@@ -1,35 +1,54 @@
 @(message:String)
-@main("Home") {
+
+@javascript = {
+    <script type="text/javascript">
+        function initialize() {
+
+            var myLatLng = new google.maps.LatLng(-24.786735,-51.108398);
+            var mapOptions = {
+                zoom: 7,
+                center: myLatLng,
+                mapTypeId: google.maps.MapTypeId.STREET
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        }
+
+        jQuery(function(){
+            initialize();
+        });
+    </script>
+}
+
+@main("Home", javascript) {
+
+    <div id="map-canvas" style="height:600px"></div>
     
-    <h2>@message</h2>
     <p>
-        Aqui fica um mapa
+        <a class="btn btn-default" href="@routes.Biomas.manter(0, "nome", "asc", "")">link para bioma</a>
     </p>
     
     <p>
-        <a class="btn" href="@routes.Biomas.manter(0, "nome", "asc", "")">link para bioma</a>
+        <a class="btn btn-default" href="@routes.Formacoes.manter(0, "nome", "asc", "")">link para formação</a>
     </p>
     
     <p>
-        <a class="btn" href="@routes.Formacoes.manter(0, "nome", "asc", "")">link para formação</a>
-    </p>
-    
-    <p>
-        <a class="btn" href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">link para espaçamento</a>
+        <a class="btn btn-default" href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">link para espaçamento</a>
     </p>
     <p>
-        <a class="btn" href="@routes.Autores.manter(0, "nome", "asc", "")">link para autor</a>
+        <a class="btn btn-default" href="@routes.Autores.manter(0, "nome", "asc", "")">link para autor</a>
     </p>
     <p>
-        <a class="btn" href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")">link para disponibilidades</a>
+        <a class="btn btn-default" href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")">link para disponibilidades</a>
     </p>
     <p>
-        <a class="btn" href="@routes.MetodosQB.manter()">link para MétodoQB</a>
+        <a class="btn btn-default" href="@routes.MetodosQB.manter()">link para MétodoQB</a>
     </p>
      <p>
-        <a class="btn" href="@routes.MetodosQC.manter()">link para MétodoQC</a>
+        <a class="btn btn-default" href="@routes.MetodosQC.manter()">link para MétodoQC</a>
     </p>
     
     
     
 }
+
