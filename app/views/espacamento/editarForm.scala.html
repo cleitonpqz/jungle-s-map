@@ -1,0 +1,35 @@
+@(id: Long, espacamentoForm: Form[Espacamento])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@main("Alterar Espaçamento") {
+    
+    @form(routes.Espacamentos.update(id)) {
+        
+        <fieldset>
+                        
+            @inputText(
+                espacamentoForm("descricao"), 
+                '_label -> "Espaçamento",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite o descricao do espacamento",
+                '_help -> "",
+                '_error -> espacamentoForm.error("descricao")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+            <a href="@routes.Espacamentos.manter(0, "nome", "asc", "")" class="btn">Voltar</a>
+        </div>
+        
+    }
+ 
+     
+        
+}

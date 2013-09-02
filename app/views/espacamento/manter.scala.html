@@ -1,0 +1,141 @@
+@(currentPage: com.avaje.ebean.Page[Espacamento], currentSortBy: String, currentOrder: String, currentFilter: String, espacamentoForm: Form[Espacamento])
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.Espacamentos.manter(newPage, sortBy, order, currentFilter)
+    
+}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Cadastrar Espaçamento"){
+    
+    @form(action = routes.Espacamentos.salvar) {
+        
+        <fieldset class form-inline>
+           @inputText(
+                espacamentoForm("descricao"), 
+                '_label -> "Espaçamento",
+                'class ->"input-xlarge",
+                'placeholder->"Digite a descrição do espaçamento",
+                '_help -> "",
+                '_error -> espacamentoForm.error("nome")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Incluir">
+            
+        </div>
+    <br>
+        <h3 id="homeTitle">@Messages("Espaçamentos", currentPage.getTotalRowCount)</h3>
+}
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+
+    <hr>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nenhum Espaçamento Cadastrado</em>
+        </div>
+        
+    } else {
+       <div class="well">
+        <table class="table">
+            <thead>
+                <tr class="tablehead">
+                    @header("nome", "Descrição")
+                    <th>Alterar</th>
+                    <th>Excluir</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(espacamento <- currentPage.getList) {
+                    <tr>
+                        <td>
+                            @espacamento.descricao
+                        </td>
+                        <td>
+                               <a href="@routes.Espacamentos.editar(espacamento.id)"><i class="icon-pencil" rel="tooltip" title="Editar espaçamento"></i></a>
+                        </td>
+                         
+                        <td> 
+                               <a href="@routes.Espacamentos.deletar(espacamento.id)"><i class="icon-remove" rel="tooltip" title="Excluir espaçamento"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+       </div>
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Anterior</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Exibindo @currentPage.getDisplayXtoYofZ(" a "," de ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Próxima &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}    

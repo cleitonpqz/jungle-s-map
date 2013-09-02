@@ -1,0 +1,160 @@
+@(currentPage: com.avaje.ebean.Page[Formacao], currentSortBy: String, currentOrder: String, currentFilter: String, formacaoForm: Form[Formacao])
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.Formacoes.manter(newPage, sortBy, order, currentFilter)
+    
+}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Cadastrar Formação"){
+    
+    @form(action = routes.Formacoes.salvar) {
+        
+        <fielset>
+            <div class="row">
+                    <div class="span3">
+                    @select(
+                        formacaoForm("bioma.id"), 
+                        options(Bioma.opcoes), 
+                        '_label -> "Bioma", 
+                        '_default -> "-- Escolha o Bioma --",
+                        '_showConstraints -> false,
+                        '_error -> formacaoForm.error("bioma")
+
+                    )
+                    </div>
+                    <div class="span4">
+                     <br><br>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo bioma"></i>
+                           </a>
+                    </div>
+            </div>
+           @inputText(
+                formacaoForm("nome"), 
+                '_label -> "Formacao",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o nome da formação",
+                '_help -> "",
+                '_error -> formacaoForm.error("nome")
+            )
+                 
+        </fielset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Incluir">
+            
+        </div>
+    <br>
+        <h3 id="homeTitle">@Messages("Formações", currentPage.getTotalRowCount)</h3>
+}
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+     @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+
+    <hr>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nenhuma Formação Cadastrada</em>
+        </div>
+        
+    } else {
+       <div class="well">
+        <table class="table">
+            <thead>
+                <tr class="tablehead">
+                    @header("nome", "Nome da Formação")
+                    <th>Alterar</th>
+                    <th>Excluir</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(formacao <- currentPage.getList) {
+                    <tr>
+                        <td>
+                            @formacao.nome
+                        </td>
+                        <td>
+                               <a href="@routes.Formacoes.editar(formacao.id)"><i class="icon-pencil" rel="tooltip" title="Editar Bioma"></i></a>
+                        </td>
+                         
+                        <td> 
+                               <a href="@routes.Formacoes.deletar(formacao.id)"><i class="icon-remove" rel="tooltip" title="Excluir Bioma"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+       </div>
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Anterior</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Exibindo @currentPage.getDisplayXtoYofZ(" a "," de ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Próxima &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}    

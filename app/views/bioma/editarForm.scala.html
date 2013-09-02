@@ -1,0 +1,35 @@
+@(id: Long, biomaForm: Form[Bioma])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@main("Alterar Bioma") {
+    
+    @form(routes.Biomas.update(id)) {
+        
+        <fieldset>
+                        
+            @inputText(
+                biomaForm("nome"), 
+                '_label -> "Bioma",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite o nome do bioma",
+                '_help -> "",
+                '_error -> biomaForm.error("nome")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+            <a href="@routes.Biomas.manter(0, "nome", "asc", "")" class="btn">Voltar</a>
+        </div>
+        
+    }
+ 
+     
+        
+}

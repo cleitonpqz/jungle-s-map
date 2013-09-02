@@ -1,0 +1,84 @@
+@(metodoQBList: List[MetodoQuantificacaoBiomassa], metodoQBForm: Form[MetodoQuantificacaoBiomassa])
+
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Cadastrar Método de Quantificação de Biomassa"){
+    
+    @form(action = routes.MetodosQB.salvar) {
+        
+        <fieldset>
+           @inputText(
+                metodoQBForm("descricao"), 
+                '_label -> "Método de Quantificação de Biomassa",
+                'class ->"input-xlarge",
+                'placeholder->"Digite a descricao do método",
+                '_help -> "",
+                '_error -> metodoQBForm.error("nome")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Incluir">
+            
+        </div>
+    <br>
+        <h3 id="homeTitle">@Messages("Método de Quantificação de Biomassa")</h3>
+}
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+
+    <hr>
+    
+    @if(metodoQBList.isEmpty()) {
+        
+        <div class="well">
+            <em>Nenhum Método de Quantificação de Biomassa Cadastrado</em>
+        </div>
+        
+    } else {
+       <div class="well">
+        <table class="table">
+            <thead>
+                <tr class="tablehead">
+                    <th>Descrição</th>
+                    <th >Alterar</th>
+                    <th>Excluir</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(metodo <- metodoQBList) {
+                    <tr>
+                        <td>
+                            @metodo.descricao
+                        </td>
+                        <td>
+                               <a href="@routes.MetodosQB.editar(metodo.id)"><i class="icon-pencil" rel="tooltip" title="Editar Método"></i></a>
+                        </td>
+                         
+                        <td> 
+                               <a href="@routes.MetodosQB.deletar(metodo.id)"><i class="icon-remove" rel="tooltip" title="Excluir Método"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+       </div>
+        
+    }
+}    

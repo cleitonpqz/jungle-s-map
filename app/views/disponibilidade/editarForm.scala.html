@@ -1,0 +1,35 @@
+@(id: Long, disponibilidadeForm: Form[Disponibilidade])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@main("Alterar Disponibilidade") {
+    
+    @form(routes.Disponibilidades.update(id)) {
+        
+        <fieldset>
+                        
+            @inputText(
+                disponibilidadeForm("descricao"), 
+                '_label -> "Disponibilidade",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite a descrição da disponibilidade",
+                '_help -> "",
+                '_error -> disponibilidadeForm.error("descricao")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+            <a href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")" class="btn">Voltar</a>
+        </div>
+        
+    }
+ 
+     
+        
+}

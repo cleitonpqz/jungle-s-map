@@ -3,7 +3,77 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                               controllers.Application.index()
 
+#Bioma Listar e novo
+GET     /biomas                         controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /biomas                         controllers.Biomas.salvar()
+# Bioma Editar                     
+GET     /biomas/:id                     controllers.Biomas.editar(id:Long)
+POST    /biomas/:id                     controllers.Biomas.update(id:Long)
+# Bioma Deletar
+GET    /biomas/:id/deletar              controllers.Biomas.deletar(id:Long)
+
+#-----------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /formacoes                      controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /formacoes                      controllers.Formacoes.salvar()
+# Formacao Editar                     
+GET     /formacoes/:id                  controllers.Formacoes.editar(id:Long)
+POST    /formacoes/:id                  controllers.Formacoes.update(id:Long)
+# Formacao Deletar
+GET    /formacoes/:id/deletar           controllers.Formacoes.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /espacamentos                      controllers.Espacamentos.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
+POST    /espacamentos                      controllers.Espacamentos.salvar()
+# Formacao Editar                     
+GET     /espacamentos/:id                  controllers.Espacamentos.editar(id:Long)
+POST    /espacamentos/:id                  controllers.Espacamentos.update(id:Long)
+# Formacao Deletar
+GET    /espacamentos/:id/deletar           controllers.Espacamentos.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /autores                      controllers.Autores.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /autores                      controllers.Autores.salvar()
+# Formacao Editar                     
+GET     /autores/:id                  controllers.Autores.editar(id:Long)
+POST    /autores/:id                  controllers.Autores.update(id:Long)
+# Formacao Deletar
+GET    /autores/:id/deletar           controllers.Autores.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /disponibilidades                      controllers.Disponibilidades.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
+POST    /disponibilidades                      controllers.Disponibilidades.salvar()
+# Formacao Editar                     
+GET     /disponibilidades/:id                  controllers.Disponibilidades.editar(id:Long)
+POST    /disponibilidades/:id                  controllers.Disponibilidades.update(id:Long)
+# Formacao Deletar
+GET    /disponibilidades/:id/deletar           controllers.Disponibilidades.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /metodosQB                      controllers.MetodosQB.manter()
+POST    /metodosQB                      controllers.MetodosQB.salvar()
+# Formacao Editar                     
+GET     /metodosQB/:id                  controllers.MetodosQB.editar(id:Long)
+POST    /metodosQB/:id                  controllers.MetodosQB.update(id:Long)
+# Formacao Deletar
+GET    /metodosQB/:id/deletar           controllers.MetodosQB.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /metodosQC                      controllers.MetodosQC.manter()
+POST    /metodosQC                      controllers.MetodosQC.salvar()
+# Formacao Editar                     
+GET     /metodosQC/:id                  controllers.MetodosQC.editar(id:Long)
+POST    /metodosQC/:id                  controllers.MetodosQC.update(id:Long)
+# Formacao Deletar
+GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
+
+#--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                   controllers.Assets.at(path="/public", file)   

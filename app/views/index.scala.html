@@ -1,7 +1,35 @@
-@(message: String)
-
-@main("Welcome to Play 2.1") {
+@(message:String)
+@main("Home") {
     
-    @play20.welcome(message, style = "Java")
+    <h2>@message</h2>
+    <p>
+        Aqui fica um mapa
+    </p>
+    
+    <p>
+        <a class="btn" href="@routes.Biomas.manter(0, "nome", "asc", "")">link para bioma</a>
+    </p>
+    
+    <p>
+        <a class="btn" href="@routes.Formacoes.manter(0, "nome", "asc", "")">link para formação</a>
+    </p>
+    
+    <p>
+        <a class="btn" href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">link para espaçamento</a>
+    </p>
+    <p>
+        <a class="btn" href="@routes.Autores.manter(0, "nome", "asc", "")">link para autor</a>
+    </p>
+    <p>
+        <a class="btn" href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")">link para disponibilidades</a>
+    </p>
+    <p>
+        <a class="btn" href="@routes.MetodosQB.manter()">link para MétodoQB</a>
+    </p>
+     <p>
+        <a class="btn" href="@routes.MetodosQC.manter()">link para MétodoQC</a>
+    </p>
+    
+    
     
 }
