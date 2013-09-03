@@ -39,9 +39,9 @@
 
 @main("Cadastrar Bioma"){
     
-    @form(action = routes.Biomas.salvar) {
+    @form(action = routes.Biomas.salvar, 'role -> "form") {
         
-        <fieldset class form-inline>
+        <fieldset class="form-inline">
            @inputText(
                 biomaForm("nome"), 
                 '_label -> "Bioma",

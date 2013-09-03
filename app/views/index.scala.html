@@ -1,5 +1,9 @@
 @(message:String)
 
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
+}
+
 @javascript = {
     <script type="text/javascript">
         function initialize() {
@@ -20,9 +24,9 @@
     </script>
 }
 
-@main("Home", javascript) {
+@main("Home", javascript, stylesheet) {
 
-    <div id="map-canvas" style="height:600px"></div>
+    <div id="map-canvas"></div>
     
     <p>
         <a class="btn btn-default" href="@routes.Biomas.manter(0, "nome", "asc", "")">link para bioma</a>
