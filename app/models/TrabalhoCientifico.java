@@ -36,5 +36,21 @@ public class TrabalhoCientifico extends Model {
     public MetodoQuantificacaoCarbono metodo_quantificacao_carbono;
     
     public static Model.Finder<Long,TrabalhoCientifico> find = new Model.Finder<Long,TrabalhoCientifico>(Long.class, TrabalhoCientifico.class);
-    
+
+    public static Map<String,String> opcoes() {
+        LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
+        for(TrabalhoCientifico f: TrabalhoCientifico.find.orderBy("autor.nome").findList()) {
+            opcoes.put(f.id.toString(), f.autor.nome);
+        }
+        return opcoes;
+    }
+
+    public static Page<TrabalhoCientifico> page(int page, int pageSize, String sortBy, String order, String filter) {
+        return 
+            find.where()
+                .ilike("autor.nome", "%" + filter + "%")
+                .orderBy(sortBy + " " + order)
+                .findPagingList(pageSize)
+                .getPage(page);
+    }
 }

@@ -1,0 +1,209 @@
+@(currentPage: com.avaje.ebean.Page[TrabalhoCientifico], currentSortBy: String, currentOrder: String, currentFilter: String, trabalhoCientificoForm: Form[TrabalhoCientifico])
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.TrabalhosCientificos.manter(newPage, sortBy, order, currentFilter)
+    
+}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Cadastrar Trabalho Científico"){
+    
+    @form(action = routes.TrabalhosCientificos.salvar) {
+        
+        <fielset>
+
+            <div class="row">
+                    <div class="span3">
+                    @select(
+                        trabalhoCientificoForm("autor.id"), 
+                        options(Autor.opcoes), 
+                        '_label -> "Autor", 
+                        '_default -> "-- Escolha o Autor --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("autor")
+                    ) 
+                    </div>
+                    <div class="span4">
+                     <br><br>
+                          <a href="@routes.Autores.manter(0, "nome", "asc", "")">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo autor"></i>
+                           </a>
+                    </div>
+            </div>
+
+            <div class="row">
+                    <div class="span3">
+                    @select(
+                        trabalhoCientificoForm("disponibilidade.id"), 
+                        options(Disponibilidade.opcoes), 
+                        '_label -> "Disponibilidade", 
+                        '_default -> "-- Escolha a Disponibilidade --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("disponibilidade")
+                    )
+                    </div>
+                    <div class="span4">
+                     <br><br>
+                          <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova Disponibilidade"></i>
+                           </a>
+                    </div>
+            </div>
+
+            <div class="row">
+                    <div class="span3">
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
+                        options(MetodoQuantificacaoBiomassa.opcoes), 
+                        '_label -> "Método de Quantificação de Biomassa", 
+                        '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
+                    )
+                    </div>
+                    <div class="span4">
+                     <br><br>
+                          <a href="@routes.MetodosQB.manter()">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa"></i>
+                           </a>
+                    </div>
+            </div>
+
+            <div class="row">
+                    <div class="span3">
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
+                        options(MetodoQuantificacaoCarbono.opcoes), 
+                        '_label -> "Método de Quantificação de Carbono", 
+                        '_default -> "-- Escolha o Método de Quantificação de Carbono --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
+                    ) 
+                    </div>
+                    <div class="span4">
+                     <br><br>
+                          <a href="@routes.MetodosQC.manter()">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono"></i>
+                           </a>
+                    </div>
+            </div>
+                 
+        </fielset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Incluir">
+            
+        </div>
+    <br>
+        <h3 id="homeTitle">@Messages("Trabalhos Científicos", currentPage.getTotalRowCount)</h3>
+}
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+     @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+
+    <hr>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nenhum Trabalho Científico Cadastrado</em>
+        </div>
+        
+    } else {
+       <div class="well">
+        <table class="table">
+            <thead>
+                <tr class="tablehead">
+                    @header("autor.nome", "Nome do Autor")
+                    <th>Alterar</th>
+                    <th>Excluir</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                @for(TrabalhoCientifico <- currentPage.getList) {
+                    <tr>
+                        <td>
+                            @TrabalhoCientifico.autor.nome
+                        </td>
+                        <td>
+                               <a href="@routes.TrabalhosCientificos.editar(TrabalhoCientifico.id)"><i class="icon-pencil" rel="tooltip" title="Editar Trabalho Científico"></i></a>
+                        </td>
+                         
+                        <td> 
+                               <a href="@routes.TrabalhosCientificos.deletar(TrabalhoCientifico.id)"><i class="icon-remove" rel="tooltip" title="Excluir Trabalho Científico"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+       </div>
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Anterior</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Exibindo @currentPage.getDisplayXtoYofZ(" a "," de ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Próxima &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}    

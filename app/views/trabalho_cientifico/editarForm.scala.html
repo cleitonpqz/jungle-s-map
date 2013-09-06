@@ -1,0 +1,61 @@
+@(id: Long, trabalhoCientificoForm: Form[TrabalhoCientifico])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@main("Alterar TrabalhoCientifico") {
+    
+    @form(routes.TrabalhosCientificos.update(id)) {
+        
+        <fieldset>
+            @select(
+                trabalhoCientificoForm("autor.id"), 
+                options(Autor.opcoes), 
+                '_label -> "Autor", 
+                '_default -> "-- Escolha o Autor --",
+                '_showConstraints -> false,
+                '_error -> trabalhoCientificoForm.error("autor")
+            ) 
+            
+            @select(
+                trabalhoCientificoForm("disponibilidade.id"), 
+                options(Disponibilidade.opcoes), 
+                '_label -> "Disponibilidade", 
+                '_default -> "-- Escolha a Disponibilidade --",
+                '_showConstraints -> false,
+                '_error -> trabalhoCientificoForm.error("disponibilidade")
+            )
+
+            @select(
+                trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
+                options(MetodoQuantificacaoBiomassa.opcoes), 
+                '_label -> "Método de Quantificação de Biomassa", 
+                '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
+                '_showConstraints -> false,
+                '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
+            )
+
+            @select(
+                trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
+                options(MetodoQuantificacaoCarbono.opcoes), 
+                '_label -> "Método de Quantificação de Carbono", 
+                '_default -> "-- Escolha o Método de Quantificação de Carbono --",
+                '_showConstraints -> false,
+                '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
+            ) 
+            
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+            <a href="@routes.TrabalhosCientificos.manter(0, "nome", "asc", "")" class="btn">Voltar</a>
+        </div>
+        
+    }
+ 
+     
+        
+}

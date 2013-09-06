@@ -5,6 +5,17 @@
 # Home page
 GET     /                               controllers.Application.index()
 
+# Trabalho Científico Listar e novo
+GET     /trabalhos                         controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
+POST    /trabalhos                         controllers.TrabalhosCientificos.salvar()
+# Trabalho Científico Editar                     
+GET     /trabalhos/:id                     controllers.TrabalhosCientificos.editar(id:Long)
+POST    /trabalhos/:id                     controllers.TrabalhosCientificos.update(id:Long)
+# Trabalho Científico Deletar
+GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.deletar(id:Long)
+
+#-----------------------------------------------------------------------------------------------------------------------------
+
 #Bioma Listar e novo
 GET     /biomas                         controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /biomas                         controllers.Biomas.salvar()
