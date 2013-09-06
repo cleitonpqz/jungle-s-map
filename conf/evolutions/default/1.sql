@@ -46,6 +46,15 @@ create table metodo_quantificacao_carbono (
   constraint pk_metodo_quantificacao_carbono primary key (id))
 ;
 
+create table trabalho_cientifico (
+  id                        bigint not null,
+  autor_id                  bigint,
+  disponibilidade_id        bigint,
+  metodo_quantificacao_biomassa_id bigint,
+  metodo_quantificacao_carbono_id bigint,
+  constraint pk_trabalho_cientifico primary key (id))
+;
+
 create sequence autor_seq;
 
 create sequence bioma_seq;
@@ -60,8 +69,18 @@ create sequence metodo_quantificacao_biomassa_seq;
 
 create sequence metodo_quantificacao_carbono_seq;
 
+create sequence trabalho_cientifico_seq;
+
 alter table formacao add constraint fk_formacao_bioma_1 foreign key (bioma_id) references bioma (id);
 create index ix_formacao_bioma_1 on formacao (bioma_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_2 foreign key (autor_id) references autor (id);
+create index ix_trabalho_cientifico_autor_2 on trabalho_cientifico (autor_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_disponi_3 foreign key (disponibilidade_id) references disponibilidade (id);
+create index ix_trabalho_cientifico_disponi_3 on trabalho_cientifico (disponibilidade_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo__4 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
+create index ix_trabalho_cientifico_metodo__4 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo__5 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
+create index ix_trabalho_cientifico_metodo__5 on trabalho_cientifico (metodo_quantificacao_carbono_id);
 
 
 
@@ -81,6 +100,8 @@ drop table if exists metodo_quantificacao_biomassa cascade;
 
 drop table if exists metodo_quantificacao_carbono cascade;
 
+drop table if exists trabalho_cientifico cascade;
+
 drop sequence if exists autor_seq;
 
 drop sequence if exists bioma_seq;
@@ -94,4 +115,6 @@ drop sequence if exists formacao_seq;
 drop sequence if exists metodo_quantificacao_biomassa_seq;
 
 drop sequence if exists metodo_quantificacao_carbono_seq;
+
+drop sequence if exists trabalho_cientifico_seq;
 
