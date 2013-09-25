@@ -15,11 +15,30 @@
                 mapTypeId: google.maps.MapTypeId.STREET
             };
             var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            return map;
+        }
+
+        function polygon_create(){
+            var creator = new PolygonCreator(initialize());
+                creator.showData();
 
         }
 
+        
+            
+
+
+
         jQuery(function(){
             initialize();
+
+            $(document).mousedown(function(e){ 
+            if( e.button == 2 ) {
+                var creator = new PolygonCreator(initialize());
+                creator.showData();
+            } 
+            return true; 
+            }); 
         });
     </script>
 }
