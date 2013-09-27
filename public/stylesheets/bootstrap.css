@@ -6167,3 +6167,8 @@ a.badge:focus {
 .affix {
   position: fixed;
 }
+.tablehead{
+    color:#0088cc;
+}
+#map-canvas{ max-width: none; }
+

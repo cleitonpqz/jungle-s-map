@@ -1,0 +1,592 @@
+@(localForm: Form[Local], trabalhoCientificoForm: Form[TrabalhoCientifico])
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+
+@stylesheet = {
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
+}
+
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
+<script type="text/javascript">
+   function initialize() { 
+   var all_overlays = [];
+   var selectedPolygon;
+   
+   function clearSelection() {
+        if (selectedPolygon) {
+          selectedPolygon.setEditable(false);
+          selectedPolygon = null;
+        }
+      }
+
+  function setSelection(polygon) {
+    clearSelection();
+    selectedPolygon = polygon;
+    polygon.setEditable(true);
+    selectColor(polygon.get('fillColor') || polygon.get('strokeColor'));
+    getPolygonCoord();
+  }
+
+  function deleteSelectedPoly() {
+    if (selectedPolygon) {
+       selectedPolygon.setMap(null);
+    }
+  }
+  function getPolygonCoord(polygon){
+    var vertices = polygon.getPath();
+    $('.coordenada').remove();
+    for (var i =0; i < (vertices.getLength()); i++) {
+    var template = $('.coordenada_template');
+    template.before('<div class="twipsies well coordenada">' + template.html() + '</div>');
+    }   
+     renumberCoord();
+       
+    for (var i =0; i < vertices.getLength(); i++) {
+      var xy = vertices.getAt(i);
+         $("input[name$='coordenadas["+i+"].latitude']").val(xy.lat());
+         $("input[name$='coordenadas["+i+"].longitude']").val(xy.lng());
+      }
+  } 
+  
+  function utilizarControl(controlDiv, map) {
+
+   controlDiv.style.padding = '5px';
+
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = 'white';
+  controlUI.style.borderStyle = 'solid';
+  controlUI.style.borderWidth = '2px';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click para utilizar o polígono selecionado no cadastro';
+  controlDiv.appendChild(controlUI);
+
+  var controlText = document.createElement('div');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '12px';
+  controlText.style.paddingLeft = '4px';
+  controlText.style.paddingRight = '4px';
+  controlText.innerHTML = 'Utilizar';
+  controlUI.appendChild(controlText);
+
+   google.maps.event.addDomListener(controlUI, 'click', function() {
+     getPolygonCoord(selectedPolygon);
+  });
+
+};
+
+function apagarControl(controlDiv, map) {
+
+   controlDiv.style.padding = '5px';
+
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = 'white';
+  controlUI.style.borderStyle = 'solid';
+  controlUI.style.borderWidth = '2px';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click para apagar o polígono selecionado';
+  controlDiv.appendChild(controlUI);
+
+  var controlText = document.createElement('div');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '12px';
+  controlText.style.paddingLeft = '4px';
+  controlText.style.paddingRight = '4px';
+  controlText.innerHTML = 'Apagar';
+  controlUI.appendChild(controlText);
+
+   google.maps.event.addDomListener(controlUI, 'click', function() {
+    deleteSelectedPoly();
+  });
+
+};
+   var mapOptions = {
+    center: new google.maps.LatLng(-24.786735,-51.108398),
+    zoom: 7,
+    scrollwheel: false,
+    panControl: true,
+  
+    zoomControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.LARGE
+      },
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  
+  
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+    
+  var apagarControlDiv = document.createElement('div');
+  var apagarControl = new apagarControl(apagarControlDiv, map);
+  apagarControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(apagarControlDiv);
+  
+  var utilizarControlDiv = document.createElement('div');
+  var utilizarControl = new utilizarControl(utilizarControlDiv, map);
+  utilizarControlDiv.index = 2;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(utilizarControlDiv);
+  
+  
+  var polyOptions = {
+          strokeColor: '#ff0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#ff0000',
+          fillOpacity: 0.35,
+          editable: true
+        };
+        // Creates a drawing manager attached to the map that allows the user to draw
+        // markers, lines, and shapes.
+       var drawingManager = new google.maps.drawing.DrawingManager({
+          drawingMode: google.maps.drawing.OverlayType.POLYGON,
+          markerOptions: {
+            draggable: true
+          },
+          polylineOptions: {
+            editable: true
+          },
+          drawingControlOptions: {
+      position: google.maps.ControlPosition.TOP_CENTER,
+      drawingModes: [
+        google.maps.drawing.OverlayType.POLYGON,
+        
+      ]
+    },
+          rectangleOptions: polyOptions,
+          circleOptions: polyOptions,
+          polygonOptions: polyOptions,
+          map: map
+        });
+
+        google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+            all_overlays.push(e);
+             if (e.type !== google.maps.drawing.OverlayType.MARKER) {
+                drawingManager.setDrawingMode(null);
+            var polygon = e.overlay;
+            getPolygonCoord(polygon);
+            google.maps.event.addListener(polygon, 'click', function() {
+              setSelection(polygon);
+            });
+            setSelection(polygon);
+            }
+        });
+
+ }
+ 
+
+        jQuery(function(){
+            initialize();
+        });
+    </script>
+    
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#bioma').change(function(e){
+        e.preventDefault();
+        $("#formacao").html("");
+        jsRoutes.controllers.Locais.listarFormacao($('#bioma').val()).ajax({
+                success: function(data){
+                $("#formacao").append("<option class='blank' value=''>-- Escolha a Formação --</option>");
+                $.each(data, function(key, item) {
+                   $("#formacao").append("<option value='"+item.id+"'>"+item.nome+"</option>");
+                   });
+            
+        }
+     });
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#cadastrarTrabalhoBtn').click(function(e){
+         jsRoutes.controllers.Locais.salvarModal().ajax({
+                data: $("#trabalhoCientificoModalBody").find("select").serialize(),
+                success: function(data){
+                $("#trabalhoCientificoId").val(data.id);
+                $("#trabalhoCientificoInformacao")
+                        .html("<tr><td>Autor:</td><td>"+data.autor.nome+"</td></tr>\n\
+                                <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
+                                <tr><td>Metodo de Qantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
+                                <tr><td>Metodo de Qantificação arbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>");
+                                $('#trabalhoCientificoModal').modal('hide');
+                                e.stopPropagation();
+        }
+     });
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".municipio_template").css("display", "none");
+    $(".coordenada_template").css("display", "none");
+    });
+</script>
+
+<script type="text/javascript">
+         $('body').on('click','.addCoordenada', function(e){
+           var template = $('.coordenada_template');
+           template.before('<div class="twipsies well coordenada">' + template.html() + '</div>');
+           renumberCoord();
+           });
+        
+        $('body').on('click', '.removeCoordenada',function(e) {
+            $(this).parents('.coordenada').remove();
+            renumberCoord();
+        });
+        
+        $('body').on('click','.addMunicipio', function(e) {
+           var template = $('.municipio_template');
+           template.before('<div class="clearfix municipio">' + template.html() + '</div>');
+          renumberMunic();
+            
+        });
+        $('body').on('click', '.removeMunicipio',function(e) {
+            $(this).parents('.municipio').remove();
+            renumberMunic();
+        }); 
+        
+        
+        
+        $('#localform').submit(function() {
+            $('.municipio_template').remove();
+            $('.coordenada_template').remove();
+        });
+        
+        var renumberCoord = function(e) {
+            $('.coordenada').each(function(i) {
+                $('input', this).each(function() {
+                    $(this).attr('name', $(this).attr('name').replace(/coordenadas\[.+?\]/g, 'coordenadas[' + i + ']'));
+                });
+                
+            });
+        };
+        var renumberMunic = function(e) {
+            $('.municipio').each(function(i) {
+                $('select', this).each(function() {
+                    $(this).attr('name', $(this).attr('name').replace(/municipios_locais\[.+?\]/g, 'municipios_locais[' + i + ']'));
+                });
+                
+            });
+        };
+        
+        
+          
+          $('#trabalhoModalBtn').click(function (e) {
+            $('#myModal').modal('show');
+          });
+        
+        $('#form').submit(function() {
+            $('.municipio_template').remove();
+            $('.coordenada_template').remove();
+        });
+    </script>
+}
+@municipioGroup(field: Field, className: String = "municipio") = {
+           <div class="@className">
+        
+        <a class="removeMunicipio btn btn-danger pull-right btn-small">Remover</a>
+                    @select(
+                    localForm("municipios_locais[0].municipio.id"), 
+                    options(Municipio.opcoes), 
+                    '_label -> "",
+                    'class ->"input-xlarge",
+                    '_default -> "-- Escolha um município --",
+                    '_showConstraints -> false,
+                    '_error -> localForm.error("municipio")
+                    )
+              </div>  
+              
+            }
+
+
+@coordenadaGroup(field: Field, className: String = "coordenada") = {
+    <div class="well form-inline @className">
+       <a class="removeCoordenada btn btn-danger pull-right btn-small">Remover</a>
+        <input type="text" name="coordenadas[0].latitude" class="large" placeholder="Latitude">  
+        <input type="text" name="coordenadas[0].longitude" class="large" placeholder="Longitude">  
+  </div>
+
+ }
+
+@main("Incluir Local", javascript, stylesheet) {
+   
+           
+              <table>
+                <tr>
+                    <td>
+                @select(
+                    localForm("formacao.bioma.id"), 
+                    options(Bioma.opcoes), 
+                    '_label -> "Bioma",
+                    'class ->"input-xlarge",
+                    'id ->"bioma",
+                    '_default -> "-- Escolha o Bioma --",
+                    '_showConstraints -> false,
+                    '_error -> localForm.error("bioma")
+                ) 
+                </td>
+                     <td>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")">
+                          <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo bioma"></i>
+                          </a>
+                      </td>
+                 </tr>
+             </table>
+        @form(action = routes.Locais.salvar, 'id -> "form") {
+        
+        
+        <fieldset id="localform"> 
+            <input type="hidden" id="trabalhoCientificoId" name="trabalho_cientifico.id" value="">
+             <table>
+                <tr>
+                    <td>
+              
+                @select(
+                    localForm("formacao.id"),
+                    options(),
+                    'id->"formacao",
+                    'class ->"input-xlarge",
+                    '_label -> "Formação", 
+                    '_default -> "-- Escolha a Formação --",
+                    '_showConstraints -> false,
+                    '_error -> localForm.error("formacao")
+                ) 
+                
+                </td>
+                     <td>
+                               <a href="@routes.Formacoes.manter(0, "nome", "asc", "")">
+                                <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova formação"></i>
+                               </a>
+                       </td>
+                 </tr>
+             </table>
+
+                @inputText(
+                    localForm("descricao"), 
+                    '_label -> "Local",
+                    'class ->"input-xlarge",
+                    'rel->"tooltip",
+                    'title->"Digite o nome do local",
+                    '_help -> "",
+                    '_error -> localForm.error("descricao")
+                )
+            <table>
+                <tr>
+                    <td>
+                @select(
+                    localForm("espacamento.id"), 
+                    options(Espacamento.opcoes),
+                    'class ->"input-xlarge",
+                    '_label -> "Espaçamento", 
+                    '_default -> "-- Escolha o Espaçamento --",
+                    '_showConstraints -> false,
+                    '_error -> localForm.error("espacamento")
+                )
+                
+              </td>
+                     <td>
+                               <a  href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">
+                                <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo espaçamento"></i>
+                               </a>
+                       </td>
+                 </tr>
+             </table>
+                @inputText(
+                    localForm("area_total"), 
+                    '_label -> "Área Total (ha)",
+                    'class ->"input-xlarge",
+                    'rel->"tooltip",
+                    'title->"Digite o nome do local",
+                    '_help -> "",
+                    '_error -> localForm.error("nome")
+                )
+
+      </fieldset>
+      <fieldset>
+            <legend>Municípios</legend>
+            
+            <div id="municipio">
+            
+                @repeat(localForm("municipios")) { municipio =>
+                
+                    @municipioGroup(municipio)
+                
+                }
+                
+               
+                @municipioGroup(
+                    localForm("municipio[x]"),
+                    className = "municipio_template"
+                )
+                
+                <div class="manage">
+                    <a class="addMunicipio btn btn-success btn-small">Adicionar município</a>
+                </div>
+            
+            </div>
+            
+        </fieldset>
+        <fieldset>
+            <legend>Coordenadas</legend>
+            
+            <div id="coordenadas">
+            
+                @repeat(localForm("coordenadas")) { coordenada =>
+                
+                    @coordenadaGroup(coordenada)
+                
+                }
+                
+                @**
+                 * Keep an hidden block that will be used as template for Javascript copy code
+                 **@
+                @coordenadaGroup(
+                    localForm("coordenada[x]"),
+                    className = "coordenada_template"
+                )
+                
+                <div>
+                    <a class="addCoordenada btn btn-success btn-small">Adicionar Coordenada</a>
+                </div>
+            
+           
+            <br>
+        </fieldset>
+        <fieldset>
+                <legend>Trabalho Científico</legend>
+                <div>
+                  <a data-toggle="modal" href="#trabalhoCientificoModal" class="btn btn-primary btn-small">Cadastrar trabalho</a>
+                  <a type="button" class="btn btn-success btn-small">Utilizar trabalho de outro local</a>
+                  <a type="button" class="btn btn-warning btn-small">Ver sugestão do software</a>
+                  <a type="button" class="btn btn-inverse btn-small" href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Cadastrar trabalho</a>
+                </div>
+                
+        </fieldset>
+    <br>
+    <fieldset>
+            <div class="actions">
+                <input type="submit" class="btn btn-primary" value="Salvar">
+                <a href="@routes.Application.index()" class="btn">Voltar</a>
+            </div>
+    </fieldset>
+        
+    }
+    
+    <div class="well">
+        <table id="trabalhoCientificoInformacao" class="table">
+            
+        </table>
+    </div>
+    
+    
+<div id="trabalhoCientificoModal" class="modal hide fade in" style="display: none; ">  
+<div class="modal-header">  
+<a class="close" data-dismiss="modal"></a>  
+<h3>Cadastrar Trabalho Científico</h3>  
+</div>  
+<div class="modal-body">  
+ <div id="trabalhoCientificoModalBody">
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("autor.id"), 
+                        options(Autor.opcoes), 
+                        '_label -> "Autor",
+                        'id->"autor.id",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Autor --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("autor")
+                    ) 
+                    </td>
+                     <td>
+                          <a href="@routes.Autores.manter(0, "nome", "asc", "")">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo autor"></i>
+                           </a>
+                    </td>
+                 </tr>
+             </table>
+
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("disponibilidade.id"), 
+                        options(Disponibilidade.opcoes), 
+                        '_label -> "Disponibilidade",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha a Disponibilidade --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("disponibilidade")
+                    )
+                    </td>
+                     <td>
+                        <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")">
+                        <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova Disponibilidade"></i>
+                        </a>
+                 </td>
+                 </tr>
+             </table>
+
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
+                        options(MetodoQuantificacaoBiomassa.opcoes), 
+                        '_label -> "Método de Quantificação de Biomassa",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
+                    )
+                    </td>
+                     <td>
+                          <a href="@routes.MetodosQB.manter()">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa"></i>
+                           </a>
+                   </td>
+                 </tr>
+             </table>
+
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
+                        options(MetodoQuantificacaoCarbono.opcoes), 
+                        '_label -> "Método de Quantificação de Carbono",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Método de Quantificação de Carbono --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
+                    ) 
+                    </td>
+                     <td>
+                          <a href="@routes.MetodosQC.manter()">
+                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono"></i>
+                           </a>
+                    </td>
+                 </tr>
+             </table>
+ </div>              
+</div>  
+<div class="modal-footer">  
+<a type="button" id="cadastrarTrabalhoBtn" class="btn btn-success">Cadastrar</a>  
+<a href="#" class="btn" data-dismiss="modal">Fechar</a>  
+</div>  
+</div> 
+}
+
