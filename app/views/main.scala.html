@@ -16,7 +16,8 @@
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-
+    <!-- JavaScript Route -->
+    
     @stylesheet
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -39,12 +40,30 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li class=""><a href="@routes.Application.index()"><i class="icon-home icon-white"></i>Home</a></li>
-                    <li><a href="">Local</a></li>
+                    <li><a href="@routes.Locais.incluir()">Local</a></li>
+                    <li class="dropdown">  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Dados do Local <b class="caret"></b></a>  
+                        <ul class="dropdown-menu">  
+                            <li><a  href="@routes.Biomas.manter(0, "nome", "asc", "")">Bioma</a></li>  
+                            <li><a href="@routes.Formacoes.manter(0, "nome", "asc", "")">Formação</a></li>  
+                            <li><a href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">Espaçamento</a></li>
+                        </ul>  
+                    </li>
+                    <li class="dropdown">  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Trabalho Científico<b class="caret"></b></a>  
+                        <ul class="dropdown-menu">  
+                            <li><a href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Trabalho Científico</a></li>  
+                            <li><a href="@routes.Autores.manter(0, "nome", "asc", "")">Autor</a></li>  
+                            <li><a href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")">Disponibilidades</a></li>
+                            <li><a href="@routes.MetodosQB.manter()">MétodoQB</a></li>
+                            <li><a href="@routes.MetodosQC.manter()">MétodoQC</a></li>
+                        </ul>  
+                    </li>
                 </ul>
             </div><!--/.nav-collapse -->         
             <ul class="nav pull-right">
              <li class="dropdown">  
-                 <a href="#"class="dropdown-toggle" data-toggle="dropdown"> Alguma Coisa <b class="caret"></b></a>  
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Alguma Coisa <b class="caret"></b></a>  
                  <ul class="dropdown-menu">  
                      <li><a href="#">Opção1</a></li>  
                      <li><a href="">Opção2</a></li>  
@@ -55,7 +74,9 @@
           </div>
       </div>
     </div>
-
+      </br></br></br>
+      
+   <div id="map-canvas"></div>
     <div class="container">
 
       <div class="content">
