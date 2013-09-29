@@ -88,8 +88,8 @@
             <thead>
                 <tr class="tablehead">
                     @header("descricao", "Nome do Disponibilidade")
-                    <th>Alterar</th>
-                    <th>Excluir</th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
@@ -101,11 +101,11 @@
                             @disponibilidade.descricao
                         </td>
                         <td>
-                               <a href="@routes.Disponibilidades.editar(disponibilidade.id)"><i class="icon-pencil" rel="tooltip" title="Editar Disponibilidade"></i></a>
+                               <a href="@routes.Disponibilidades.editar(disponibilidade.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @disponibilidade.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Disponibilidades.deletar(disponibilidade.id)"><i class="icon-remove" rel="tooltip" title="Excluir Disponibilidade"></i></a>
+                               <a href="@routes.Disponibilidades.deletar(disponibilidade.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @disponibilidade.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

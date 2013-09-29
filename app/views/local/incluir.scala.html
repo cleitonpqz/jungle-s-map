@@ -10,7 +10,7 @@
 
 @javascript = {
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
-<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
 <script type="text/javascript">
@@ -337,9 +337,7 @@ $(document).ready(function(){
                 ) 
                 </td>
                      <td>
-                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")">
-                          <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo bioma"></i>
-                          </a>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo bioma">Cadastrar novo bioma</a>
                       </td>
                  </tr>
              </table>
@@ -365,9 +363,7 @@ $(document).ready(function(){
                 
                 </td>
                      <td>
-                               <a href="@routes.Formacoes.manter(0, "nome", "asc", "")">
-                                <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova formação"></i>
-                               </a>
+                               <a href="@routes.Formacoes.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova formação">Cadastrar nova formação</a>
                        </td>
                  </tr>
              </table>
@@ -396,9 +392,7 @@ $(document).ready(function(){
                 
               </td>
                      <td>
-                               <a  href="@routes.Espacamentos.manter(0, "descricao", "asc", "")">
-                                <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo espaçamento"></i>
-                               </a>
+                               <a  href="@routes.Espacamentos.manter(0, "descricao", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo espaçamento">Cadastrar novo espaçamento</a>
                        </td>
                  </tr>
              </table>
@@ -512,9 +506,7 @@ $(document).ready(function(){
                     ) 
                     </td>
                      <td>
-                          <a href="@routes.Autores.manter(0, "nome", "asc", "")">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo autor"></i>
-                           </a>
+                          <a href="@routes.Autores.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo autor">Cadastrar novo autor</a>
                     </td>
                  </tr>
              </table>
@@ -533,9 +525,7 @@ $(document).ready(function(){
                     )
                     </td>
                      <td>
-                        <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")">
-                        <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova Disponibilidade"></i>
-                        </a>
+                        <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova Disponibilidade">Cadastrar nova Disponibilidade</a>
                  </td>
                  </tr>
              </table>
@@ -554,9 +544,7 @@ $(document).ready(function(){
                     )
                     </td>
                      <td>
-                          <a href="@routes.MetodosQB.manter()">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa"></i>
-                           </a>
+                          <a href="@routes.MetodosQB.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa">Cadastrar novo Método de Quantificação de Biomassa</a>
                    </td>
                  </tr>
              </table>
@@ -575,9 +563,7 @@ $(document).ready(function(){
                     ) 
                     </td>
                      <td>
-                          <a href="@routes.MetodosQC.manter()">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono"></i>
-                           </a>
+                          <a href="@routes.MetodosQC.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono">Cadastrar novo Método de Quantificação de Carbono</a>
                     </td>
                  </tr>
              </table>

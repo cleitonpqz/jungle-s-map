@@ -56,9 +56,7 @@
                     </div>
                     <div class="span4">
                      <br><br>
-                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo bioma"></i>
-                           </a>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo bioma">Cadastrar novo bioma</a>
                     </div>
             </div>
            @inputText(
@@ -107,8 +105,8 @@
             <thead>
                 <tr class="tablehead">
                     @header("nome", "Nome da Formação")
-                    <th>Alterar</th>
-                    <th>Excluir</th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
@@ -120,11 +118,11 @@
                             @formacao.nome
                         </td>
                         <td>
-                               <a href="@routes.Formacoes.editar(formacao.id)"><i class="icon-pencil" rel="tooltip" title="Editar Bioma"></i></a>
+                               <a href="@routes.Formacoes.editar(formacao.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @formacao.nome">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Formacoes.deletar(formacao.id)"><i class="icon-remove" rel="tooltip" title="Excluir Bioma"></i></a>
+                               <a href="@routes.Formacoes.deletar(formacao.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @formacao.nome">Excluir</a>
                         </td>
                     </tr>
                 }

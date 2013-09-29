@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                               controllers.Application.index()
+GET     /javascriptRoutes               controllers.Application.javascriptRoutes()
 
 # Trabalho Científico Listar e novo
 GET     /trabalhos                         controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
@@ -26,7 +27,7 @@ POST    /biomas/:id                     controllers.Biomas.update(id:Long)
 GET    /biomas/:id/deletar              controllers.Biomas.deletar(id:Long)
 
 #-----------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Formacoes
 GET     /formacoes                      controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /formacoes                      controllers.Formacoes.salvar()
 # Formacao Editar                     
@@ -36,7 +37,7 @@ POST    /formacoes/:id                  controllers.Formacoes.update(id:Long)
 GET    /formacoes/:id/deletar           controllers.Formacoes.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Espacamentos
 GET     /espacamentos                      controllers.Espacamentos.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
 POST    /espacamentos                      controllers.Espacamentos.salvar()
 # Formacao Editar                     
@@ -46,7 +47,7 @@ POST    /espacamentos/:id                  controllers.Espacamentos.update(id:Lo
 GET    /espacamentos/:id/deletar           controllers.Espacamentos.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Autores
 GET     /autores                      controllers.Autores.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /autores                      controllers.Autores.salvar()
 # Formacao Editar                     
@@ -56,7 +57,7 @@ POST    /autores/:id                  controllers.Autores.update(id:Long)
 GET    /autores/:id/deletar           controllers.Autores.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Disponibilidade
 GET     /disponibilidades                      controllers.Disponibilidades.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
 POST    /disponibilidades                      controllers.Disponibilidades.salvar()
 # Formacao Editar                     
@@ -85,6 +86,13 @@ POST    /metodosQC/:id                  controllers.MetodosQC.update(id:Long)
 # Formacao Deletar
 GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
 
+#--------------------------------------------------------------------------------------------------------------------------------
+#Locais 
+GET     /javascriptRoutes               controllers.Application.javascriptRoutes
+GET     /Locais                         controllers.Locais.incluir()
+POST    /Locais/listarFormacao          controllers.Locais.listarFormacao(id:Long)
+POST    /Locais                         controllers.Locais.salvar()
+POST  /locais/salvarModal               controllers.Locais.salvarModal()
 #--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                   controllers.Assets.at(path="/public", file)   

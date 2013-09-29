@@ -32,6 +32,11 @@ public class Formacao extends Model {
         }
         return opcoes;
     }
+
+    public static List<Formacao> opcoesPorBioma(Long id) {
+        LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
+        return Formacao.find.where().eq("bioma.id", id).orderBy("nome").findList();
+    }
     
     public static Page<Formacao> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 

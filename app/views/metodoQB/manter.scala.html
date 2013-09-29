@@ -55,8 +55,8 @@
             <thead>
                 <tr class="tablehead">
                     <th>Descrição</th>
-                    <th >Alterar</th>
-                    <th>Excluir</th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
@@ -68,11 +68,11 @@
                             @metodo.descricao
                         </td>
                         <td>
-                               <a href="@routes.MetodosQB.editar(metodo.id)"><i class="icon-pencil" rel="tooltip" title="Editar Método"></i></a>
+                               <a href="@routes.MetodosQB.editar(metodo.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @metodo.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.MetodosQB.deletar(metodo.id)"><i class="icon-remove" rel="tooltip" title="Excluir Método"></i></a>
+                               <a href="@routes.MetodosQB.deletar(metodo.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @metodo.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

@@ -56,9 +56,7 @@
                     </div>
                     <div class="span4">
                      <br><br>
-                          <a href="@routes.Autores.manter(0, "nome", "asc", "")">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo autor"></i>
-                           </a>
+                          <a href="@routes.Autores.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo autor">Cadastrar novo autor</a>
                     </div>
             </div>
 
@@ -75,9 +73,7 @@
                     </div>
                     <div class="span4">
                      <br><br>
-                          <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar nova Disponibilidade"></i>
-                           </a>
+                          <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova Disponibilidade">Cadastrar nova Disponibilidade</a>
                     </div>
             </div>
 
@@ -94,9 +90,7 @@
                     </div>
                     <div class="span4">
                      <br><br>
-                          <a href="@routes.MetodosQB.manter()">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa"></i>
-                           </a>
+                          <a href="@routes.MetodosQB.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa">Cadastrar novo Método de Quantificação de Biomassa</a>
                     </div>
             </div>
 
@@ -113,9 +107,7 @@
                     </div>
                     <div class="span4">
                      <br><br>
-                          <a href="@routes.MetodosQC.manter()">
-                            <i align="bottom" class="icon-plus" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono"></i>
-                           </a>
+                          <a href="@routes.MetodosQC.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono">Cadastrar novo Método de Quantificação de Carbono</a>
                     </div>
             </div>
                  
@@ -156,8 +148,8 @@
             <thead>
                 <tr class="tablehead">
                     @header("autor.nome", "Nome do Autor")
-                    <th>Alterar</th>
-                    <th>Excluir</th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
@@ -169,11 +161,11 @@
                             @TrabalhoCientifico.autor.nome
                         </td>
                         <td>
-                               <a href="@routes.TrabalhosCientificos.editar(TrabalhoCientifico.id)"><i class="icon-pencil" rel="tooltip" title="Editar Trabalho Científico"></i></a>
+                               <a href="@routes.TrabalhosCientificos.editar(TrabalhoCientifico.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar Trabalho Científico">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.TrabalhosCientificos.deletar(TrabalhoCientifico.id)"><i class="icon-remove" rel="tooltip" title="Excluir Trabalho Científico"></i></a>
+                               <a href="@routes.TrabalhosCientificos.deletar(TrabalhoCientifico.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir Trabalho Científico">Excluir</a>
                         </td>
                     </tr>
                 }

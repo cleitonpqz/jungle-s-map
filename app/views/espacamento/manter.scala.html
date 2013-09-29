@@ -88,8 +88,8 @@
             <thead>
                 <tr class="tablehead">
                     @header("nome", "Descrição")
-                    <th>Alterar</th>
-                    <th>Excluir</th>
+                    <th></th>
+                    <th></th>
                     
                 </tr>
             </thead>
@@ -101,11 +101,11 @@
                             @espacamento.descricao
                         </td>
                         <td>
-                               <a href="@routes.Espacamentos.editar(espacamento.id)"><i class="icon-pencil" rel="tooltip" title="Editar espaçamento"></i></a>
+                               <a href="@routes.Espacamentos.editar(espacamento.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @espacamento.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Espacamentos.deletar(espacamento.id)"><i class="icon-remove" rel="tooltip" title="Excluir espaçamento"></i></a>
+                               <a href="@routes.Espacamentos.deletar(espacamento.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @espacamento.descricao">Excluir</a>
                         </td>
                     </tr>
                 }
