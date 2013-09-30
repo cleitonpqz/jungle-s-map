@@ -1,7 +1,16 @@
-@(message:String)
-
+@(locais: List[Local])
 @stylesheet = {
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
+}
+
+@display(coordenadas: Iterator[Coordenada]) = {
+    @for(coordenada <- coordenadas) {
+        @if(coordenadas.hasNext) {
+            new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude),
+        } else {
+            new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude)
+        }
+    }
 }
 
 @javascript = {
@@ -15,6 +24,29 @@
                 mapTypeId: google.maps.MapTypeId.STREET
             };
             var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            
+            @for(local <- locais) {
+
+                var poligono = new google.maps.Polygon({
+                    paths: [@display(local.coordenadas.iterator)],
+                    strokeColor: '#6B8E23',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 3,
+                    fillColor: '#228B22',
+                    fillOpacity: 0.35
+                });
+                poligono.setMap(map);
+
+
+                google.maps.event.addListener(poligono, 'click', function(event) {
+                    var infowindow =  new google.maps.InfoWindow({
+                        content: '@local.descricao'
+                    });
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(this.map);
+                });
+
+            }
 
         }
 
