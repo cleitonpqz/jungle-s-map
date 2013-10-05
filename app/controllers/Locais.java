@@ -51,4 +51,12 @@ public class Locais extends Controller{
                 sortBy, order, bioma, formacao, local, estado, cidade)
             );
     }
+    
+    public static Result manter(int page, String sortBy, String order, int bioma, int formacao, String local, int estado, int cidade) {
+        return ok(
+            manter.render(
+                Local.localizarSimilar(page, 5, sortBy, order, bioma, formacao,local, estado, cidade) ,
+                sortBy, order, bioma, formacao, local, estado, cidade)
+            );
+    }
 }

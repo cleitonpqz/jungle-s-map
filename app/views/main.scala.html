@@ -1,4 +1,4 @@
-@(title: String, javascript: Html = Html(""), stylesheet: Html = Html(""))(content: Html)
+@(title: String, javascript: Html = Html(""), stylesheet: Html = Html(""), map_canvas: Html = Html(""))(content: Html)
 <!DOCTYPE html>
 
 <html>
@@ -40,7 +40,14 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li class=""><a href="@routes.Application.index()"><i class="icon-home icon-white"></i>Home</a></li>
-                    <li><a href="@routes.Locais.incluir()">Local</a></li>
+                     <li class="dropdown">  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Local <b class="caret"></b></a>  
+                        <ul class="dropdown-menu">  
+                            <li><a  href="@routes.Locais.manter()">Manter</a></li>  
+                            <li><a href="@routes.Locais.incluir()">Incluir</a></li>  
+                        </ul>  
+                    </li>
+                    
                     <li class="dropdown">  
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Dados do Local <b class="caret"></b></a>  
                         <ul class="dropdown-menu">  
@@ -74,16 +81,14 @@
           </div>
       </div>
     </div>
-    <div id="map-canvas"></div>
-    <div class="container">
-
+      @map_canvas
+      <div class="container">
+       <div class="page-header">
+             <h3>@title</h3>
+       </div>
       <div class="content">
-        <div class="row">
-          <div class="span12">
             @content
-          </div>
-        </div>          
-      </div>
+     </div>
       
       <hr>
 

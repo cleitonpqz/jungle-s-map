@@ -94,7 +94,8 @@ POST    /Formacoes/listarFormacao           controllers.Formacoes.listarFormacao
 POST    /Municipios/listarMunicipio         controllers.Municipios.listarMunicipio(id:Long)
 POST    /Locais                             controllers.Locais.salvar()
 POST    /TrabalhosCientificos/findById      controllers.TrabalhosCientificos.findById(id:Long)
-GET     /Locais/localizarSimilar            controllers.Locais.localizarSimilar(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= 0, f:Int ?= 0, l ?= "", e:Int ?= 0, m:Int ?= 0)
+GET     /Locais/localizarSimilar            controllers.Locais.localizarSimilar(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= -1, f:Int ?= -1, l ?= "", e:Int ?= -1, m:Int ?= -1)
+GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= -1, f:Int ?= -1, l ?= "", e:Int ?= -1, m:Int ?= -1)
 #--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                   controllers.Assets.at(path="/public", file)   

@@ -1,8 +1,7 @@
 @(localForm: Form[Local], trabalhoCientificoForm: Form[TrabalhoCientifico])
+@map_canvas={<div id="map-canvas"></div>}
 @import helper._
-
 @import helper.twitterBootstrap._ 
-
 
 @stylesheet = {
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/index.css")">
@@ -326,7 +325,7 @@ $(document).ready(function(){
 
  }
 
-@main("Incluir Local", javascript, stylesheet) {
+@main("Incluir Local", javascript, stylesheet, map_canvas) {
    
            
               <table>

@@ -22,7 +22,7 @@
     }
     
     // Generate the link
-    routes.Locais.localizarSimilar(newPage, sortBy, order, bioma, formacao, local, estado, municipio)
+    routes.Locais.manter(newPage, sortBy, order, bioma, formacao, local, estado, municipio)
     
 }
 @**********************************
@@ -48,21 +48,6 @@
 @javascript = {
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
-<script type="text/javascript">
-    
- $(document).ready(function(){
-    $('#selecionarBtn').click(function(e){
-        window.opener.document.getElementById('trabalhoCientificoSelect').value= $( "input:checked" ).val();
-        window.close();
-     });
-});
-    function avisa_pagiana_mae(){
-        opener.findByIdTrabalhoCientifico();
-    } 
-
-window.onbeforeunload = avisa_pagiana_mae;
- 
-</script>
 
 <script type="text/javascript">     
 
@@ -141,8 +126,8 @@ $(document).ready(function(){
 }
 
 @import helper._
-@layoutPopUp("Local Semelhante", javascript, stylesheet){
- <legend>Escolher Local Similar</legend> 
+@main("Manter Local", javascript, stylesheet){
+ 
 <div class="row">  
     <div class="span6">  
         <form action="@link(0, "name")" method="GET" class="form-horizontal">
@@ -204,22 +189,22 @@ $(document).ready(function(){
                 </div> 
 
               </div>  
-              <div class="form-actions">  
-                        <button type="submit" class="btn btn-primary">Pesquisar</button>
-                        <a type="button" class="btn" onclick="window.close()">Fechar</a>  
-               </div>  
-
-    </form> 
+              
         
 </div>
  <div class="span6">
      <div id="map-canvas"></div>
  </div>
+    <div class="row">
+        <div class="form-actions span12">  
+                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                             
+        </div> 
+    </div>
+
+    </form> 
  </div>
- <div class="row">  
-    <div class="span10"> 
-  
-    @if(flash.containsKey("success")) {
+     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Feito!</strong> @flash.get("success")
@@ -270,8 +255,12 @@ $(document).ready(function(){
                             <p>@municipioLocal.municipio.nome</p>
                             }
                         </td>
+                        <td>
+                               <a href="" class="btn btn-primary btn-small" rel="tooltip" title="Editar @local.descricao">Editar</a>
+                        </td>
+                         
                         <td> 
-                            <input type="radio" name="localRadio" class="localradio"  value="@local.trabalho_cientifico.id">   
+                               <a href="" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao">Excluir</a>
                         </td>
                     </tr>
                 }
@@ -305,10 +294,8 @@ $(document).ready(function(){
                     </li>
                 }
             </ul>
-        </div>
-    </div>
- </div>
-    }
+       </div>
+    }   
 }
 
 

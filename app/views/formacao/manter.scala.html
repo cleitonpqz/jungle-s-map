@@ -42,23 +42,25 @@
     @form(action = routes.Formacoes.salvar) {
         
         <fielset>
-            <div class="row">
-                    <div class="span3">
+            <table>
+                <tr>
+                    <td>
                     @select(
                         formacaoForm("bioma.id"), 
                         options(Bioma.opcoes), 
-                        '_label -> "Bioma", 
+                        '_label -> "Bioma",
+                        'class ->"input-xlarge",
                         '_default -> "-- Escolha o Bioma --",
                         '_showConstraints -> false,
                         '_error -> formacaoForm.error("bioma")
 
                     )
-                    </div>
-                    <div class="span4">
-                     <br><br>
-                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo bioma">Cadastrar novo bioma</a>
-                    </div>
-            </div>
+                    </td>
+                     <td>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo bioma">Novo</a>
+                    </td>
+                 </tr>
+             </table>
            @inputText(
                 formacaoForm("nome"), 
                 '_label -> "Formacao",
