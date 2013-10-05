@@ -1,0 +1,309 @@
+@(currentPage: com.avaje.ebean.Page[Local], currentSortBy: String, currentOrder: String, bioma: Int, formacao : Int, local : String, estado : Int, municipio : Int)
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.Locais.localizarSimilar(newPage, sortBy, order, bioma, formacao, local, estado, municipio)
+    
+}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+@display(coordenadas: Iterator[Coordenada]) = {
+    @for(coordenada <- coordenadas) {
+        @if(coordenadas.hasNext) {
+            new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude),
+        } else {
+            new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude)
+        }
+    }
+}
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/popUp.css")">
+}
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script type="text/javascript">
+    
+ $(document).ready(function(){
+    $('#selecionarBtn').click(function(e){
+        window.opener.document.getElementById('trabalhoCientificoSelect').value= $( "input:checked" ).val();
+        window.close();
+     });
+});
+    function avisa_pagiana_mae(){
+        opener.findByIdTrabalhoCientifico();
+    } 
+
+window.onbeforeunload = avisa_pagiana_mae;
+ 
+</script>
+
+<script type="text/javascript">     
+
+function initialize() {
+
+            var myLatLng = new google.maps.LatLng(-24.786735,-51.108398);
+            var mapOptions = {
+                zoom: 7,
+                center: myLatLng,
+                mapTypeId: google.maps.MapTypeId.STREET
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            
+            @for(local <- currentPage.getList) {
+
+                var poligono = new google.maps.Polygon({
+                    paths: [@display(local.coordenadas.iterator)],
+                    strokeColor: '#6B8E23',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 3,
+                    fillColor: '#228B22',
+                    fillOpacity: 0.35
+                });
+                poligono.setMap(map);
+
+
+                google.maps.event.addListener(poligono, 'click', function(event) {
+                    var infowindow =  new google.maps.InfoWindow({
+                        content: '@local.descricao'
+                    });
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(this.map);
+                });
+
+            }
+
+        }
+
+        jQuery(function(){
+            initialize();
+        });
+</script>
+ <script type="text/javascript">   
+    $(document).ready(function(){
+    $('#bioma').change(function(e){
+        e.preventDefault();
+        $("#formacao").html("");
+        jsRoutes.controllers.Formacoes.listarFormacao($('#bioma').val()).ajax({
+                success: function(data){
+                $("#formacao").append("<option class='blank' value='-1'>-- Escolha a Formação --</option>");
+                $.each(data, function(key, item) {
+                   $("#formacao").append("<option value='"+item.id+"'>"+item.nome+"</option>");
+                   });
+            
+        }
+     });
+  });
+});
+
+$(document).ready(function(){
+    $('#estado').change(function(e){
+        e.preventDefault();
+        $("#municipio").html("");
+        jsRoutes.controllers.Municipios.listarMunicipio($('#estado').val()).ajax({
+                success: function(data){
+                $("#municipio").append("<option class='blank' value='-1'>-- Escolha o Município --</option>");
+                $.each(data, function(key, item) {
+                   $("#municipio").append("<option value='"+item.id+"'>"+item.nome+"</option>");
+                   });
+            
+        }
+     });
+  });
+});
+</script>
+}
+
+@import helper._
+@layoutPopUp("Local Semelhante", javascript, stylesheet){
+ <legend>Escolher Local Similar</legend> 
+<div class="row">  
+    <div class="span6">  
+        <form action="@link(0, "name")" method="GET" class="form-horizontal">
+
+               
+
+                <div class="control-group">  
+                 <label class="control-label" for="local" >Local</label>  
+                    <div class="controls">  
+                      <input type="text" class="input-xlarge" id="local" name="l">  
+                     </div>  
+                </div>  
+
+                <div class="control-group">  
+                <label class="control-label" for="bioma">Bioma</label>  
+                <div class="controls">  
+                  <select id="bioma" name="b" class="input-xlarge">  
+                    <option value ="-1">--Escolha um Bioma--</option>
+                    @for(opcao<-Bioma.opcoes){
+                        <option value ="@opcao._1">@opcao._2</option>
+                    }
+                  </select>  
+                </div>  
+              </div>  
+
+                <div class="control-group">  
+                <label class="control-label" for="select01">Formação</label>  
+                <div class="controls">  
+                  <select id="formacao" name="f" class="input-xlarge">  
+                    <option value ="-1">--Escolha um Formação--</option>
+                    @for(opcao<-Formacao.opcoes){
+                        <option value ="@opcao._1">@opcao._2</option>
+                    }
+                  </select> 
+                </div>  
+              </div> 
+
+
+                <div class="control-group">  
+                <label class="control-label" for="select01">Estado</label>  
+                <div class="controls">  
+                  <select id="estado" name="e" class="input-xlarge">  
+                    <option value ="-1">--Escolha um Estado--</option>
+                    @for(opcao<-Estado.opcoes){
+                        <option value ="@opcao._1">@opcao._2</option>
+                    }
+                  </select> 
+                </div>  
+              </div>  
+             <div class="control-group">  
+                <label class="control-label" for="select01">Município</label>  
+                <div class="controls">  
+                  <select id="municipio" name="m" class="input-xlarge">  
+                    <option value ="-1">--Escolha um Município--</option>
+                    @for(opcao<-Municipio.opcoes){
+                        <option value ="@opcao._1">@opcao._2</option>
+                    }
+                  </select>   
+                </div> 
+
+              </div>  
+              <div class="form-actions">  
+                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        <a type="button" class="btn" onclick="window.close()">Fechar</a>  
+                </div>  
+
+    </form> 
+        
+</div>
+ <div class="span6">
+     <div id="map-canvas"></div>
+ </div>
+ </div>
+  }
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+     @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+
+    <hr>
+    
+    @if(currentPage.getTotalRowCount == 0) {
+        
+        <div class="well">
+            <em>Nenhuma Formação Cadastrada</em>
+        </div>
+        
+    } else {
+       <div class="well">
+        <table class="table">
+            <thead>
+                <tr class="tablehead">
+                    @header("descricao", "Local")
+                    @header("formacao.bioma.nome", "Bioma")
+                    @header("formacao.nome", "Formação")
+                    @header("municipio.nome", "Município")
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                    @for(local <- currentPage.getList) {
+                    <tr>
+                        <td>
+                            @local.descricao
+                        </td>
+                        <td>
+                             @local.formacao.bioma.nome
+                        </td>
+                        <td>
+                             @local.formacao.nome
+                        </td>
+                         <td> 
+                            @for(municipioLocal<-local.municipios_locais){
+                            <p>@municipioLocal.municipio.nome</p>
+                            }
+                        </td>
+                        <td> 
+                            <input type="radio" name="localRadio" class="localradio"  value="@local.trabalho_cientifico.id">   
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+         <div type="submit">  
+           <a type="button" class="btn btn-warning btn-small" id="selecionarBtn">Selecionar</a>
+          </div>
+       </div>
+        <div id="pagination" class="pagination">
+            <ul>
+                @if(currentPage.hasPrev) {
+                    <li class="prev">
+                        <a href="@link(currentPage.getPageIndex - 1, null)">&larr; Previous</a>
+                    </li>
+                } else {
+                    <li class="prev disabled">
+                        <a>&larr; Anterior</a>
+                    </li>
+                }
+                <li class="current">
+                    <a>Exibindo @currentPage.getDisplayXtoYofZ(" a "," de ")</a>
+                </li>
+                @if(currentPage.hasNext) {
+                    <li class="next">
+                        <a href="@link(currentPage.getPageIndex + 1, null)">Next &rarr;</a>
+                    </li>
+                } else {
+                    <li class="next disabled">
+                        <a>Próxima &rarr;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+

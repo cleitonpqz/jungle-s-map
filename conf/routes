@@ -88,11 +88,13 @@ GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #Locais 
-GET     /javascriptRoutes               controllers.Application.javascriptRoutes
-GET     /Locais                         controllers.Locais.incluir()
-POST    /Locais/listarFormacao          controllers.Locais.listarFormacao(id:Long)
-POST    /Locais                         controllers.Locais.salvar()
-POST  /locais/salvarModal               controllers.Locais.salvarModal()
+GET     /javascriptRoutes                   controllers.Application.javascriptRoutes
+GET     /Locais                             controllers.Locais.incluir()
+POST    /Formacoes/listarFormacao           controllers.Formacoes.listarFormacao(id:Long)
+POST    /Municipios/listarMunicipio         controllers.Municipios.listarMunicipio(id:Long)
+POST    /Locais                             controllers.Locais.salvar()
+POST    /TrabalhosCientificos/findById      controllers.TrabalhosCientificos.findById(id:Long)
+GET     /Locais/localizarSimilar            controllers.Locais.localizarSimilar(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= 0, f:Int ?= 0, l ?= "", e:Int ?= 0, m:Int ?= 0)
 #--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                   controllers.Assets.at(path="/public", file)   

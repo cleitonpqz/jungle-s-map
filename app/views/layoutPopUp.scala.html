@@ -1,0 +1,49 @@
+@(title: String, javascript: Html = Html(""), stylesheet: Html = Html(""))(content: Html)
+<!DOCTYPE html>
+<html lang="pt">
+ <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+
+    <title>@title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+
+    <!-- Custom styles for this template -->
+    
+    @stylesheet
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="@routes.Assets.at("javascripts/html5shiv.js")"></script>
+      <script src="@routes.Assets.at("javascripts/respond.min.js")"></script>
+    <![endif]-->
+  </head>
+  <body>
+   <div class="container">
+
+      <div class="content">
+              @content
+             
+      </div>
+      
+     
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+    @javascript
+
+  </body>
+      
+</html>

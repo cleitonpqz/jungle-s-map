@@ -115,6 +115,7 @@ create table trabalho_cientifico (
   disponibilidade_id        bigint,
   metodo_quantificacao_biomassa_id bigint,
   metodo_quantificacao_carbono_id bigint,
+  ano                       integer,
   constraint pk_trabalho_cientifico primary key (id))
 ;
 

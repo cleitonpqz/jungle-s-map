@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.*;
 import views.html.formacao.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
 import models.*;
 
 public class Formacoes extends Controller {
@@ -65,4 +66,9 @@ public class Formacoes extends Controller {
         return GO_HOME;
         }   
     }
-}
+    
+    public static Result listarFormacao(Long id){ 
+        return ok(Json.toJson(Formacao.opcoesPorBioma(id)));
+    }
+     
+ }

@@ -26,8 +26,11 @@ public class Locais extends Controller{
     }
      
      public static Result listarFormacao(Long id){ 
-         Formacao.opcoesPorBioma(id);
-         return ok(Json.toJson(Formacao.opcoesPorBioma(id)));
+        return ok(Json.toJson(Formacao.opcoesPorBioma(id)));
+    }
+     
+     public static Result opcoesFormacao(){ 
+        return ok(Json.toJson(Formacao.opcoes()));
     }
     
     public static Result  salvar() {
@@ -41,18 +44,11 @@ public class Locais extends Controller{
         return GO_HOME;
        }
     
-    public static Result salvarModal() {
-         String autor_id = form().bindFromRequest().get("autor.id");
-         String disponibilidade_id = form().bindFromRequest().get("disponibilidade.id");
-         String metodoQB_id = form().bindFromRequest().get("metodo_quantificacao_biomassa.id");
-         String metodoQC_id = form().bindFromRequest().get("metodo_quantificacao_carbono.id");
-         TrabalhoCientifico trabalhoCientifico = new TrabalhoCientifico();
-         trabalhoCientifico.autor = Autor.find.byId(Long.parseLong(autor_id));
-         trabalhoCientifico.disponibilidade = Disponibilidade.find.byId(Long.parseLong(disponibilidade_id));
-         trabalhoCientifico.metodo_quantificacao_biomassa = MetodoQuantificacaoBiomassa.find.byId(Long.parseLong(metodoQB_id));
-         trabalhoCientifico.metodo_quantificacao_carbono = MetodoQuantificacaoCarbono.find.byId(Long.parseLong(metodoQC_id));
-         trabalhoCientifico.save();
-         System.out.println(metodoQB_id);
-         return ok(Json.toJson(trabalhoCientifico));
+    public static Result localizarSimilar(int page, String sortBy, String order, int bioma, int formacao, String local, int estado, int cidade) {
+        return ok(
+            popUpLocalizarSimilar.render(
+                Local.localizarSimilar(page, 5, sortBy, order, bioma, formacao,local, estado, cidade) ,
+                sortBy, order, bioma, formacao, local, estado, cidade)
+            );
     }
 }

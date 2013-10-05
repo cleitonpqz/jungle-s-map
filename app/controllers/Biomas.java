@@ -45,14 +45,6 @@ public class Biomas extends Controller {
         return GO_HOME;
     }
     
-    /* public static Result novo() {
-        Form<Bioma> biomaForm = form(Bioma.class);
-        return ok(
-            createForm.render(biomaForm)
-        );
-    }*/
-    
-    
     public static Result salvar() {
         Form<Bioma> biomaForm = form(Bioma.class).bindFromRequest();
         if(biomaForm.hasErrors()) {

@@ -9,12 +9,12 @@ import play.data.validation.*;
 
 import com.avaje.ebean.*;
 
-@Entity 
+@Entity
 public class TrabalhoCientifico extends Model {
     
     @Id
     public Long id;
-
+    
     @ManyToOne
     @Constraints.Required(message="O campo autor é obrigatório!")
     @Formats.NonEmpty
@@ -22,25 +22,25 @@ public class TrabalhoCientifico extends Model {
 
     @ManyToOne
     @Constraints.Required(message="O campo Disponibilidade é obrigatório!")
-    @Formats.NonEmpty
     public Disponibilidade disponibilidade;
 
     @ManyToOne
     @Constraints.Required(message="O campo Método de Quantificação de Biomassa é obrigatório!")
-    @Formats.NonEmpty
     public MetodoQuantificacaoBiomassa metodo_quantificacao_biomassa;
 
     @ManyToOne
     @Constraints.Required(message="O campo Método de Quantificação de Carbono é obrigatório!")
-    @Formats.NonEmpty
     public MetodoQuantificacaoCarbono metodo_quantificacao_carbono;
+    
+    @Constraints.Required(message="O campo autor é obrigatório!")
+    public Integer ano;
     
     public static Model.Finder<Long,TrabalhoCientifico> find = new Model.Finder<Long,TrabalhoCientifico>(Long.class, TrabalhoCientifico.class);
 
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(TrabalhoCientifico f: TrabalhoCientifico.find.orderBy("autor.nome").findList()) {
-            opcoes.put(f.id.toString(), f.autor.nome);
+        for(TrabalhoCientifico t: TrabalhoCientifico.find.orderBy("autor.nome").findList()) {
+            opcoes.put(t.id.toString(), t.autor.nome +" ("+t.ano+")");
         }
         return opcoes;
     }

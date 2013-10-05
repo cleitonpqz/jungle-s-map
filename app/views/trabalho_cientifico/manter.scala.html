@@ -76,7 +76,14 @@
                           <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova Disponibilidade">Cadastrar nova Disponibilidade</a>
                     </div>
             </div>
-
+            @inputText(
+                trabalhoCientificoForm("ano"), 
+                '_label -> "Ano",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o ano",
+                '_help -> "",
+                '_error -> trabalhoCientificoForm.error("ano")
+            )
             <div class="row">
                     <div class="span3">
                     @select(

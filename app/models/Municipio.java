@@ -45,4 +45,11 @@ public class Municipio extends Model {
                 .findPagingList(pageSize)
                 .getPage(page);
     }
+    
+     public static List<Municipio> opcoesPorEstado(Long id) {
+       if(id!=-1){
+       return Municipio.find.where().eq("uf.id", id).orderBy("nome").findList();
+       }else
+       return Municipio.find.where().orderBy("nome").findList();
+    }
 }

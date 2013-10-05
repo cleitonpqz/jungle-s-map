@@ -20,8 +20,9 @@ public class Application extends Controller {
             
                 // Routes for Locais
                 controllers.routes.javascript.Locais.incluir(), 
-                controllers.routes.javascript.Locais.listarFormacao(),
-                controllers.routes.javascript.Locais.salvarModal()
+                controllers.routes.javascript.Formacoes.listarFormacao(),
+                controllers.routes.javascript.Municipios.listarMunicipio(),
+                controllers.routes.javascript.TrabalhosCientificos.findById()
                              
                 
             )

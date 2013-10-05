@@ -11,8 +11,8 @@
 @javascript = {
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
-
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
+
 <script type="text/javascript">
    function initialize() { 
    var all_overlays = [];
@@ -64,7 +64,7 @@
   controlUI.style.borderWidth = '2px';
   controlUI.style.cursor = 'pointer';
   controlUI.style.textAlign = 'center';
-  controlUI.title = 'Click para utilizar o polígono selecionado no cadastro';
+  controlUI.title = 'Click para utilizar o polígono selecionado';
   controlDiv.appendChild(controlUI);
 
   var controlText = document.createElement('div');
@@ -192,11 +192,11 @@ $(document).ready(function(){
     $('#bioma').change(function(e){
         e.preventDefault();
         $("#formacao").html("");
-        jsRoutes.controllers.Locais.listarFormacao($('#bioma').val()).ajax({
+        jsRoutes.controllers.Formacoes.listarFormacao($('#bioma').val()).ajax({
                 success: function(data){
                 $("#formacao").append("<option class='blank' value=''>-- Escolha a Formação --</option>");
                 $.each(data, function(key, item) {
-                   $("#formacao").append("<option value='"+item.id+"'>"+item.nome+"</option>");
+                   $("#formacao").append("<option value='+item.id+'>"+item.nome+"</option>");
                    });
             
         }
@@ -207,22 +207,25 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#cadastrarTrabalhoBtn').click(function(e){
-         jsRoutes.controllers.Locais.salvarModal().ajax({
-                data: $("#trabalhoCientificoModalBody").find("select").serialize(),
-                success: function(data){
-                $("#trabalhoCientificoId").val(data.id);
-                $("#trabalhoCientificoInformacao")
-                        .html("<tr><td>Autor:</td><td>"+data.autor.nome+"</td></tr>\n\
+    $('#trabalhoCientificoSelect').change(function(e){
+           findByIdTrabalhoCientifico();
+     });
+});
+
+function findByIdTrabalhoCientifico() {
+    jsRoutes.controllers.TrabalhosCientificos.findById($('#trabalhoCientificoSelect option:selected').val()).ajax({
+                    success: function(data){
+                        $("#trabalhoCientificoInformacao")
+                        .html("<tr><td>Autor</td><td>"+data.autor.nome+"</td></tr>\n\\n\
+                                <tr><td>Ano</td><td>"+data.ano+"</td></tr>\n\
                                 <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
                                 <tr><td>Metodo de Qantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
                                 <tr><td>Metodo de Qantificação arbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>");
                                 $('#trabalhoCientificoModal').modal('hide');
                                 e.stopPropagation();
-        }
-     });
-  });
-});
+		}
+         });
+}
 </script>
 
 
@@ -290,6 +293,10 @@ $(document).ready(function(){
             $('.municipio_template').remove();
             $('.coordenada_template').remove();
         });
+        
+     function popUpLocalizarSimilar() {
+      popup = window.open('@routes.Locais.localizarSimilar(0, "descricao", "asc", -1, -1, "", -1, -1)', 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
+    }
     </script>
 }
 @municipioGroup(field: Field, className: String = "municipio") = {
@@ -337,7 +344,7 @@ $(document).ready(function(){
                 ) 
                 </td>
                      <td>
-                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo bioma">Cadastrar novo bioma</a>
+                          <a href="@routes.Biomas.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Bioma">Novo</a>
                       </td>
                  </tr>
              </table>
@@ -345,7 +352,7 @@ $(document).ready(function(){
         
         
         <fieldset id="localform"> 
-            <input type="hidden" id="trabalhoCientificoId" name="trabalho_cientifico.id" value="">
+            
              <table>
                 <tr>
                     <td>
@@ -363,7 +370,7 @@ $(document).ready(function(){
                 
                 </td>
                      <td>
-                               <a href="@routes.Formacoes.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova formação">Cadastrar nova formação</a>
+                               <a href="@routes.Formacoes.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova formação">Nova</a>
                        </td>
                  </tr>
              </table>
@@ -392,7 +399,7 @@ $(document).ready(function(){
                 
               </td>
                      <td>
-                               <a  href="@routes.Espacamentos.manter(0, "descricao", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo espaçamento">Cadastrar novo espaçamento</a>
+                               <a  href="@routes.Espacamentos.manter(0, "descricao", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo espaçamento">Novo</a>
                        </td>
                  </tr>
              </table>
@@ -459,15 +466,32 @@ $(document).ready(function(){
         </fieldset>
         <fieldset>
                 <legend>Trabalho Científico</legend>
+                @select(
+                    localForm("trabalho_cientifico.id"), 
+                    options(TrabalhoCientifico.opcoes),
+                    'class ->"input-xlarge",
+                    'name->"trabalho_cientifico.id",
+                    'id->"trabalhoCientificoSelect",
+                    '_label -> "Trabalho Científico", 
+                    '_default -> "-- Escolha o Trabalho Científico --",
+                    '_showConstraints -> false,
+                    '_error -> localForm.error("espacamento")
+                )
+                
+              
                 <div>
-                  <a data-toggle="modal" href="#trabalhoCientificoModal" class="btn btn-primary btn-small">Cadastrar trabalho</a>
-                  <a type="button" class="btn btn-success btn-small">Utilizar trabalho de outro local</a>
+                  <a type="button" class="btn btn-primary btn-small" href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Cadastrar trabalho</a>
+                  <a type="button" class="btn btn-success btn-small" onclick="popUpLocalizarSimilar()">Utilizar local similar</a>
                   <a type="button" class="btn btn-warning btn-small">Ver sugestão do software</a>
-                  <a type="button" class="btn btn-inverse btn-small" href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Cadastrar trabalho</a>
+                  
                 </div>
                 
         </fieldset>
-    <br>
+     <div class="well">
+        <table id="trabalhoCientificoInformacao" class="table">
+            
+        </table>
+    </div>
     <fieldset>
             <div class="actions">
                 <input type="submit" class="btn btn-primary" value="Salvar">
@@ -477,102 +501,9 @@ $(document).ready(function(){
         
     }
     
-    <div class="well">
-        <table id="trabalhoCientificoInformacao" class="table">
-            
-        </table>
-    </div>
+   
     
     
-<div id="trabalhoCientificoModal" class="modal hide fade in" style="display: none; ">  
-<div class="modal-header">  
-<a class="close" data-dismiss="modal"></a>  
-<h3>Cadastrar Trabalho Científico</h3>  
-</div>  
-<div class="modal-body">  
- <div id="trabalhoCientificoModalBody">
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("autor.id"), 
-                        options(Autor.opcoes), 
-                        '_label -> "Autor",
-                        'id->"autor.id",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Autor --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("autor")
-                    ) 
-                    </td>
-                     <td>
-                          <a href="@routes.Autores.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo autor">Cadastrar novo autor</a>
-                    </td>
-                 </tr>
-             </table>
 
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("disponibilidade.id"), 
-                        options(Disponibilidade.opcoes), 
-                        '_label -> "Disponibilidade",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha a Disponibilidade --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("disponibilidade")
-                    )
-                    </td>
-                     <td>
-                        <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar nova Disponibilidade">Cadastrar nova Disponibilidade</a>
-                 </td>
-                 </tr>
-             </table>
-
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
-                        options(MetodoQuantificacaoBiomassa.opcoes), 
-                        '_label -> "Método de Quantificação de Biomassa",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
-                    )
-                    </td>
-                     <td>
-                          <a href="@routes.MetodosQB.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa">Cadastrar novo Método de Quantificação de Biomassa</a>
-                   </td>
-                 </tr>
-             </table>
-
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
-                        options(MetodoQuantificacaoCarbono.opcoes), 
-                        '_label -> "Método de Quantificação de Carbono",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Método de Quantificação de Carbono --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
-                    ) 
-                    </td>
-                     <td>
-                          <a href="@routes.MetodosQC.manter()" align="bottom" class="btn btn-primary btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono">Cadastrar novo Método de Quantificação de Carbono</a>
-                    </td>
-                 </tr>
-             </table>
- </div>              
-</div>  
-<div class="modal-footer">  
-<a type="button" id="cadastrarTrabalhoBtn" class="btn btn-success">Cadastrar</a>  
-<a href="#" class="btn" data-dismiss="modal">Fechar</a>  
-</div>  
-</div> 
 }
 

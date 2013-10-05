@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.*;
 import views.html.trabalho_cientifico.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
 import models.*;
 
 public class TrabalhosCientificos extends Controller {
@@ -65,4 +66,10 @@ public class TrabalhosCientificos extends Controller {
         return GO_HOME;
         }   
     }
+    
+    public static Result findById(Long id) {
+        System.out.println("Aquiiiiiiiiiiiii");
+        return ok(Json.toJson(TrabalhoCientifico.find.byId(id)));
+    }
+       
 }
