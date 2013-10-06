@@ -46,6 +46,7 @@
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/popUp.css")">
 }
 @javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 
@@ -122,6 +123,30 @@ $(document).ready(function(){
      });
   });
 });
+</script>
+
+<script type="text/javascript">
+    function confirmaExclusao(id, descricao){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir o Local: "+descricao,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                    jsRoutes.controllers.Locais.excluir(id).ajax({});
+                    window.location.href="/Locais/"+id+"/excluir";
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }
 </script>
 }
 
@@ -260,15 +285,12 @@ $(document).ready(function(){
                         </td>
                          
                         <td> 
-                               <a href="" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao">Excluir</a>
+                               <a type="button" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao" onclick="confirmaExclusao(@local.id, '@local.descricao')">Excluir</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-         <div type="submit">  
-           <a type="button" class="btn btn-warning btn-small" id="selecionarBtn">Selecionar</a>
-          </div>
        </div>
         <div id="pagination" class="pagination">
             <ul>

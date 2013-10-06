@@ -68,7 +68,6 @@ public class TrabalhosCientificos extends Controller {
     }
     
     public static Result findById(Long id) {
-        System.out.println("Aquiiiiiiiiiiiii");
         return ok(Json.toJson(TrabalhoCientifico.find.byId(id)));
     }
        

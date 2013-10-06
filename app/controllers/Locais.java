@@ -8,18 +8,14 @@ import play.*;
 import views.html.local.*;
 import javax.persistence.PersistenceException;
 import play.libs.Json;
-import org.codehaus.jackson.JsonNode;
 import models.*;
 
 public class Locais extends Controller{
     
-    public static Result GO_HOME = redirect(routes.Application.index());
+    public static Result GO_HOME = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
     
-    public static Result index() {
-        return GO_HOME;
-    }
-    
-     public static Result incluir() {
+       
+    public static Result incluir() {
          Form<Local> localForm = form(Local.class);
          Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class);
          return ok(incluir.render(localForm, trabalhoCientificoForm));
@@ -59,4 +55,20 @@ public class Locais extends Controller{
                 sortBy, order, bioma, formacao, local, estado, cidade)
             );
     }
+    
+    public static Result findById(Long id) {
+        System.out.println(Local.find.byId(id).descricao);
+        return ok(Json.toJson(Local.find.byId(id)));
+    }
+    
+    public static Result excluir (Long id) {
+        try{Local.find.ref(id).delete();
+            flash("success", "Local excluido");
+            return GO_HOME;
+            }catch(PersistenceException exception){
+             flash("error", "Local não permitida");
+             return GO_HOME;
+            }
+    }
+    
 }

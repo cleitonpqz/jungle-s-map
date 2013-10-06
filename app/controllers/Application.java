@@ -18,7 +18,6 @@ public class Application extends Controller {
         return ok(
             Routes.javascriptRouter("jsRoutes",
             
-                // Routes for Locais
                 controllers.routes.javascript.Locais.incluir(), 
                 controllers.routes.javascript.Formacoes.listarFormacao(),
                 controllers.routes.javascript.Municipios.listarMunicipio(),
