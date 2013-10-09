@@ -12,13 +12,12 @@ import models.*;
 
 public class Locais extends Controller{
     
-    public static Result GO_HOME = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
+    public static Result GO_HOME = redirect(routes.Application.index());
     
        
     public static Result incluir() {
          Form<Local> localForm = form(Local.class);
-         Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class);
-         return ok(incluir.render(localForm, trabalhoCientificoForm));
+         return ok(incluir.render(localForm));
     }
      
      public static Result listarFormacao(Long id){ 
@@ -31,9 +30,8 @@ public class Locais extends Controller{
     
     public static Result  salvar() {
         Form<Local> localForm = form(Local.class).bindFromRequest();
-        Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class);
         if(localForm.hasErrors()) {
-           return badRequest(incluir.render(localForm, trabalhoCientificoForm));
+           return badRequest(incluir.render(localForm));
         }
         localForm.get().save();
         flash("success", "O Local " + localForm.get().descricao + " foi incluido com sucesso");
@@ -62,12 +60,13 @@ public class Locais extends Controller{
     }
     
     public static Result excluir (Long id) {
+        Result VOLTAR = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
         try{Local.find.ref(id).delete();
             flash("success", "Local excluido");
-            return GO_HOME;
+            return VOLTAR;
             }catch(PersistenceException exception){
              flash("error", "Local não permitida");
-             return GO_HOME;
+             return VOLTAR;
             }
     }
     

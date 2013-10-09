@@ -1,4 +1,4 @@
-@(localForm: Form[Local], trabalhoCientificoForm: Form[TrabalhoCientifico])
+@(localForm: Form[Local])
 @map_canvas={<div id="map-canvas"></div>}
 @import helper._
 @import helper.twitterBootstrap._ 
@@ -195,7 +195,7 @@ $(document).ready(function(){
                 success: function(data){
                 $("#formacao").append("<option class='blank' value=''>-- Escolha a Formação --</option>");
                 $.each(data, function(key, item) {
-                   $("#formacao").append("<option value='+item.id+'>"+item.nome+"</option>");
+                   $("#formacao").append("<option value="+item.id+">"+item.nome+"</option>");
                    });
             
         }
