@@ -88,7 +88,8 @@ GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #Locais 
-
+POST    /locais/:id                         controllers.Locais.atualizar(id:Long)
+GET     /Locais/:id/editar                  controllers.Locais.editar(id:Long)
 GET     /Locais                             controllers.Locais.incluir()
 POST    /Formacoes/listarFormacao           controllers.Formacoes.listarFormacao(id:Long)
 POST    /Municipios/listarMunicipio         controllers.Municipios.listarMunicipio(id:Long)

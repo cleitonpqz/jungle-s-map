@@ -69,5 +69,24 @@ public class Locais extends Controller{
              return VOLTAR;
             }
     }
+    public static Result editar(Long id) {
+         Local local = Local.find.byId(id);
+         Form<Local> localForm = form(Local.class).fill(local);
+         return ok(
+         editarForm.render(id, localForm, local.coordenadas)
+         );
+    }
+        
+    public static Result atualizar(Long id) {
+        Result VOLTAR = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
+        Form<Local> localForm = form(Local.class).bindFromRequest();
+        if(localForm.hasErrors()) {
+        return badRequest(editarForm.render(id, localForm, localForm.get().coordenadas));
+        }
+        localForm.get().update(id);
+        flash("success", "O Local " + localForm.get().descricao + " foi alterado com sucesso");
+        return VOLTAR;
+    }
+
     
 }

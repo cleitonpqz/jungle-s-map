@@ -1,4 +1,4 @@
-@(localForm: Form[Local])
+@(id: Long, localForm: Form[Local], polyCoordenadas: List[Coordenada])
 @map_canvas={<div id="map-canvas"></div>}
 @import helper._
 @import helper.twitterBootstrap._ 
@@ -142,25 +142,17 @@ function apagarControl(controlDiv, map) {
           fillOpacity: 0.35,
           editable: true
         };
-        // Creates a drawing manager attached to the map that allows the user to draw
-        // markers, lines, and shapes.
-       var drawingManager = new google.maps.drawing.DrawingManager({
-          drawingMode: google.maps.drawing.OverlayType.POLYGON,
-          markerOptions: {
-            draggable: true
-          },
-          polylineOptions: {
-            editable: true
-          },
-          drawingControlOptions: {
+  var drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      markerOptions: {
+      draggable: true
+      },
+      drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
       drawingModes: [
         google.maps.drawing.OverlayType.POLYGON,
-        
-      ]
+       ]
     },
-          rectangleOptions: polyOptions,
-          circleOptions: polyOptions,
           polygonOptions: polyOptions,
           map: map
         });
@@ -177,10 +169,31 @@ function apagarControl(controlDiv, map) {
             setSelection(polygon);
             }
         });
+        
+        var arrayCoordendas = new Array();
+        polyCoordenadas:
+        @for((coordenada, count) <- polyCoordenadas.zipWithIndex) {
+            arrayCoordendas[@count] = new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude);
+         }
+        
+        var poligono = new google.maps.Polygon({
+                    paths: arrayCoordendas,
+                    strokeColor: '#ff0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#ff0000',
+                    fillOpacity: 0.35,
+                    editable: false
+                });
+         
+         google.maps.event.addListener(poligono, 'click', function() {
+              setSelection(poligono);
+            });
+         drawingManager.setDrawingMode(null);
+         poligono.setMap(map);
 
  }
  
-
         jQuery(function(){
             initialize();
         });
@@ -203,10 +216,11 @@ $(document).ready(function(){
   });
 });
 
-$('body').on('click', '.checkPrincipal', function(e) {
+
+     $('body').on('click', '.checkPrincipal', function(e) {
           $('.checkPrincipal').not(this).removeAttr('checked')
           
- });
+        });
 </script>
 
 <script type="text/javascript">
@@ -225,11 +239,11 @@ function findByIdTrabalhoCientifico() {
                                 <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
                                 <tr><td>Metodo de Qantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
                                 <tr><td>Metodo de Qantificação arbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>");
-                                $('#trabalhoCientificoModal').modal('hide');
                                 e.stopPropagation();
 		}
          });
 }
+
 </script>
 
 
@@ -301,25 +315,25 @@ $(document).ready(function(){
             $('.coordenada_template').remove();
         });
         
+        
      function popUpLocalizarSimilar() {
       popup = window.open('@routes.Locais.localizarSimilar(0, "descricao", "asc", -1, -1, "", -1, -1)', 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
     }
     </script>
 }
-@municipioGroup(field: Field, className: String = "municipio") = {
-    
-           <div class="@className">
+@municipioGroup(field: Field, fieldName: String = "municipios_locais[0]", className: String = "municipio") = {
+    <div class="@className">
                <div class=" well form-inline">
                     <a class="removeMunicipio btn btn-danger pull-right btn-small">Remover</a>
                      <div class="controls">  
-                         <select name="municipios_locais[0].municipio.id" class="input-xlarge">  
+                         <select name="@{fieldName+".municipio.id"}" class="input-xlarge") value="@field("municipio.id").value"">  
                             <option>--Escolha um Município--</option>
                                 @for(opcao<-Municipio.opcoes){
-                                    <option value ="@opcao._1">@opcao._2</option>
+                                    <option value ="@opcao._1" @if(field("municipio.id").value.getOrElse(0) == opcao._1){selected}>@opcao._2</option>
                                 }
                         </select> 
                     <label class="checkbox">  
-                    <input type="checkbox" name="municipios_locais[0].principal" class="checkPrincipal" value ="true"> principal 
+                    <input type="checkbox" name="@{fieldName+".principal"}" class="checkPrincipal" value ="true" @if(field("principal").value){checked}> principal 
                     </label>
                 </div> 
                 </div> 
@@ -327,16 +341,17 @@ $(document).ready(function(){
   }
 
 
-@coordenadaGroup(field: Field, className: String = "coordenada") = {
+@coordenadaGroup(field: Field, fieldName: String = "coordenadas[0]", className: String = "coordenada") = {
+ 
     <div class="well form-inline @className">
        <a class="removeCoordenada btn btn-danger pull-right btn-small">Remover</a>
-        <input type="text" name="coordenadas[0].latitude" class="large" placeholder="Latitude">  
-        <input type="text" name="coordenadas[0].longitude" class="large" placeholder="Longitude">  
+        <input type="text" name="@{fieldName+".latitude"}" class="large" placeholder="Latitude" value="@field("latitude").value")">  
+        <input type="text" name="@{fieldName+".longitude"}" class="large" placeholder="Longitude" value="@field("longitude").value")">  
   </div>
-
+ 
  }
 
-@main("Incluir Local", javascript, stylesheet, map_canvas) {
+@main("Editar Local", javascript, stylesheet, map_canvas) {
    
            
               <table>
@@ -358,7 +373,7 @@ $(document).ready(function(){
                       </td>
                  </tr>
              </table>
-        @form(action = routes.Locais.salvar, 'id -> "form") {
+        @form(action = routes.Locais.atualizar(id), 'id -> "form") {
         
         
         <fieldset id="localform"> 
@@ -369,7 +384,7 @@ $(document).ready(function(){
               
                 @select(
                     localForm("formacao.id"),
-                    options(),
+                    options(Formacao.opcoes(Long.parseLong(localForm("formacao.bioma.id").value))),
                     'id->"formacao",
                     'class ->"input-xlarge",
                     '_label -> "Formação", 
@@ -429,11 +444,13 @@ $(document).ready(function(){
             
             <div id="municipio">
             
-               @repeat(localForm("municipios_locais")) { municipio =>
+                @repeat(localForm("municipios_locais")) { municipio =>
                 
-                    @municipioGroup(municipio)
+                    @municipioGroup(municipio, municipio.name)
                 
-                }              
+                }
+                
+               
                 @municipioGroup(
                     localForm("municipio[x]"),
                     className = "municipio_template"
@@ -453,15 +470,11 @@ $(document).ready(function(){
             
                 @repeat(localForm("coordenadas")) { coordenada =>
                 
-                    @coordenadaGroup(coordenada)
+                    @coordenadaGroup(coordenada, coordenada.name)
+                  }
                 
-                }
-                
-                @**
-                 * Keep an hidden block that will be used as template for Javascript copy code
-                 **@
                 @coordenadaGroup(
-                    localForm("coordenada[x]"),
+                    localForm("coordenada[0]"),
                     className = "coordenada_template"
                 )
                 
@@ -497,16 +510,23 @@ $(document).ready(function(){
         </fieldset>
      <div class="well">
         <table id="trabalhoCientificoInformacao" class="table">
-            
+         @if(localForm("trabalho_cientifico") != null){
+            <tr><td>Autor</td><td>@localForm("trabalho_cientifico.autor.nome").value</td></tr>
+            <tr><td>Ano</td><td>@localForm("trabalho_cientifico.ano").value</td></tr>
+            <tr><td>Disponibilidade</td><td>@localForm("trabalho_cientifico.disponibilidade.descricao").value</td></tr>
+            <tr><td>Metodo de Qantificação Biomassa:</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_biomassa.descricao").value</td></tr>
+            <tr><td>Metodo de Qantificação arbono</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_carbono.descricao").value</td></tr>
+         }   
         </table>
     </div>
     <fieldset>
             <div class="actions">
                 <input type="submit" class="btn btn-primary" value="Salvar">
-                <a href="@routes.Application.index()" class="btn">Voltar</a>
+                <a href="@routes.Locais.manter()" class="btn">Voltar</a>
             </div>
     </fieldset>
         
     }
+ 
 }
 

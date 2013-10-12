@@ -19,7 +19,7 @@ public Long id;
 public String descricao;
 
 @Constraints.Required(message="O campo área  obrigatório!")
-public Float area_total;
+public Double area_total;
 
 @ManyToOne
 public TrabalhoCientifico trabalho_cientifico;

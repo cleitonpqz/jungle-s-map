@@ -68,7 +68,7 @@ public class Formacoes extends Controller {
     }
     
     public static Result listarFormacao(Long id){ 
-        return ok(Json.toJson(Formacao.opcoesPorBioma(id)));
+       return ok(Json.toJson(Formacao.opcoesPorBioma(id)));
     }
      
  }
