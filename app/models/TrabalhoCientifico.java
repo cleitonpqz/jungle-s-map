@@ -35,6 +35,9 @@ public class TrabalhoCientifico extends Model {
     @Constraints.Required(message="O campo autor é obrigatório!")
     public Integer ano;
     
+    @OneToMany(targetEntity = TrabalhoVariavelInteresse.class, cascade = CascadeType.ALL)
+    public List<TrabalhoVariavelInteresse> trabalho_variavel_interesse = new ArrayList<TrabalhoVariavelInteresse>();
+    
     public static Model.Finder<Long,TrabalhoCientifico> find = new Model.Finder<Long,TrabalhoCientifico>(Long.class, TrabalhoCientifico.class);
 
     public static Map<String,String> opcoes() {

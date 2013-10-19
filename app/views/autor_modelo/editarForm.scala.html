@@ -1,0 +1,35 @@
+@(id: Long, autorForm: Form[AutorModelo])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@main("Alterar Autor") {
+    
+    @form(routes.AutoresModelos.update(id)) {
+        
+        <fieldset>
+                        
+            @inputText(
+                autorForm("nome"), 
+                '_label -> "Autor",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite o nome do autor",
+                '_help -> "",
+                '_error -> autorForm.error("nome")
+            )
+                 
+        </fieldset>
+        
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+            <a href="@routes.Autores.manter(0, "nome", "asc", "")" class="btn">Voltar</a>
+        </div>
+        
+    }
+ 
+     
+        
+}

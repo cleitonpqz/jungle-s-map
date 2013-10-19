@@ -107,11 +107,7 @@ img {
   -ms-interpolation-mode: bicubic;
 }
 
-#map_canvas img,
-.google-maps img {
-  max-width: none;
-}
-
+ 
 button,
 input,
 select,
@@ -6170,5 +6166,5 @@ a.badge:focus {
 .tablehead{
     color:#0088cc;
 }
-#map-canvas{ max-width: none; }
+
 

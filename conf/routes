@@ -86,6 +86,27 @@ POST    /metodosQC/:id                  controllers.MetodosQC.update(id:Long)
 # Formacao Deletar
 GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
 
+#-----------------------------------------------------------------------------------------------------------------------------
+#Variável Listar e novo
+GET     /variaveis                         controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /variaveis                         controllers.Variaveis.salvar()
+# Bioma Editar                     
+GET     /variaveis/:id                     controllers.Variaveis.editar(id:Long)
+POST    /variaveis/:id                     controllers.Variaveis.update(id:Long)
+# Bioma Deletar
+GET    /variaveis/:id/deletar              controllers.Variaveis.deletar(id:Long)
+
+#-------------------------------------------------------------------------------------------------------------------------------
+#AutoresModelos
+GET     /autoresModelos                     controllers.AutoresModelos.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /autoresModelos                     controllers.AutoresModelos.salvar()
+# Formacao Editar                     
+GET     /autoresModelos/:id                 controllers.AutoresModelos.editar(id:Long)
+POST    /autoresModelos/:id                 controllers.AutoresModelos.update(id:Long)
+# Formacao Deletar
+GET    /autoresModelos/:id/deletar          controllers.AutoresModelos.deletar(id:Long)
+
+
 #--------------------------------------------------------------------------------------------------------------------------------
 #Locais 
 POST    /locais/:id                         controllers.Locais.atualizar(id:Long)

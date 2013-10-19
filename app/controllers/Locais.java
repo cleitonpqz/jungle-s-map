@@ -7,7 +7,12 @@ import static play.data.Form.*;
 import play.*;
 import views.html.local.*;
 import javax.persistence.PersistenceException;
-import play.libs.Json;
+import play.libs.Json.*;
+import play.libs.Json;   
+import static play.libs.Json.toJson;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;    
 import models.*;
 
 public class Locais extends Controller{
@@ -54,11 +59,7 @@ public class Locais extends Controller{
             );
     }
     
-    public static Result findById(Long id) {
-        System.out.println(Local.find.byId(id).descricao);
-        return ok(Json.toJson(Local.find.byId(id)));
-    }
-    
+   
     public static Result excluir (Long id) {
         Result VOLTAR = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
         try{Local.find.ref(id).delete();
@@ -87,6 +88,33 @@ public class Locais extends Controller{
         flash("success", "O Local " + localForm.get().descricao + " foi alterado com sucesso");
         return VOLTAR;
     }
-
+    
+     public static Result findById(Long id) {
+        ObjectNode result = Json.newObject();
+        String coordenadas ="";
+        String municipios="";
+        Local local = Local.find.byId(id);
+       	result.put("id", local.id);
+	result.put("descricao", local.descricao);
+        result.put("area_total", local.area_total);
+	result.put("trabalho_cientifico", Json.toJson(local.trabalho_cientifico));
+        result.put("formacao", Json.toJson(local.formacao));
+	result.put("espacamento", Json.toJson(local.espacamento.descricao));
+        result.put("area_total", local.area_total);
+	result.put("trabalho_cientifico", Json.toJson(local.trabalho_cientifico));
+        
+        for(Coordenada coordenada: local.coordenadas){
+             coordenadas = coordenadas+"("+coordenada.latitude+","+coordenada.longitude+")";
+        }
+        result.put("coordenadas", Json.toJson(coordenadas));
+        
+        for(MunicipioLocal municipioLocal: local.municipios_locais){
+             municipios = municipios+municipioLocal.municipio.nome+", ";
+        }
+        result.put("municipios", Json.toJson(municipios));
+ 
+        return ok(result);
+    }
+    
     
 }

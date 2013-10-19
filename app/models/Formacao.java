@@ -6,6 +6,7 @@ import javax.persistence.*;
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
+import javax.validation.*;
 
 import com.avaje.ebean.*;
 
@@ -16,11 +17,8 @@ public class Formacao extends Model {
     
     @Constraints.Required(message="O campo formação é obrigatório!")
     public String nome;
-    
-    
+        
     @ManyToOne
-    @Constraints.Required(message="O campo bioma é obrigatório!")
-    @Formats.NonEmpty
     public Bioma bioma;
     
     public static Model.Finder<Long,Formacao> find = new Model.Finder<Long,Formacao>(Long.class, Formacao.class);

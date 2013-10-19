@@ -21,7 +21,8 @@ public class Application extends Controller {
                 controllers.routes.javascript.Locais.incluir(), 
                 controllers.routes.javascript.Formacoes.listarFormacao(),
                 controllers.routes.javascript.Municipios.listarMunicipio(),
-                controllers.routes.javascript.TrabalhosCientificos.findById()
+                controllers.routes.javascript.TrabalhosCientificos.findById(),
+                controllers.routes.javascript.Locais.findById()
                              
                 
             )
