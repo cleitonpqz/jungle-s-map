@@ -1,0 +1,16 @@
+#visualizacao{
+    width: 700px;
+}
+
+table#operadores{
+	border-style:double;
+		border-color:black;
+		padding-left: 5px;
+		padding-right:5px;
+		font-family: sans-serif;
+        background-color:#b8c3cd;
+	}
+.operador{
+           width:100% 
+        }
+

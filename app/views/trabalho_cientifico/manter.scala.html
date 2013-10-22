@@ -89,13 +89,14 @@
                 '_help -> "",
                 '_error -> trabalhoCientificoForm.error("ano")
             )
+            <legend>Método de Quantificação</legend>
             <table>
                 <tr>
                     <td>
                     @select(
                         trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
                         options(MetodoQuantificacaoBiomassa.opcoes), 
-                        '_label -> "Método de Quantificação de Biomassa",
+                        '_label -> "Biomassa",
                         'class ->"input-xlarge",
                         '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
                         '_showConstraints -> false,
@@ -114,7 +115,7 @@
                     @select(
                         trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
                         options(MetodoQuantificacaoCarbono.opcoes), 
-                        '_label -> "Método de Quantificação de Carbono",
+                        '_label -> "Carbono",
                         'class ->"input-xlarge",
                         '_default -> "-- Escolha o Método de Quantificação de Carbono --",
                         '_showConstraints -> false,
@@ -130,15 +131,78 @@
          <fieldset class="equacao-border">
             <legend class="equacao-border">Equações</legend>
             <div class="control-group">
-                <label class="control-label input-label" for="startTime">Biomassa :</label>
-                <div class="controls bootstrap-timepicker">
-                    <select name="equacoes" class="input-xlarge") value="">  
-                            <option>--Escolha um Município--</option>
-                                @for(opcao<-Municipio.opcoes){
+               <h5>Biomassa</h5>
+                <div>
+                      <select name="equacoes" class="input-xlarge") value="">  
+                            <option>--Escolha uma Equacao--</option>
+                                @for(opcao<-Equacao.opcoes(1)){
                                     <option value ="@opcao._1" >@opcao._2</option>
                                 }
                         </select> 
-                    <a href="@routes.MetodosQC.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono">Novo</a>
+                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
+                </div>
+            </div>
+            <div class="control-group">
+                 <div>
+                        <select name="equacoes" class="input-xlarge") value="">  
+                            <option>--Escolha uma Modelo--</option>
+                                @for(opcao<-Modelo.opcoes(1)){
+                                    <option value ="@opcao._1" >@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
+                </div>
+            </div>
+            <div class="control-group">
+               <h5>Carbono</h5>
+                <div>
+                      <select name="equacoes" class="input-xlarge") value="">  
+                            <option>--Escolha uma Equacao--</option>
+                                @for(opcao<-Equacao.opcoes(2)){
+                                    <option value ="@opcao._1" >@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrar(2)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
+                </div>
+            </div>
+            <div class="control-group">
+                 <div>
+                        <select name="equacoes" class="input-xlarge") value="">  
+                            <option>--Escolha uma Modelo--</option>
+                                @for(opcao<-Modelo.opcoes(2)){
+                                    <option value ="@opcao._1" >@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
+                </div>
+            </div>
+            <div class="control-group">
+               <h5>Volume</h5>
+                <div>
+                      <select name="trabalho_cientifico_equacoes.id" class="input-xlarge") value="">  
+                            <option>--Escolha uma Equacao--</option>
+                                @for(opcao<-Equacao.opcoes(3)){
+                                    <option value ="@opcao._1" >@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrar(3)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
+                </div>
+            </div>
+            <div class="control-group">
+                 <div>
+                        <select name="equacoes" class="input-xlarge") value="">  
+                            <option>--Escolha uma Modelo--</option>
+                                @for(opcao<-Modelo.opcoes(3)){
+                                    <option value ="@opcao._1" >@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
+ 
                 </div>
             </div>
         </fieldset>  

@@ -20,15 +20,12 @@ public class VariavelInteresse extends Model {
     @Constraints.Required(message="O campo nome é obrigatório!")
     public String nome;
     
-    @OneToMany(targetEntity = TrabalhoVariavelInteresse.class, cascade = CascadeType.ALL)
-    public List<TrabalhoVariavelInteresse> trabalho_variavel_interesse = new ArrayList<TrabalhoVariavelInteresse>();
-    
     public static Model.Finder<Long,VariavelInteresse> find = new Model.Finder<Long,VariavelInteresse>(Long.class, VariavelInteresse.class);
 
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(VariavelInteresse v: VariavelInteresse.find.orderBy("nome").findList()) {
-            opcoes.put(v.sigla.toString(), v.nome +" ("+v.sigla+")");
+            opcoes.put(v.id.toString(), v.nome +" ("+v.sigla+")");
          }
         return opcoes;
     }

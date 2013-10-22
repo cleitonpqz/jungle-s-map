@@ -14,8 +14,11 @@ public class Equacao extends Model {
    @Id
     public Long id;
     
-    @Constraints.Required(message="O campo expressao é obrigatório!")
+    @Constraints.Required(message="O campo equação é obrigatório!")
     public String expressao;
+    
+    @Constraints.Required(message="O campo equação é obrigatório!")
+    public String visualizacao;
     
     public String variavel_A;
     public Double valor_variavel_A;
@@ -96,16 +99,19 @@ public class Equacao extends Model {
     public Double valor_variavel_Z; 
     
     @ManyToOne
-    public TrabalhoVariavelInteresse trabalho_variavel_interesse;
+    public VariavelInteresse variavel_interesse;
+    
+    @OneToMany(targetEntity = TrabalhoCientificoEquacao.class, cascade = CascadeType.ALL)
+    public List<TrabalhoCientificoEquacao> trabalho_cientifico_equacao = new ArrayList<TrabalhoCientificoEquacao>();  
             
     
     public static Model.Finder<Long,Equacao> find = new Model.Finder<Long,Equacao>(Long.class, Equacao.class);
 
-    public static Map<String,String> opcoes() {
+    public static Map<String,String> opcoes(long id) {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Equacao e: Equacao.find.orderBy("expressao").findList()) {
-            opcoes.put(e.id.toString(), e.expressao);
-         }
+        for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("visualizacao").findList()) {
+            opcoes.put(e.id.toString(), e.visualizacao);
+        }
         return opcoes;
     }
     

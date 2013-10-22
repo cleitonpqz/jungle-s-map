@@ -1,0 +1,324 @@
+@(variavelInteresse : Long =0 ,equacaoForm: Form[Equacao])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/equacao.css")">
+}
+
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=drawing"></script>
+
+<script type="text/javascript">
+        var flagOperacao=0;
+        var flagVariavel=0;
+        var flagConstante=0;
+	var flagInicio=1;
+	var flagRaiz = 0;
+	var arrayABC= new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        var count=0;
+	var tamanhoUltimo=0;
+	var ultimoIsVariavel=0;
+	
+  $('body').on('change', '#variavel',function(){
+              	if(flagConstante==0 && flagVariavel==0){
+                    var stringVariavel=$("#variavel").val();
+                     $("#visualizacao").val($("#visualizacao").val()+stringVariavel);
+                     $("#expressao").val($("#expressao").val()+"valor_variavel_"+arrayABC[count]);
+                     $("#divVariaveis").append("<div id='"+arrayABC[count]+"'><input type='hidden' name='variavel_"+arrayABC[count]+"' value='"+stringVariavel+"'>\n\
+                                                <input type='hidden' name='valor_variavel_"+arrayABC[count]+"' value='0'> </div>");
+                     alert($("#expressao").val());
+                 count++;
+                flagVariavel=1
+		flagOperacao=0;
+                flagInicio=0;
+                tamanhoUltimo=stringVariavel.length;
+		}
+                $("#variavel").val("0");
+		
+})       
+  $("#adicionarConstanteBtn").click(function(){
+        	if(flagConstante==0 && flagVariavel==0){
+                    var stringConstante = $("#constante").val();
+			$("#visualizacao").val($("#visualizacao").val()+stringConstante);
+                        $("#expressao").val($("#expressao").val()+stringConstante);
+                        $("#constante").val("");
+                        tamanhoUltimo=stringConstante.length;
+                        
+		flagConstante=1;
+                flagOperacao=0;
+                flagVariavel=0;
+                flagInicio=0;
+                
+		}
+		
+})
+ $("#multiplicacao").click(function(){
+		if(flagOperacao==0){
+			$("#visualizacao").val($("#visualizacao").val()+"*");
+                        $("#expressao").val($("#expressao").val()+"*");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+		}
+})
+$("#divisao").click(function(){
+		if(flagOperacao==0){
+			$("#visualizacao").val($("#visualizacao").val()+"/");
+                        $("#expressao").val($("#expressao").val()+"/");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+		}
+})
+$("#adicao").click(function(){
+                if(flagOperacao==0){
+			$("#visualizacao").val($("#visualizacao").val()+"+");
+                        $("#expressao").val($("#expressao").val()+"+");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+		}
+		
+})
+$("#subtracao").click(function(){
+                if(flagOperacao==0){
+			$("#visualizacao").val($("#visualizacao").val()+"-");
+                        $("#expressao").val($("#expressao").val()+"-");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+		}
+		
+})
+$("#potencicao").click(function(){
+		if(flagOperacao==0){
+			$("#visualizacao").val($("#visualizacao").val()+"^");
+                        $("#expressao").val($("#expressao").val()+"^");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+	}
+})
+$("#raiz").click(function(){
+                if(flagOperacao!=0 ||flagInicio==1){
+		$("#visualizacao").val($("#visualizacao").val()+"Raiz");
+                $("#expressao").val($("#expressao").val()+"Raiz");
+		flagOperacao=0;
+                flagVariavel=1;
+                flagConstante=1;
+                flagInicio=0;
+                flagRaiz=1;
+                tamanhoUltimo=4;
+                }
+		
+})
+$("#logaritmoNeperiano").click(function(){
+                if(flagOperacao!=0 || flagInicio==1){
+			$("#visualizacao").val($("#visualizacao").val()+"LN");
+                        $("#expressao").val($("#expressao").val()+"LN");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=2;
+		}
+		
+})
+$("#logaritmo").click(function(){
+		if(flagOperacao!=0 || flagInicio==1){
+			$("#visualizacao").val($("#visualizacao").val()+"Log");
+                        $("#expressao").val($("#expressao").val()+"Log");
+		flagOperacao=0;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=3;
+	}
+})
+$("#exponencial").click(function(){
+		if(flagOperacao!=0 || flagInicio==1){
+			$("#visualizacao").val($("#visualizacao").val()+"Exp");
+                        $("#expressao").val($("#expressao").val()+"Exp");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=3;
+	}
+})
+$("#virgula").click(function(){
+		if(flagRaiz!=0){
+			$("#visualizacao").val($("#visualizacao").val()+",");
+                        $("#expressao").val($("#expressao").val()+",");
+		flagOperacao=1;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+		}
+})
+$("#abreParenteses").click(function(){
+                $("#visualizacao").val($("#visualizacao").val()+"(");
+                $("#expressao").val($("#expressao").val()+"(");
+		flagOperacao=0;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=0;
+                tamanhoUltimo=1;
+				
+})
+$("#fechaParenteses").click(function(){
+		$("#visualizacao").val($("#visualizacao").val()+")");
+                $("#expressao").val($("#expressao").val()+")");
+		flagOperacao=0;
+                flagVariavel=1;
+                flagConstante=1;
+                flagInicio=0;
+                tamanhoUltimo=1;
+})
+
+$('body').on('click','#CE',function(){
+    var auxVisualizacao = $("#visualizacao").val();
+    var auxExpressao = $("#expressao").val();
+    if(flagVariavel==1){
+        auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - tamanhoUltimo);
+        auxExpressao = auxExpressao.substring(0, auxExpressao.length - 16);
+         $("#"+arrayABC[count]).remove();
+        count--;
+        tamanhoUltimo=0;
+        flagOperacao=1;
+        flagVariavel=0;
+        flagConstante=0;
+        
+    }else{
+        auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - tamanhoUltimo);
+        auxExpressao = auxExpressao.substring(0, auxExpressao.length - tamanhoUltimo);
+        tamanhoUltimo=0;
+        flagOperacao=0;
+        flagVariavel=0;
+        flagConstante=0;
+        flagInicio=1;
+    }
+        $("#visualizacao").val(auxVisualizacao);
+        $("#expressao").val(auxExpressao);
+        
+        input.value = input.value.substring(0, input.value.length - 1);
+            
+	})
+$('body').on('click','#C', function(){
+        $("#visualizacao").val("");
+        $("#expressao").val("");
+        $("#divVariaveis").html("");
+                count=0;
+		flagOperacao=0;
+                flagVariavel=0;
+                flagConstante=0;
+                flagInicio=1;
+	})  
+</script>
+}
+
+@main("Cadastrar Equação", javascript, stylesheet) {
+    
+    @form(routes.Equacoes.salvar()) {
+        
+        <fieldset>
+                <div class="clearfix  " id="bioma_field">
+           <label for="bioma">Equação para calculo de</label>
+           <div class="input">
+           <select id="variavel_interesse" name="variavel_interesse.id" class="input-large" disabled>
+              @for(opcao<-VariavelInteresse.opcoes){
+                      <option value ="@opcao._1" @if(variavelInteresse.toString == opcao._1){selected}>@opcao._2</option>
+              } 
+           </select>
+               <input type="hidden" name="variavel_interesse.id" value ="@variavelInteresse">
+               <span class="help-inline"></span>
+               <span class="help-block"></span> 
+           </div>
+           </div>    
+
+                  <div class="clearfix  " id="expressao_field">
+                   <label for="expressao">Equação:</label>
+                       <div class="input">
+                           <input type="hidden" id="expressao" name ="expressao">
+                           <input type="text" id="visualizacao" name="visualizacao" readonly rel="tooltip" title="Insira a equação">
+
+                               <span class="help-inline"></span>
+                               <span class="help-block"></span> 
+                       </div>
+          </div>
+          <div class="row">
+                   <div class="span6">
+                       <h4>Variáveis</h4>
+                       <select id="variavel" name="variavel" class="input-xlarge">
+                           <option value ="0">-- Variáveis --</option>
+                           
+                            @for(opcao<-Variavel.opcoes){
+                              <option value ="@opcao._1">@opcao._2</option>
+                             } 
+                    </select>
+                    <h4>Constantes</h4>
+                        <input type="text" id="constante" name="expressao" rel="tooltip" title="Digite uma Constante">
+                        <a type="button" class="btn btn-info  btn-mini" id="adicionarConstanteBtn"> + </a>
+                   </div>
+          <div class="span6">
+                     <h4>Operadores</h4>
+                     <div id="corpo">
+                        <table id="operadores">
+                            <tr><td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE"/></td>
+                                <td colspan="2" ><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C"/></td>
+                            </tr>
+                            
+                            <tr>
+                                <td><input type="button" rel="tooltip" title="Adição" style="width:100%" value="+" id="adicao"/></td>
+                                <td><input type="button" rel="tooltip" title="Subtração" style="width:100%" class="operador" value="-" id="subtracao"/></td>
+                                <td><input type="button" rel="tooltip" title="Multiplicacao" style="width:100%" value="*" id="multiplicacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Divisão" style="width:100%" value="/" id="divisao"/></td>
+                            </tr>
+                            
+                            <tr>
+                                <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao"/></td>
+                                <td><input type="button" rel="tooltip" title="Raiz - Usar Raiz(base,índice)" type="button"  style="width:100%" value="Raiz" id="raiz"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - LN()" type="button"  style="width:100%" value="LN" id="logaritmoNeperiano"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo na base 10" style="width:100%" value="log" id="logaritmo"/></td>
+                                
+                            </tr>
+                            
+                            <tr>
+                                <td><input type="button" rel="tooltip" title='Exponêncial - Usar Exp(b) para "e" elevado a "b"' style="width:100%" value="Exp" id="exponencial"/></td>
+                                <td><input type="button" rel="tooltip" title='Virgula - Para usar no operador "Raíz"' style="width:100%" value="," id="virgula"/></td>
+                                <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses"/></td>
+                                <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses"/></td>
+                            </tr>
+                        </table>
+                    </div>
+            </div>
+           </div>
+        </fieldset>
+        <div id="divVariaveis">
+        </div>
+       
+        <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Salvar">
+        </div>
+        
+    }
+ 
+     
+        
+}
