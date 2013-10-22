@@ -23,11 +23,12 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
             cadastrarEquacao.render(varialvelInteresse ,equacaoForm)
             );
     }
-    public static Result salvar() {
+    public static Result salvar(Long varialvelInteresse) {
        Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
         
         if(equacaoForm.hasErrors()) {
-            return badRequest(cadastrarEquacao.render(Long.parseLong("3"), equacaoForm));
+            flash("error","Equação não incluída");
+            return badRequest(cadastrarEquacao.render(varialvelInteresse, equacaoForm));
         }
         equacaoForm.get().save();
         flash("success", "O Equação " + equacaoForm.get().visualizacao + " foi incluida com sucesso");

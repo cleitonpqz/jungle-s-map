@@ -108,9 +108,19 @@ public class Equacao extends Model {
     public static Model.Finder<Long,Equacao> find = new Model.Finder<Long,Equacao>(Long.class, Equacao.class);
 
     public static Map<String,String> opcoes(long id) {
+        String sigla;
+        switch((int)id){
+            case 1: sigla= "B = ";
+                    break;
+            case 2: sigla= "C = ";
+                break;
+            case 3: sigla ="V = ";
+                break;
+            default: sigla="";
+        }
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("visualizacao").findList()) {
-            opcoes.put(e.id.toString(), e.visualizacao);
+            opcoes.put(e.id.toString(), sigla+e.visualizacao);
         }
         return opcoes;
     }

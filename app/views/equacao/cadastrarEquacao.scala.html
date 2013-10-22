@@ -31,8 +31,7 @@
                      $("#expressao").val($("#expressao").val()+"valor_variavel_"+arrayABC[count]);
                      $("#divVariaveis").append("<div id='"+arrayABC[count]+"'><input type='hidden' name='variavel_"+arrayABC[count]+"' value='"+stringVariavel+"'>\n\
                                                 <input type='hidden' name='valor_variavel_"+arrayABC[count]+"' value='0'> </div>");
-                     alert($("#expressao").val());
-                 count++;
+                count++;
                 flagVariavel=1
 		flagOperacao=0;
                 flagInicio=0;
@@ -198,7 +197,7 @@ $('body').on('click','#CE',function(){
     if(flagVariavel==1){
         auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - tamanhoUltimo);
         auxExpressao = auxExpressao.substring(0, auxExpressao.length - 16);
-         $("#"+arrayABC[count]).remove();
+         $("#"+arrayABC[count-1]).remove();
         count--;
         tamanhoUltimo=0;
         flagOperacao=1;
@@ -235,7 +234,20 @@ $('body').on('click','#C', function(){
 
 @main("Cadastrar Equação", javascript, stylesheet) {
     
-    @form(routes.Equacoes.salvar()) {
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+    
+    @form(routes.Equacoes.salvar(variavelInteresse)) {
         
         <fieldset>
                 <div class="clearfix  " id="bioma_field">

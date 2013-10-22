@@ -124,7 +124,7 @@ GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0
 #-------------------------------------------------------------------------------------------------------------------------------
 #Formacao Listar e novo
 GET     /equacoes                    controllers.Equacoes.cadastrar(variavelInteresse:Long)
-POST    /equacoes                      controllers.Equacoes.salvar()
+POST    /equacoes                    controllers.Equacoes.salvar(variavelInteresse:Long)
 # Formacao Editar                     
 # GET     /equacoes/:id                  controllers.Equacoes.editar(id:Long)
 # POST    /equacoes/:id                  controllers.Equacoes.update(id:Long)
