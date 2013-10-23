@@ -5,6 +5,7 @@
 
 create table arvore (
   id                        bigint not null,
+  parcela_id                bigint,
   num_arvore                bigint,
   dap                       bigint,
   altura                    bigint,
@@ -200,6 +201,7 @@ create table pais (
 
 create table parcela (
   id                        bigint not null,
+  local_id                  bigint,
   num_parcela               bigint,
   area                      bigint,
   qtd_biomassa_min          bigint,
@@ -310,48 +312,52 @@ create sequence variavel_seq;
 
 create sequence variavel_interesse_seq;
 
-alter table compartimento_local add constraint fk_compartimento_local_compart_1 foreign key (compartimento_id) references compartimento (id);
-create index ix_compartimento_local_compart_1 on compartimento_local (compartimento_id);
-alter table compartimento_local add constraint fk_compartimento_local_local_2 foreign key (local_id) references local (id);
-create index ix_compartimento_local_local_2 on compartimento_local (local_id);
-alter table coordenada add constraint fk_coordenada_local_3 foreign key (local_id) references local (id);
-create index ix_coordenada_local_3 on coordenada (local_id);
-alter table equacao add constraint fk_equacao_variavel_interesse_4 foreign key (variavel_interesse_id) references variavel_interesse (id);
-create index ix_equacao_variavel_interesse_4 on equacao (variavel_interesse_id);
-alter table formacao add constraint fk_formacao_bioma_5 foreign key (bioma_id) references bioma (id);
-create index ix_formacao_bioma_5 on formacao (bioma_id);
-alter table local add constraint fk_local_trabalho_cientifico_6 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_local_trabalho_cientifico_6 on local (trabalho_cientifico_id);
-alter table local add constraint fk_local_formacao_7 foreign key (formacao_id) references formacao (id);
-create index ix_local_formacao_7 on local (formacao_id);
-alter table local add constraint fk_local_espacamento_8 foreign key (espacamento_id) references espacamento (id);
-create index ix_local_espacamento_8 on local (espacamento_id);
-alter table modelo add constraint fk_modelo_autor_modelo_9 foreign key (autor_modelo_id) references autor_modelo (id);
-create index ix_modelo_autor_modelo_9 on modelo (autor_modelo_id);
-alter table modelo add constraint fk_modelo_variavel_interesse_10 foreign key (variavel_interesse_id) references variavel_interesse (id);
-create index ix_modelo_variavel_interesse_10 on modelo (variavel_interesse_id);
-alter table municipio add constraint fk_municipio_uf_11 foreign key (uf) references estado (ibge);
-create index ix_municipio_uf_11 on municipio (uf);
-alter table municipio_local add constraint fk_municipio_local_municipio_12 foreign key (municipio_ibge) references municipio (ibge);
-create index ix_municipio_local_municipio_12 on municipio_local (municipio_ibge);
-alter table municipio_local add constraint fk_municipio_local_local_13 foreign key (local_id) references local (id);
-create index ix_municipio_local_local_13 on municipio_local (local_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_14 foreign key (autor_id) references autor (id);
-create index ix_trabalho_cientifico_autor_14 on trabalho_cientifico (autor_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_15 foreign key (disponibilidade_id) references disponibilidade (id);
-create index ix_trabalho_cientifico_dispon_15 on trabalho_cientifico (disponibilidade_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_16 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
-create index ix_trabalho_cientifico_metodo_16 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_17 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
-create index ix_trabalho_cientifico_metodo_17 on trabalho_cientifico (metodo_quantificacao_carbono_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_18 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_cientifico_equaca_18 on trabalho_cientifico_equacao (trabalho_cientifico_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_19 foreign key (equacao_id) references equacao (id);
-create index ix_trabalho_cientifico_equaca_19 on trabalho_cientifico_equacao (equacao_id);
-alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_20 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_cientifico_modelo_20 on trabalho_cientifico_modelo (trabalho_cientifico_id);
-alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_21 foreign key (modelo_id) references modelo (id);
-create index ix_trabalho_cientifico_modelo_21 on trabalho_cientifico_modelo (modelo_id);
+alter table arvore add constraint fk_arvore_parcela_1 foreign key (parcela_id) references parcela (id);
+create index ix_arvore_parcela_1 on arvore (parcela_id);
+alter table compartimento_local add constraint fk_compartimento_local_compart_2 foreign key (compartimento_id) references compartimento (id);
+create index ix_compartimento_local_compart_2 on compartimento_local (compartimento_id);
+alter table compartimento_local add constraint fk_compartimento_local_local_3 foreign key (local_id) references local (id);
+create index ix_compartimento_local_local_3 on compartimento_local (local_id);
+alter table coordenada add constraint fk_coordenada_local_4 foreign key (local_id) references local (id);
+create index ix_coordenada_local_4 on coordenada (local_id);
+alter table equacao add constraint fk_equacao_variavel_interesse_5 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_equacao_variavel_interesse_5 on equacao (variavel_interesse_id);
+alter table formacao add constraint fk_formacao_bioma_6 foreign key (bioma_id) references bioma (id);
+create index ix_formacao_bioma_6 on formacao (bioma_id);
+alter table local add constraint fk_local_trabalho_cientifico_7 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_local_trabalho_cientifico_7 on local (trabalho_cientifico_id);
+alter table local add constraint fk_local_formacao_8 foreign key (formacao_id) references formacao (id);
+create index ix_local_formacao_8 on local (formacao_id);
+alter table local add constraint fk_local_espacamento_9 foreign key (espacamento_id) references espacamento (id);
+create index ix_local_espacamento_9 on local (espacamento_id);
+alter table modelo add constraint fk_modelo_autor_modelo_10 foreign key (autor_modelo_id) references autor_modelo (id);
+create index ix_modelo_autor_modelo_10 on modelo (autor_modelo_id);
+alter table modelo add constraint fk_modelo_variavel_interesse_11 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_modelo_variavel_interesse_11 on modelo (variavel_interesse_id);
+alter table municipio add constraint fk_municipio_uf_12 foreign key (uf) references estado (ibge);
+create index ix_municipio_uf_12 on municipio (uf);
+alter table municipio_local add constraint fk_municipio_local_municipio_13 foreign key (municipio_ibge) references municipio (ibge);
+create index ix_municipio_local_municipio_13 on municipio_local (municipio_ibge);
+alter table municipio_local add constraint fk_municipio_local_local_14 foreign key (local_id) references local (id);
+create index ix_municipio_local_local_14 on municipio_local (local_id);
+alter table parcela add constraint fk_parcela_local_15 foreign key (local_id) references local (id);
+create index ix_parcela_local_15 on parcela (local_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_16 foreign key (autor_id) references autor (id);
+create index ix_trabalho_cientifico_autor_16 on trabalho_cientifico (autor_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_17 foreign key (disponibilidade_id) references disponibilidade (id);
+create index ix_trabalho_cientifico_dispon_17 on trabalho_cientifico (disponibilidade_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_18 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
+create index ix_trabalho_cientifico_metodo_18 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_19 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
+create index ix_trabalho_cientifico_metodo_19 on trabalho_cientifico (metodo_quantificacao_carbono_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_20 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_equaca_20 on trabalho_cientifico_equacao (trabalho_cientifico_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_21 foreign key (equacao_id) references equacao (id);
+create index ix_trabalho_cientifico_equaca_21 on trabalho_cientifico_equacao (equacao_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_22 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_modelo_22 on trabalho_cientifico_modelo (trabalho_cientifico_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_23 foreign key (modelo_id) references modelo (id);
+create index ix_trabalho_cientifico_modelo_23 on trabalho_cientifico_modelo (modelo_id);
 
 
 
