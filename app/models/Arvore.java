@@ -14,6 +14,9 @@ public class Arvore extends Model {
    @Id
     public Long id;
 
+    @ManyToOne
+    public Parcela parcela;
+
     public Long numArvore;
     public long dap;
     public Long altura;
@@ -29,7 +32,7 @@ public class Arvore extends Model {
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Arvore a: Arvore.find.orderBy("numArvore").findList()) {
-            opcoes.put(a.id.toString(), a.numArvore.toString());
+            opcoes.put(a.id.toString(), a.numArvore.toString()) ;
          }
         return opcoes;
     }
