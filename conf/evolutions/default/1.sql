@@ -3,6 +3,20 @@
 
 # --- !Ups
 
+create table arvore (
+  id                        bigint not null,
+  num_arvore                bigint,
+  dap                       bigint,
+  altura                    bigint,
+  qtd_biomassa_obs          varchar(255),
+  qtd_carbono_obs           varchar(255),
+  qtd_carbono_est           bigint,
+  qtd_volume_obs            varchar(255),
+  qtd_volume_est            bigint,
+  qtd_biomassa_est          bigint,
+  constraint pk_arvore primary key (id))
+;
+
 create table autor (
   id                        bigint not null,
   nome                      varchar(255),
@@ -184,6 +198,30 @@ create table pais (
   constraint pk_pais primary key (id))
 ;
 
+create table parcela (
+  id                        bigint not null,
+  num_parcela               bigint,
+  area                      bigint,
+  qtd_biomassa_min          bigint,
+  qtd_biomassa_med          bigint,
+  qtd_biomassa_max          bigint,
+  qtd_carbono_min           bigint,
+  qtd_carbono_med           bigint,
+  qtd_carbono_max           bigint,
+  qtd_volume_min            bigint,
+  qtd_volume_med            bigint,
+  qtd_volume_max            bigint,
+  r2                        bigint,
+  r2ajust                   bigint,
+  ia                        bigint,
+  syx                       bigint,
+  syx_perc                  bigint,
+  fm                        bigint,
+  syx_fm                    bigint,
+  syx_fm_perc               bigint,
+  constraint pk_parcela primary key (id))
+;
+
 create table trabalho_cientifico (
   id                        bigint not null,
   autor_id                  bigint,
@@ -222,6 +260,8 @@ create table variavel_interesse (
   constraint pk_variavel_interesse primary key (id))
 ;
 
+create sequence arvore_seq;
+
 create sequence autor_seq;
 
 create sequence autor_modelo_seq;
@@ -257,6 +297,8 @@ create sequence municipio_seq;
 create sequence municipio_local_seq;
 
 create sequence pais_seq;
+
+create sequence parcela_seq;
 
 create sequence trabalho_cientifico_seq;
 
@@ -315,6 +357,8 @@ create index ix_trabalho_cientifico_modelo_21 on trabalho_cientifico_modelo (mod
 
 # --- !Downs
 
+drop table if exists arvore cascade;
+
 drop table if exists autor cascade;
 
 drop table if exists autor_modelo cascade;
@@ -351,6 +395,8 @@ drop table if exists municipio_local cascade;
 
 drop table if exists pais cascade;
 
+drop table if exists parcela cascade;
+
 drop table if exists trabalho_cientifico cascade;
 
 drop table if exists trabalho_cientifico_equacao cascade;
@@ -360,6 +406,8 @@ drop table if exists trabalho_cientifico_modelo cascade;
 drop table if exists variavel cascade;
 
 drop table if exists variavel_interesse cascade;
+
+drop sequence if exists arvore_seq;
 
 drop sequence if exists autor_seq;
 
@@ -396,6 +444,8 @@ drop sequence if exists municipio_seq;
 drop sequence if exists municipio_local_seq;
 
 drop sequence if exists pais_seq;
+
+drop sequence if exists parcela_seq;
 
 drop sequence if exists trabalho_cientifico_seq;
 
