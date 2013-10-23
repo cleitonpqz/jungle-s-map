@@ -36,6 +36,9 @@ public List<MunicipioLocal> municipios_locais = new ArrayList<MunicipioLocal>();
 @OneToMany(targetEntity = Coordenada.class, cascade = CascadeType.ALL)
 public List<Coordenada> coordenadas = new ArrayList<Coordenada>();
 
+@OneToMany(targetEntity = Parcela.class, cascade = CascadeType.ALL)
+public List<Parcela> parcelas = new ArrayList<Parcela>();
+
 public static Model.Finder<Long,Local> find = new Model.Finder<Long,Local>(Long.class, Local.class);
 
 public static List<Local> list(String sortBy, String order, String filter) {
