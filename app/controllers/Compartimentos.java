@@ -5,7 +5,7 @@ import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
 import play.*;
-import views.html.bioma.*;
+import views.html.compartimento.*;
 import javax.persistence.PersistenceException;
 
 import models.*;
@@ -37,7 +37,7 @@ public class Compartimentos extends Controller {
     
      public static Result update(Long id) {
         Form<Compartimento> compartimentoForm = form(Compartimento.class).bindFromRequest();
-        if(comapartimentoForm.hasErrors()) {
+        if(compartimentoForm.hasErrors()) {
             return badRequest(editarForm.render(id, compartimentoForm));
         }
         compartimentoForm.get().update(id);
