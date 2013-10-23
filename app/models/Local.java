@@ -18,7 +18,7 @@ public Long id;
 @Constraints.Required(message="O campo local é obrigatório!")
 public String descricao;
 
-@Constraints.Required(message="O campo área  obrigatório!")
+@Constraints.Required(message="O campo área é obrigatório!")
 public Double area_total;
 
 @ManyToOne

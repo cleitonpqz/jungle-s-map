@@ -53,6 +53,7 @@ create table disponibilidade (
 create table equacao (
   id                        bigint not null,
   expressao                 varchar(255),
+  visualizacao              varchar(255),
   variavel_a                varchar(255),
   valor_variavel_a          float,
   variavel_b                varchar(255),
@@ -105,7 +106,7 @@ create table equacao (
   valor_variavel_y          float,
   variavel_z                varchar(255),
   valor_variavel_z          float,
-  trabalho_variavel_interesse_id bigint,
+  variavel_interesse_id     bigint,
   constraint pk_equacao primary key (id))
 ;
 
@@ -157,7 +158,7 @@ create table modelo (
   expressao                 varchar(255),
   ano                       integer,
   autor_modelo_id           bigint,
-  trabalho_variavel_interesse_id bigint,
+  variavel_interesse_id     bigint,
   constraint pk_modelo primary key (id))
 ;
 
@@ -193,11 +194,18 @@ create table trabalho_cientifico (
   constraint pk_trabalho_cientifico primary key (id))
 ;
 
-create table trabalho_variavel_interesse (
+create table trabalho_cientifico_equacao (
   id                        bigint not null,
   trabalho_cientifico_id    bigint,
-  variavel_interesse_id     bigint,
-  constraint pk_trabalho_variavel_interesse primary key (id))
+  equacao_id                bigint,
+  constraint pk_trabalho_cientifico_equacao primary key (id))
+;
+
+create table trabalho_cientifico_modelo (
+  id                        bigint not null,
+  trabalho_cientifico_id    bigint,
+  modelo_id                 bigint,
+  constraint pk_trabalho_cientifico_modelo primary key (id))
 ;
 
 create table variavel (
@@ -252,7 +260,9 @@ create sequence pais_seq;
 
 create sequence trabalho_cientifico_seq;
 
-create sequence trabalho_variavel_interesse_seq;
+create sequence trabalho_cientifico_equacao_seq;
+
+create sequence trabalho_cientifico_modelo_seq;
 
 create sequence variavel_seq;
 
@@ -264,8 +274,8 @@ alter table compartimento_local add constraint fk_compartimento_local_local_2 fo
 create index ix_compartimento_local_local_2 on compartimento_local (local_id);
 alter table coordenada add constraint fk_coordenada_local_3 foreign key (local_id) references local (id);
 create index ix_coordenada_local_3 on coordenada (local_id);
-alter table equacao add constraint fk_equacao_trabalho_variavel_i_4 foreign key (trabalho_variavel_interesse_id) references trabalho_variavel_interesse (id);
-create index ix_equacao_trabalho_variavel_i_4 on equacao (trabalho_variavel_interesse_id);
+alter table equacao add constraint fk_equacao_variavel_interesse_4 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_equacao_variavel_interesse_4 on equacao (variavel_interesse_id);
 alter table formacao add constraint fk_formacao_bioma_5 foreign key (bioma_id) references bioma (id);
 create index ix_formacao_bioma_5 on formacao (bioma_id);
 alter table local add constraint fk_local_trabalho_cientifico_6 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
@@ -276,8 +286,8 @@ alter table local add constraint fk_local_espacamento_8 foreign key (espacamento
 create index ix_local_espacamento_8 on local (espacamento_id);
 alter table modelo add constraint fk_modelo_autor_modelo_9 foreign key (autor_modelo_id) references autor_modelo (id);
 create index ix_modelo_autor_modelo_9 on modelo (autor_modelo_id);
-alter table modelo add constraint fk_modelo_trabalho_variavel_i_10 foreign key (trabalho_variavel_interesse_id) references trabalho_variavel_interesse (id);
-create index ix_modelo_trabalho_variavel_i_10 on modelo (trabalho_variavel_interesse_id);
+alter table modelo add constraint fk_modelo_variavel_interesse_10 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_modelo_variavel_interesse_10 on modelo (variavel_interesse_id);
 alter table municipio add constraint fk_municipio_uf_11 foreign key (uf) references estado (ibge);
 create index ix_municipio_uf_11 on municipio (uf);
 alter table municipio_local add constraint fk_municipio_local_municipio_12 foreign key (municipio_ibge) references municipio (ibge);
@@ -292,10 +302,14 @@ alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_16 
 create index ix_trabalho_cientifico_metodo_16 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
 alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_17 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
 create index ix_trabalho_cientifico_metodo_17 on trabalho_cientifico (metodo_quantificacao_carbono_id);
-alter table trabalho_variavel_interesse add constraint fk_trabalho_variavel_interess_18 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_variavel_interess_18 on trabalho_variavel_interesse (trabalho_cientifico_id);
-alter table trabalho_variavel_interesse add constraint fk_trabalho_variavel_interess_19 foreign key (variavel_interesse_id) references variavel_interesse (id);
-create index ix_trabalho_variavel_interess_19 on trabalho_variavel_interesse (variavel_interesse_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_18 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_equaca_18 on trabalho_cientifico_equacao (trabalho_cientifico_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_19 foreign key (equacao_id) references equacao (id);
+create index ix_trabalho_cientifico_equaca_19 on trabalho_cientifico_equacao (equacao_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_20 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_modelo_20 on trabalho_cientifico_modelo (trabalho_cientifico_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_21 foreign key (modelo_id) references modelo (id);
+create index ix_trabalho_cientifico_modelo_21 on trabalho_cientifico_modelo (modelo_id);
 
 
 
@@ -339,7 +353,9 @@ drop table if exists pais cascade;
 
 drop table if exists trabalho_cientifico cascade;
 
-drop table if exists trabalho_variavel_interesse cascade;
+drop table if exists trabalho_cientifico_equacao cascade;
+
+drop table if exists trabalho_cientifico_modelo cascade;
 
 drop table if exists variavel cascade;
 
@@ -383,7 +399,9 @@ drop sequence if exists pais_seq;
 
 drop sequence if exists trabalho_cientifico_seq;
 
-drop sequence if exists trabalho_variavel_interesse_seq;
+drop sequence if exists trabalho_cientifico_equacao_seq;
+
+drop sequence if exists trabalho_cientifico_modelo_seq;
 
 drop sequence if exists variavel_seq;
 

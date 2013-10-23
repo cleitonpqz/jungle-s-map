@@ -25,7 +25,7 @@ public class Variavel extends Model {
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Variavel v: Variavel.find.orderBy("nome").findList()) {
-            opcoes.put(v.sigla.toString(), v.nome +" ("+v.sigla+")");
+            opcoes.put(v.sigla, v.nome +" ("+v.sigla+")");
          }
         return opcoes;
     }

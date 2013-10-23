@@ -24,16 +24,26 @@ public class Modelo extends Model {
     public AutorModelo autor_modelo;
     
     @ManyToOne
-    public TrabalhoVariavelInteresse trabalho_variavel_interesse;
-            
+    public VariavelInteresse variavel_interesse;
+    
+    @OneToMany(targetEntity = TrabalhoCientificoModelo.class, cascade = CascadeType.ALL)
+    public List<TrabalhoCientificoModelo> trabalho_cientifico_modelo = new ArrayList<TrabalhoCientificoModelo>();            
     
     public static Model.Finder<Long,Modelo> find = new Model.Finder<Long,Modelo>(Long.class, Modelo.class);
 
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Modelo m: Modelo.find.orderBy("ano").findList()) {
+        for(Modelo m: Modelo.find.orderBy("autor_modelo.nome").findList()) {
             opcoes.put(m.id.toString(), m.expressao +"("+m.autor_modelo.nome+")");
          }
+        return opcoes;
+    }
+    
+     public static Map<String,String> opcoes(long id) {
+        LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
+        for(Modelo m: Modelo.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
+            opcoes.put(m.id.toString(),m.autor_modelo.nome +" "+ m.expressao);
+        }
         return opcoes;
     }
     
