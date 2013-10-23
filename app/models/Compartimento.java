@@ -27,11 +27,12 @@ public class Compartimento extends Model {
         return opcoes;
     }
     
-    public static List<Compartimento> list(String sortBy, String order, String filter) {
+    public static Page<Compartimento> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
                 .ilike("descricao", "%" + filter + "%")
                 .orderBy(sortBy + " " + order)
-                .findList();
+                .findPagingList(pageSize)
+                .getPage(page);
     }
 }
