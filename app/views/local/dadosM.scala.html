@@ -1,0 +1,53 @@
+@(currentPage: com.avaje.ebean.Page[Local], currentSortBy: String, currentOrder: String, currentFilter: String, dadosMForm: Form[Local])
+
+@****************************************
+* Helper generating navigation links    *
+****************************************@
+@link(newPage:Int, newSortBy:String) = @{
+    
+    var sortBy = currentSortBy
+    var order = currentOrder
+    
+    if(newSortBy != null) {
+        sortBy = newSortBy
+        if(currentSortBy == newSortBy) {
+            if(currentOrder == "asc") {
+                order = "desc"
+            } else {
+                order = "asc"
+            }
+        } else {
+            order = "asc"
+        }
+    }
+    
+    // Generate the link
+    routes.Formacoes.manter(newPage, sortBy, order, currentFilter)
+    
+}
+@**********************************
+* Helper generating table headers *
+***********************************@
+@header(key:String, title:String) = {
+    <th class="@key.replace(".","_") header @if(currentSortBy == key) @{if(currentOrder == "asc") "headerSortDown" else "headerSortUp"}">
+        <a href="@link(0, key)">@title</a>
+    </th>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main("Cadastrar Dados do Local"){
+    
+   
+        
+        <fielset>
+            <table>
+                <tr>
+                    <td>
+                    
+                    </td>
+                 </tr>
+             </table>  
+        </fielset>
+}
