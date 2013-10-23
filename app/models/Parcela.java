@@ -17,7 +17,7 @@ public class Parcela extends Model {
     @ManyToOne
     public Local local;
 
-    @OneToMany
+    @OneToMany(targetEntity = Arvore.class, cascade = CascadeType.ALL)
     public Arvore arvore;
 
     public Long numParcela;
