@@ -14,6 +14,12 @@ public class Parcela extends Model {
    @Id
     public Long id;
 
+    @ManyToOne
+    public Local local;
+
+    @OneToMany
+    public Arvore arvore;
+
     public Long numParcela;
     public long area;
     public Long qtdBiomassaMin;
