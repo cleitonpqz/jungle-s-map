@@ -140,6 +140,10 @@ POST    /equacoes                    controllers.Equacoes.salvar(variavelInteres
 # POST    /equacoes/:id                  controllers.Equacoes.update(id:Long)
 # Formacao Deletar
 # GET    /equacoes/:id/deletar           controllers.Equacoes.deletar(id:Long)
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
+POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
