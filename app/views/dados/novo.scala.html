@@ -1,0 +1,28 @@
+
+@import helper._
+@import helper.twitterBootstrap._
+
+
+@main("Cadastrar Dados do Local"){
+
+<div class="">
+    <input type="hidden" name="local.id" class="large" placeholder="Local"> 
+    <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
+    <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
+    <h4>Dados de Entrada</h4>
+    <br />
+    <label class="radio">
+       	<input type="radio" name="optionsRadio1" id="biomassa"><label>Deseja Entrar com o valor da Biomassa/Carbono/Volume de cada Parcela. </label>
+    	<input type="radio" name="optionsRadio1" id="arvore"><label>Deseja entrar com os dados das Arvores para que o programa calcule a Biomassa/Carbono/Volume de cada Parcela.</label>
+    </label>
+    <br />
+    <h4>Tipo de Entrada</h4>
+    <br />
+  	<label class="radio">
+  		<input type="radio" name="radio2" id="manual"> <label>Entrada Manual (Digitação dos Dados)</label> 
+    	<input type="radio" name="radio2" id="import"> <label>Importação dos Dados apartir de um arquivo txt.</label>
+  	</label>
+	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
+
+</div>
+}

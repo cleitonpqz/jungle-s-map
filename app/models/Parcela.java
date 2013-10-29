@@ -22,12 +22,15 @@ public class Parcela extends Model {
 
     public Long numParcela;
     public long area;
+    public long biomassa;
     public Long qtdBiomassaMin;
     public Long qtdBiomassaMed;
     public Long qtdBiomassaMax;
+    public long carbono;
     public Long qtdCarbonoMin;
     public Long qtdCarbonoMed;
     public Long qtdCarbonoMax;
+    public long volume;
     public Long qtdVolumeMin;
     public Long qtdVolumeMed;
     public Long qtdVolumeMax;
@@ -50,12 +53,4 @@ public class Parcela extends Model {
         return opcoes;
     }
     
-    public static Page<Parcela> page(int page, int pageSize, String sortBy, String order, String filter) {
-        return 
-            find.where()
-                .ilike("numParcela", "%" + filter + "%")
-                .orderBy(sortBy + " " + order)
-                .findPagingList(pageSize)
-                .getPage(page);
-    }
 }

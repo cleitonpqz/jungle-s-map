@@ -134,7 +134,7 @@ GET     /Locais/localizarSimilar            controllers.Locais.localizarSimilar(
 GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= -1, f:Int ?= -1, l ?= "", e:Int ?= -1, m:Int ?= -1)
 
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Equações Listar e novo
 GET     /equacoes                    controllers.Equacoes.cadastrar(variavelInteresse:Long)
 POST    /equacoes                    controllers.Equacoes.salvar(variavelInteresse:Long)
 # Formacao Editar                     
@@ -142,6 +142,15 @@ POST    /equacoes                    controllers.Equacoes.salvar(variavelInteres
 # POST    /equacoes/:id                  controllers.Equacoes.update(id:Long)
 # Formacao Deletar
 # GET    /equacoes/:id/deletar           controllers.Equacoes.deletar(id:Long)
+#-------------------------------------------------------------------------------------------------------------------------------
+#Formacao Listar e novo
+GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
+POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
+#--------------------------------------------------------------------------------------------------------------------------------
+#DadosLocal novo
+
+GET	/DadosLocal/:id							controllers.DadosLocal.novo(id:Long)
+
 #--------------------------------------------------------------------------------------------------------------------------------
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
