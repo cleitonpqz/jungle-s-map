@@ -7,6 +7,9 @@ import static play.data.Form.*;
 import play.*;
 import views.html.bioma.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
+import play.libs.Json.*;
+import static play.libs.Json.toJson;
 
 import models.*;
 
@@ -16,6 +19,22 @@ public class Biomas extends Controller {
     
     public static Result index() {
         return GO_HOME;
+    }
+
+    public static Result novo() {
+        Form<Bioma> biomaForm = form(Bioma.class);
+        return ok(
+            novo.render(biomaForm)
+        );
+    }
+
+    public static Result salvareselecionar() {
+        Form<Bioma> biomaForm = form(Bioma.class).bindFromRequest();
+        if(biomaForm.hasErrors()) {
+            return badRequest(novo.render(biomaForm));
+        }
+        biomaForm.get().save();
+        return ok(Json.toJson(biomaForm.get()));
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {

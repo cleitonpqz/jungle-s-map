@@ -18,6 +18,8 @@ GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.dele
 #-----------------------------------------------------------------------------------------------------------------------------
 
 #Bioma Listar e novo
+GET		/biomas/novo					controllers.Biomas.novo()
+POST	/biomas/salvar					controllers.Biomas.salvareselecionar()
 GET     /biomas                         controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /biomas                         controllers.Biomas.salvar()
 # Bioma Editar                     

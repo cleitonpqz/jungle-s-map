@@ -1,0 +1,58 @@
+@(biomaForm: Form[Bioma])
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formBioma").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formBioma").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    alert('ok')
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal("Cadastrar e Selecionar Bioma", "Salvar", javascript){
+    
+    @form(action = routes.Biomas.salvareselecionar, 'role -> "form", 'id -> "formBioma") {
+        
+        <fieldset class="form-inline">
+           @inputText(
+                biomaForm("nome"), 
+                '_label -> "Bioma",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o nome do bioma",
+                '_help -> "",
+                '_error -> biomaForm.error("nome")
+            )
+                 
+        </fieldset>
+
+    }
+ 
+
+    <div class="alert alert-error" style="display: none">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ERRO!</strong>
+    </div>
+
+    <hr>
+    
+}    
