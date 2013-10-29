@@ -219,9 +219,6 @@ $(document).ready(function(){
      <div id="map-canvas"></div>
  </div>
     <div class="row">
-        <div class='control-group'>
-           <a href="" class="dadosLocal btn btn-small btn-success">Cadastrar dados do Local</a>
-        </div>
         <div class="form-actions span12">  
             <button type="submit" class="btn btn-primary">Pesquisar</button>
                              
@@ -287,6 +284,9 @@ $(document).ready(function(){
                          
                         <td> 
                                <a type="button" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao" onclick="confirmaExclusao(@local.id, '@local.descricao')">Excluir</a>
+                        </td>
+                        <td> 
+                               <a href="@routes.DadosLocal.novo(local.id)" class="btn btn-info btn-small" rel="tooltip" title="Cadastrar Dados do @local.descricao">Cadastrar dados do Local</a>
                         </td>
                     </tr>
                 }
