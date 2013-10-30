@@ -12,7 +12,7 @@ import com.avaje.ebean.*;
 
 @Entity 
 public class Formacao extends Model {
-   @Id
+    @Id
     public Long id;
     
     @Constraints.Required(message="O campo formação é obrigatório!")

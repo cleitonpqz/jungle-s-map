@@ -16,7 +16,8 @@
                     }
                 });
                 dataFilterRequest.done(function(data){
-                    alert('ok')
+                    $("#bioma_id").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id)
+                    $("#modal").modal("hide");
                 }).fail(function(jqXHR, textStatus){
                     $("#modal").html(jqXHR.responseText);
                 });

@@ -47,6 +47,10 @@ public class Formacoes extends Controller {
     
     public static Result salvar() {
         Form<Formacao> formacaoForm = form(Formacao.class).bindFromRequest();
+        if(form().bindFromRequest().get("bioma.id")==null 
+            || form().bindFromRequest().get("bioma.id").equals("")) {
+            formacaoForm.reject("bioma.id", "O campo Bioma é de preenchimento obrigatório!");
+        }
         if(formacaoForm.hasErrors()) {
             return badRequest(manter.render(Formacao.page(0, 10, "nome", "asc", ""), "nome", "asc", "", formacaoForm));
         }
