@@ -1,28 +1,76 @@
+@(id: Long)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 
+
 @main("Cadastrar Dados do Local"){
 
 <div class="">
-    <input type="hidden" name="local.id" class="large" placeholder="Local"> 
+    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
     <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
     <h4>Dados de Entrada</h4>
     <br />
-    <label class="radio">
-       	<input type="radio" name="optionsRadio1" id="biomassa"><label>Deseja Entrar com o valor da Biomassa/Carbono/Volume de cada Parcela. </label>
-    	<input type="radio" name="optionsRadio1" id="arvore"><label>Deseja entrar com os dados das Arvores para que o programa calcule a Biomassa/Carbono/Volume de cada Parcela.</label>
+    <label class="radio classe" id="classe">
+       	<input type="radio" name="classe" id="classe1"  ><label>Deseja Entrar com o valor da Biomassa/Carbono/Volume de cada Parcela. </label>
+    	<input type="radio" name="classe" id="classe2" ><label>Deseja entrar com os dados das Arvores para que o programa calcule a Biomassa/Carbono/Volume de cada Parcela.</label>
     </label>
     <br />
     <h4>Tipo de Entrada</h4>
     <br />
-  	<label class="radio">
-  		<input type="radio" name="radio2" id="manual"> <label>Entrada Manual (Digitação dos Dados)</label> 
-    	<input type="radio" name="radio2" id="import"> <label>Importação dos Dados apartir de um arquivo txt.</label>
+  	<label class="radio tipo" id="tipo">
+  		<input type="radio" name="tipo" id="tipo1"  > <label>Entrada Manual (Digitação dos Dados)</label> 
+    	<input type="radio" name="tipo" id="tipo2"  > <label>Importação dos Dados apartir de um arquivo txt.</label>
   	</label>
+  	<div id="biomassa_manual" style="display: none">Teste 1</div>
+  	<div id="arvore_manual" style="display: none">Teste 2</div>
+  	<div id="biomassa_import" style="display: none">Teste 3</div>
+  	<div id="arvore_import" style="display: none">Teste 4</div>
+
+  	<br />
 	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
 
 </div>
 }
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#tipo, #classe").change(function(){
+    	
+    	var tipo1 = $("#tipo1").is(":checked");
+    	var tipo2 = $("#tipo2").is(":checked");
+    	var classe1 = $("#classe1").is(":checked");
+    	var classe2 = $("#classe2").is(":checked");
+
+    	if(tipo1 == true && classe1 == true){
+    		$("#biomassa_manual").show();
+    		$("#arvore_manual").hide();
+    		$("#biomassa_import").hide();
+    		$("#arvore_import").hide();
+    	}
+    	else if(tipo1 == true && classe2 == true){
+    		$("#biomassa_manual").hide();
+    		$("#arvore_manual").show();
+    		$("#biomassa_import").hide();
+    		$("#arvore_import").hide();
+		}
+		else if(tipo2 == true && classe1 == true){
+			$("#biomassa_manual").hide();
+    		$("#arvore_manual").hide();
+    		$("#biomassa_import").show();
+    		$("#arvore_import").hide();
+		}
+		else if(tipo2 == true && classe2 == true){
+			$("#biomassa_manual").hide();
+    		$("#arvore_manual").hide();
+    		$("#biomassa_import").hide();
+    		$("#arvore_import").show();
+		}
+		else
+			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
+
+
+    });
+    });
+</script>

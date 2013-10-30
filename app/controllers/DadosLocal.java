@@ -19,7 +19,7 @@ public class DadosLocal extends Controller {
 	}
 
 	public static Result novo(long id){
-		return ok( novo.render());
+		return ok( novo.render(id));
 	}
 
 }
