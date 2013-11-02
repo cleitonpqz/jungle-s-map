@@ -4,39 +4,53 @@
 @import helper.twitterBootstrap._
 
 
-
 @main("Cadastrar Dados do Local"){
 
+@form(action = routes.DadosLocal.novo(1), 'id -> "form") {
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
     <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
     <h4>Dados de Entrada</h4>
     <br />
-    <label class="radio classe" id="classe">
+    <div class="radios">
+    	<label class="radio classe" id="classe" required>
        	<input type="radio" name="classe" id="classe1"  ><label>Deseja Entrar com o valor da Biomassa/Carbono/Volume de cada Parcela. </label>
     	<input type="radio" name="classe" id="classe2" ><label>Deseja entrar com os dados das Arvores para que o programa calcule a Biomassa/Carbono/Volume de cada Parcela.</label>
     </label>
     <br />
     <h4>Tipo de Entrada</h4>
     <br />
-  	<label class="radio tipo" id="tipo">
+  	<label class="radio tipo" id="tipo" required>
   		<input type="radio" name="tipo" id="tipo1"  > <label>Entrada Manual (Digitação dos Dados)</label> 
     	<input type="radio" name="tipo" id="tipo2"  > <label>Importação dos Dados apartir de um arquivo txt.</label>
   	</label>
-  	<div id="biomassa_manual" style="display: none">Teste 1</div>
+  	<div id="biomassa_manual" style="display: none">
+    
+    <div id='jqxWidget'>
+        <div id="jqxgrid"></div>
+            <div style='margin-top: 20px;'>
+            <div>
+                <input type="button" value="Export to Excel" id='excelExport' class="btn" />
+                <input type="button" value="Adicionar Linha" id='addrowbutton' class="btn" />
+            </div>
+        </div>
+    </div>
+
+    </div>
   	<div id="arvore_manual" style="display: none">Teste 2</div>
   	<div id="biomassa_import" style="display: none">Teste 3</div>
   	<div id="arvore_import" style="display: none">Teste 4</div>
-
-  	<br />
+    </div>
+    <br />
+    <hr>
 	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
 
 </div>
-}
+}}
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#tipo, #classe").change(function(){
+    $(".radios").change(function(){
     	
     	var tipo1 = $("#tipo1").is(":checked");
     	var tipo2 = $("#tipo2").is(":checked");
@@ -67,10 +81,64 @@ $(document).ready(function(){
     		$("#biomassa_import").hide();
     		$("#arvore_import").show();
 		}
-		else
+		else if(classe1 == false )
 			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
 
 
     });
     });
 </script>
+<script type="text/javascript">
+         $(document).ready(function () {
+             var theme = 'base';
+             // renderer for grid cells.
+             var numberrenderer = function (row, column, value) {
+                 return '<div style="text-align: center; margin-top: 5px;">' + (1 + value) + '</div>';
+             }
+             // create Grid datafields and columns arrays.
+             var datafields = [];
+             var columns = [];
+             for (var i = 0; i < 6; i++) {
+                 var text = String.fromCharCode(65 + i);
+                 if (i == 0) {
+                     var cssclass = 'jqx-widget-header';
+                     if (theme != '') cssclass += ' jqx-widget-header-' + theme;
+                     columns[columns.length] = {pinned: true, exportable: false, text: "", columntype: 'number', cellclassname: cssclass, cellsrenderer: numberrenderer };
+                 }
+                 datafields[datafields.length] = { name: text };
+                 columns[columns.length] = { text: text, datafield: text, width: 60, align: 'center' };
+             }
+             var source =
+            {
+                unboundmode: true,
+                totalrecords: 5,
+                datafields: datafields,
+                updaterow: function (rowid, rowdata) {
+                    // synchronize with the server - send update command   
+                }
+            };
+             var dataAdapter = new $.jqx.dataAdapter(source);
+             // initialize jqxGrid
+             $("#jqxgrid").jqxGrid(
+            {
+                width: 60*6+28,
+                source: dataAdapter,
+                editable: true,
+                columnsresize: true,
+                selectionmode: 'multiplecellsadvanced',
+                theme: theme,
+                columns: columns,
+                height: 5*32
+            });
+
+            
+            $("#addrowbutton").on('click', function () {
+                var datarow = generaterow();
+                var commit = $("#jqxgrid").jqxGrid('addrow', null, datarow);
+            });
+            
+            $("#excelExport").click(function () {
+                $("#jqxgrid").jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+            });
+        });
+    </script>
