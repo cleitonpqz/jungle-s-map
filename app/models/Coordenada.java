@@ -21,7 +21,7 @@ public class Coordenada extends Model {
     public Double longitude;
     
     @ManyToOne
-    @Constraints.Required(message="O campo trabalho ciêntífico é obrigatório!")
+    @Constraints.Required(message="O campo Local é obrigatório!")
     @Formats.NonEmpty
     public Local local;
     
