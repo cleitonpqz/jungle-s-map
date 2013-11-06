@@ -100,12 +100,23 @@ $(document).ready(function(){
 </script>
 <script type="text/javascript">
         $(function(){
-            var theme = 'base';    		
-            
+            var theme = 'base';
+
+            var parcela_source =
+            {
+                datafields:
+                [
+                    { name: 'parcela', type: 'number' },
+                    { name: 'biomassa', type: 'number' },
+                    { name: 'carbono', type: 'number' },
+                    { name: 'volume', type: 'number' }
+                ]
+            };
+            var dataAdapterParcela = new $.jqx.dataAdapter(parcela_source);
             // inicializa grid de parcela
             var grid_parcela = $("#jqxgrid_parcela").jqxGrid(
             {
-                //source: dataAdapter,
+                source: dataAdapterParcela,
                 editable: true,
                 columnsresize: false,
                 selectionmode: 'multiplecellsadvanced',
@@ -136,9 +147,25 @@ $(document).ready(function(){
 
 
             // inicializa grid de árvore
+            var arvore_source =
+            {
+                datafields:
+                [
+                    { name: 'parcela', type: 'number' },
+                    { name: 'arvore', type: 'number' },
+                    { name: 'dap', type: 'number' },
+                    { name: 'altura', type: 'number' },
+                    { name: 'biomassa', type: 'number' },
+                    { name: 'carbono', type: 'number' },
+                    { name: 'volume', type: 'number' }
+                ]
+            };
+            var dataAdapterArvore = new $.jqx.dataAdapter(arvore_source);
+
+
             var grid_arvore = $("#jqxgrid_arvore").jqxGrid(
             {
-                //source: dataAdapter,
+                source: dataAdapterArvore,
                 editable: true,
                 columnsresize: false,
                 selectionmode: 'multiplecellsadvanced',
