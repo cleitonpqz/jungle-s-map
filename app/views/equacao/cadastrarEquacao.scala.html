@@ -117,9 +117,9 @@ $("#potencicao").click(function(){
                     populaTermos("operador",1);
                 }
 })
-$("#raiz").click(function(){
+$("#sqrt").click(function(){
                 if(pode("operadorComParenteses")){
-                    acrescentaTermo("Raiz");
+                    acrescentaTermo("sqrt");
                     populaTermos("operador",4);
                 }
 		
@@ -272,15 +272,15 @@ $('body').on('click','#C', function(){
                             
                             <tr>
                                 <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao"/></td>
-                                <td><input type="button" rel="tooltip" title="Raiz - Usar Raiz(base,índice)" type="button"  style="width:100%" value="Raiz" id="raiz"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - LN()" type="button"  style="width:100%" value="LN" id="logaritmoNeperiano"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo na base 10" style="width:100%" value="log" id="logaritmo"/></td>
+                                <td><input type="button" rel="tooltip" title="Raiz Quadrada - Usar sqrt(número)" type="button"  style="width:100%" value="sqrt" id="sqrt"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - LN(número)" type="button"  style="width:100%" value="LN" id="logaritmoNeperiano"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo - Usar Log(logaritmando, base)" style="width:100%" value="log" id="logaritmo"/></td>
                                 
                             </tr>
                             
                             <tr>
-                                <td><input type="button" rel="tooltip" title='Exponêncial - Usar Exp(b) para "e" elevado a "b"' style="width:100%" value="Exp" id="exponencial"/></td>
-                                <td><input type="button" rel="tooltip" title='Virgula - Para usar no operador "Raíz"' style="width:100%" value="," id="virgula"/></td>
+                                <td><input type="button" rel="tooltip" title='Exponêncial - Usar Exp(b)' style="width:100%" value="Exp" id="exponencial"/></td>
+                                <td><input type="button" rel="tooltip" title='Virgula - Para usar no operador "Log"' style="width:100%" value="," id="virgula"/></td>
                                 <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses"/></td>
                                 <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses"/></td>
                             </tr>
