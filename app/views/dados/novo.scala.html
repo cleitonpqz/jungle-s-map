@@ -96,17 +96,21 @@ $(document).ready(function(){
                  return '<div style="text-align: center; margin-top: 5px;">' + (1 + value) + '</div>';
              }
              // create Grid datafields and columns arrays.
+             var label = [];
              var datafields = [];
              var columns = [];
-             for (var i = 0; i < 6; i++) {
-                 var text = String.fromCharCode(65 + i);
-                 if (i == 0) {
-                     var cssclass = 'jqx-widget-header';
-                     if (theme != '') cssclass += ' jqx-widget-header-' + theme;
-                     columns[columns.length] = {pinned: true, exportable: false, text: "", columntype: 'number', cellclassname: cssclass, cellsrenderer: numberrenderer };
-                 }
-                 datafields[datafields.length] = { name: text };
-                 columns[columns.length] = { text: text, datafield: text, width: 60, align: 'center' };
+             cssclass = ' jqx-widget-header-' + theme;
+
+             label[0] = "Parcela";
+             label[1] = "Biomassa";
+             label[2] = "Carbono";
+             label[3] = "Volume";
+
+             while(columns.length < label.length){
+             	columns[columns.length] = {pinned: true, exportable: false, text: "", columntype: 'number', cellclassname: cssclass, cellsrenderer: numberrenderer };
+             	
+             	datafields[datafields.length] = { name: columns.length - 1 };
+                columns[columns.length - 1] = { text: label[columns.length -1], datafield: columns.length, width: 95, align: 'center' };
              }
              var source =
             {
@@ -115,22 +119,39 @@ $(document).ready(function(){
                 datafields: datafields,
                 updaterow: function (rowid, rowdata) {
                     // synchronize with the server - send update command   
+                },
+                addrow: function (rowid, rowdata, position, commit) {
+                    commit(true);
                 }
             };
+
+            
              var dataAdapter = new $.jqx.dataAdapter(source);
              // initialize jqxGrid
              $("#jqxgrid").jqxGrid(
             {
-                width: 60*6+28,
+                width: 95 * label.length + 10,
                 source: dataAdapter,
                 editable: true,
-                columnsresize: true,
+                columnsresize: false,
                 selectionmode: 'multiplecellsadvanced',
                 theme: theme,
                 columns: columns,
-                height: 5*32
+                height: 5 * 32
             });
 
+             var generaterow = function () {
+                var row =
+            	{
+                	unboundmode: true,
+                	totalrecords: 1,
+                	datafields: datafields,
+                	updaterow: function (rowid, rowdata) {  
+                }
+            };
+                
+                return row;
+            }
             
             $("#addrowbutton").on('click', function () {
                 var datarow = generaterow();
