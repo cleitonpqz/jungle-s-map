@@ -27,15 +27,15 @@
   	</label>
   	<div id="biomassa_manual" style="display: none">
     
-    <div id='jqxWidget biomassa'>
-        <div class="jqxgrid" id="jqxgrid_biomassa"></div>
-            <div style='margin-top: 20px;'>
-            <div>
-                <input type="button" value="Export to Excel" id='excelExport' class="btn" />
-                <input type="button" value="Adicionar Linha" id='addrowbutton' class="btn" />
+        <div id='jqxWidget biomassa'>
+            <div class="jqxgrid" id="jqxgrid_parcela"></div>
+                <div style='margin-top: 20px;'>
+                <div>
+                    <input type="button" value="Export to Excel" id='excelExportParcela' class="btn" />
+                    <input type="button" value="Adicionar Linha" id='addRowParcela' class="btn" />
+                </div>
             </div>
         </div>
-    </div>
 
     </div>
   	<div id="arvore_manual" style="display: none">
@@ -43,8 +43,8 @@
   		    <div class="jqxgrid" id="jqxgrid_arvore"></div>
   		        <div style='margin-top: 20px;'>
   		        <div>
-  		            <input type="button" value="Export to Excel" id='excelExport' class="btn" />
-  		            <input type="button" value="Adicionar Linha" id='addrowbutton' class="btn" />
+  		            <input type="button" value="Export to Excel" id='excelExportArvore' class="btn" />
+  		            <input type="button" value="Adicionar Linha" id='addRowArvore' class="btn" />
   		        </div>
   		    </div>
   		</div>
@@ -99,94 +99,75 @@ $(document).ready(function(){
     });
 </script>
 <script type="text/javascript">
-         $(".radios").change(function(){
-             var theme = 'base';
-             // renderer for grid cells.
-             var numberrenderer = function (row, column, value) {
-                 return '<div style="text-align: center; margin-top: 5px;">' + (1 + value) + '</div>';
-             }
-             // create Grid datafields and columns arrays.
-             var label = [];
-             var datafields = [];
-             var columns = [];
-             cssclass = ' jqx-widget-header-' + theme;
-             
-             var classe1 = $("#classe1").is(":checked");
-    		
-
-             if(classe1 == true){
-             	label[0] = "Parcela";
-	            label[1] = "Biomassa";
-            	label[2] = "Carbono";
-             	label[3] = "Volume";
-
-
-             } else{
-             	label[0] = "Parcela";
-	            label[1] = "Arvore";
-    	        label[2] = "DAP";
-        	    label[3] = "Altura";
-        	    label[4] = "Biomassa";
-        	    label[5] = "Carbono";
-        	    label[6] = "Volume";
-	
-             }
-
-             
-             while(columns.length < label.length){
-             	columns[columns.length] = {pinned: true, exportable: false, text: "", columntype: 'number', cellclassname: cssclass, cellsrenderer: numberrenderer };
-             	
-             	datafields[datafields.length] = { name: columns.length - 1 };
-                columns[columns.length - 1] = { text: label[columns.length -1], datafield: columns.length, width: 95, align: 'center' };
-             }
-             var source =
-            {
-                unboundmode: true,
-                totalrecords: 5,
-                datafields: datafields,
-                updaterow: function (rowid, rowdata) {
-                    // synchronize with the server - send update command   
-                },
-                addrow: function (rowid, rowdata, position, commit) {
-                    commit(true);
-                }
-            };
-
+        $(function(){
+            var theme = 'base';    		
             
-             var dataAdapter = new $.jqx.dataAdapter(source);
-             // initialize jqxGrid
-             $(".jqxgrid").jqxGrid(
+            // inicializa grid de parcela
+            var grid_parcela = $("#jqxgrid_parcela").jqxGrid(
             {
-                width: 95 * label.length + 10,
-                source: dataAdapter,
+                //source: dataAdapter,
                 editable: true,
                 columnsresize: false,
                 selectionmode: 'multiplecellsadvanced',
                 theme: theme,
-                columns: columns,
-                height: 5 * 32
+                columns: [
+                  { text: 'Parcela', datafield: 'parcela'},
+                  { text: 'Biomassa', datafield: 'biomassa' },
+                  { text: 'Carbono', datafield: 'carbono' },
+                  { text: 'Volume', datafield: 'volume' }
+                ]
             });
 
-             var generaterow = function () {
-                var row =
-            	{
-                	unboundmode: true,
-                	totalrecords: 1,
-                	datafields: datafields,
-                	updaterow: function (rowid, rowdata) {  
-                }
-            };
-                
-                return row;
-            }
+            grid_parcela.on('initialized', function(){
+                //pré popula com 5 linhas
+                for (var i = 5 - 1; i >= 0; i--) {
+                    grid_parcela.jqxGrid('addrow', null, {});
+                };
+            });
+
             
-            $("#addrowbutton").on('click', function () {
-                var datarow = generaterow();
-                var commit = $(".jqxgrid").jqxGrid('addrow', null, datarow);
+            $("#addRowParcela").on('click', function () {
+                grid_parcela.jqxGrid('addrow', null, {});
             });
             
-            $("#excelExport").click(function () {
-                $(".jqxgrid").jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+            $("#excelExportParcela").click(function () {
+                grid_parcela.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+            });
+
+
+            // inicializa grid de árvore
+            var grid_arvore = $("#jqxgrid_arvore").jqxGrid(
+            {
+                //source: dataAdapter,
+                editable: true,
+                columnsresize: false,
+                selectionmode: 'multiplecellsadvanced',
+                theme: theme,
+                columns: [
+                  { text: 'Parcela', datafield: 'parcela'},
+                  { text: 'Árvore', datafield: 'arvore' },
+                  { text: 'DAP', datafield: 'dap' },
+                  { text: 'Altura', datafield: 'altura' },
+                  { text: 'Biomassa', datafield: 'biomassa' },
+                  { text: 'Carbono', datafield: 'carbono' },
+                  { text: 'Volume', datafield: 'volume' }
+                ]
+            });
+
+            grid_arvore.on('initialized', function(){
+                //pré popula com 5 linhas
+                for (var i = 5 - 1; i >= 0; i--) {
+                    grid_arvore.jqxGrid('addrow', null, {});
+                };
+            });
+
+            
+            $("#addRowArvore").on('click', function () {
+                grid_arvore.jqxGrid('addrow', null, {});
+            });
+            
+            $("#excelExportArvore").click(function () {
+                grid_arvore.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
             });
         });
     </script>
