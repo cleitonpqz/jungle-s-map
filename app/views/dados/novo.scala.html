@@ -27,8 +27,8 @@
   	</label>
   	<div id="biomassa_manual" style="display: none">
     
-    <div id='jqxWidget'>
-        <div id="jqxgrid"></div>
+    <div id='jqxWidget biomassa'>
+        <div class="jqxgrid" ></div>
             <div style='margin-top: 20px;'>
             <div>
                 <input type="button" value="Export to Excel" id='excelExport' class="btn" />
@@ -38,7 +38,17 @@
     </div>
 
     </div>
-  	<div id="arvore_manual" style="display: none">Teste 2</div>
+  	<div id="arvore_manual" style="display: none">
+  		<div id='jqxWidget arvore'>
+  		    <div class="jqxgrid"></div>
+  		        <div style='margin-top: 20px;'>
+  		        <div>
+  		            <input type="button" value="Export to Excel" id='excelExport' class="btn" />
+  		            <input type="button" value="Adicionar Linha" id='addrowbutton' class="btn" />
+  		        </div>
+  		    </div>
+  		</div>
+  	</div>
   	<div id="biomassa_import" style="display: none">Teste 3</div>
   	<div id="arvore_import" style="display: none">Teste 4</div>
     </div>
@@ -81,7 +91,7 @@ $(document).ready(function(){
     		$("#biomassa_import").hide();
     		$("#arvore_import").show();
 		}
-		else if(classe1 == false )
+		else 
 			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
 
 
@@ -89,7 +99,7 @@ $(document).ready(function(){
     });
 </script>
 <script type="text/javascript">
-         $(document).ready(function () {
+         $(".radios").change(function(){
              var theme = 'base';
              // renderer for grid cells.
              var numberrenderer = function (row, column, value) {
@@ -100,12 +110,29 @@ $(document).ready(function(){
              var datafields = [];
              var columns = [];
              cssclass = ' jqx-widget-header-' + theme;
+             
+             var classe1 = $("#classe1").is(":checked");
+    		
 
-             label[0] = "Parcela";
-             label[1] = "Biomassa";
-             label[2] = "Carbono";
-             label[3] = "Volume";
+             if(classe1 == true){
+             	label[0] = "Parcela";
+	            label[1] = "Biomassa";
+            	label[2] = "Carbono";
+             	label[3] = "Volume";
 
+
+             } else{
+             	label[0] = "Parcela";
+	            label[1] = "Arvore";
+    	        label[2] = "DAP";
+        	    label[3] = "Altura";
+        	    label[4] = "Biomassa";
+        	    label[5] = "Carbono";
+        	    label[6] = "Volume";
+	
+             }
+
+             
              while(columns.length < label.length){
              	columns[columns.length] = {pinned: true, exportable: false, text: "", columntype: 'number', cellclassname: cssclass, cellsrenderer: numberrenderer };
              	
@@ -128,7 +155,7 @@ $(document).ready(function(){
             
              var dataAdapter = new $.jqx.dataAdapter(source);
              // initialize jqxGrid
-             $("#jqxgrid").jqxGrid(
+             $(".jqxgrid").jqxGrid(
             {
                 width: 95 * label.length + 10,
                 source: dataAdapter,
@@ -155,11 +182,11 @@ $(document).ready(function(){
             
             $("#addrowbutton").on('click', function () {
                 var datarow = generaterow();
-                var commit = $("#jqxgrid").jqxGrid('addrow', null, datarow);
+                var commit = $(".jqxgrid").jqxGrid('addrow', null, datarow);
             });
             
             $("#excelExport").click(function () {
-                $("#jqxgrid").jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+                $(".jqxgrid").jqxGrid('exportdata', 'xls', 'jqxGrid', true);
             });
         });
     </script>
