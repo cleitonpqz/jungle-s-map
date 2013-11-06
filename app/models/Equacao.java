@@ -2,10 +2,11 @@ package models;
 
 import java.util.*;
 import javax.persistence.*;
-
+import java.sql.*;
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
+import java.sql.SQLException;
 
 import com.avaje.ebean.*;
 
@@ -132,5 +133,19 @@ public class Equacao extends Model {
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .getPage(page);
+    }
+    public static void testaEquacao(String expressao)throws SQLException{
+        String sql = "Select "+expressao+" from equacao limit 10";
+        Connection conn = play.db.DB.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+            try {
+                stmt.execute(sql);
+            } finally {
+                stmt.close();
+            }
+        } finally {
+            conn.close();
+        }
     }
 }
