@@ -1,0 +1,66 @@
+@(variavelForm: Form[Variavel])
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formVariavel").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formVariavel").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    $("#variavel").append("<option value='"+data.id+","+data.sigla+"'>" + data.nome+" ("+data.sigla+")"+ "</option>");
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal("Cadastrar e Selecionar Variavel", "Salvar", javascript){
+    
+    @form(action = routes.Variaveis.salvarSelecionar, 'role -> "form", 'id -> "formVariavel") {
+        
+        <fieldset>
+           @inputText(
+                variavelForm("nome"), 
+                '_label -> "Nome",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o nome da variável",
+                '_help -> "",
+                '_error -> variavelForm.error("nome")
+            )
+                 
+           @inputText(
+                variavelForm("sigla"), 
+                '_label -> "Sigla",
+                'class ->"input-xlarge",
+                'placeholder->"Digite a sigla da variável",
+                '_help -> "",
+                '_error -> variavelForm.error("sigla")
+            )
+                 
+        </fieldset>
+    }
+
+    <div class="alert alert-error" style="display: none">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ERRO!</strong>
+    </div>
+
+    <hr>
+    
+}    

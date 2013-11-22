@@ -9,192 +9,368 @@
 }
 
 @javascript = {
-<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+ <script type="text/javascript">
+        jQuery(function(){
 
+            //inicializa modal
+            $("#modal").modal({
+                show: false
+            });
+
+            //bind para buscar conteúdo da view e mostrar na modal
+            $("#novo_autor").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+            
+            $("#nova_variavel").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+</script>
 <script type="text/javascript">
-        var arrayABC= new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        var variavelUtilizada = new Array();
         var countVariavel=0;
-	var termos = new Array();
-        var countTermos=0;
-   
-    function Termo(tipo, tamanho){
+	var elementos = new Array();
+        var countElementos=0;
+        var countTermo = 0;
+        var tamanhoTermos=new Array();
+        var countVarElem = 0
+        var varElemento = new Array();
+      
+    function Elemento(tipo, tamanho){
         this.tipo = tipo;
         this.tamanho = tamanho;
     }
     
-    function populaTermos(tipo, tamanho){
-        termos[countTermos]= new Termo(tipo, tamanho);
-        countTermos++;
+    function populaElementos(tipo, tamanho){
+        elementos[countElementos]= new Elemento(tipo, tamanho);
+        countElementos++;
       }
     
-    function acrescentaTermo(termo){
-        $("#visualizacao").val($("#visualizacao").val()+termo);
-        $("#expressao").val($("#expressao").val()+termo);
+    function acrescentaElemento(elemento){
+        $("#termo").val($("#termo").val()+elemento);
+    }
+    function existe(vetor, objeto) {
+        for (var i = 0; i < vetor.length; i++) {
+            if (vetor[i][0] === objeto) {
+                return true;
+            }
+    }
+    return false;
     }
     function pode(caso){
         switch(caso){
          case 'negativo':
-             if (countTermos===0)
+             if (countElementos===0)
                 return true;
          case 'fechaParenteses':
          case 'operador':
-             if (countTermos===0)
+             if (countElementos===0)
                 return false;
-            var termo = termos[countTermos-1];
-            return (termo.tipo==="variavel"||termo.tipo==="constante"||termo.tipo==="fechaParenteses");
+            var elemento = elementos[countElementos-1];
+            return (elemento.tipo==="variavel"||elemento.tipo==="numero"||elemento.tipo==="fechaParenteses");
          break;
-         case 'constante':
          case 'variavel':
          case 'operadorComParenteses':
-             if (countTermos===0)
+             if (countElementos===0)
                 return true;
-             var termo = termos[countTermos-1];
-             return (termo.tipo==="operador" || termo.tipo==="abreParenteses");             
+             var elemento = elementos[countElementos-1];
+             return (elemento.tipo==="operador" || elemento.tipo==="abreParenteses");             
          break;
+         case 'numero':
+         if (countElementos===0)
+                return true;
+             var elemento = elementos[countElementos-1];
+             return (elemento.tipo==="operador" || elemento.tipo==="abreParenteses"|| elemento.tipo==="numero" || elemento.tipo==="ponto");             
+         break;
+         
          case 'abreParenteses':
-              if (countTermos===0)
+              if (countElementos===0)
                 return true;
-             var termo = termos[countTermos-1];
-             return (termo.tipo==="operador" || termo.tipo==="abreParenteses"||termo.tipo==="operadorComParenteses");
+             var elemento = elementos[countElementos-1];
+             return (elemento.tipo==="operador" || elemento.tipo==="abreParenteses"||elemento.tipo==="operadorComParenteses");
          break;
+         
+         case 'ponto':
+             var elemento = elementos[countElementos-1];
+             return (elemento.tipo==="numero");
+         break
          default: return true;
     }
         
     }
 	
-  $('body').on('change', '#variavel',function(){
-              	if(pode("variavel")){
-                    var stringVariavel=$("#variavel").val();
-                     $("#visualizacao").val($("#visualizacao").val()+stringVariavel);
-                     $("#expressao").val($("#expressao").val()+"valor_variavel_"+arrayABC[countVariavel]);
-                     $("#divVariaveis").append("<div id='"+arrayABC[countVariavel]+"'><input type='hidden' name='variavel_"+arrayABC[countVariavel]+"' value='"+stringVariavel+"'>\n\
-                                                </div>");
-                    countVariavel++;
-                    populaTermos("variavel",stringVariavel.length);
-		}
+    $('body').on('click','#adicionarTermoBtn', function(){
+       var stringExpressao =$("#expressao").val();
+       var stringTermo=$("#termo").val();
+       var stringAux = "b"+countTermo+"*("+stringTermo+")";
+       if(countTermo>0){
+           stringExpressao = stringExpressao+"+"+stringAux;
+           tamanhoTermos[countTermo]=stringAux.length+1;
+       }
+        else{
+            stringExpressao = stringAux;
+            tamanhoTermos[countTermo]=stringAux.length;
+        }
+        if(countVarElem>0){
+            for(var i=0; i<countVarElem; i++){
+                 if(countVariavel>0){
+                      if(!existe(variavelUtilizada, varElemento[i][0])){
+                        $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
+                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].valor' value='0'> </div>");
+
+                       variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
+                       countVariavel++;
+                   }
+                   }else{
+                        $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
+                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].valor' value='0'> </div>");
+
+                       variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
+                       countVariavel++;
+                    }
+                    
+               }
+               countVarElem=0
+               varElemento=new Array;
+        }
+       $("#expressao").val(stringExpressao);
+       $("#divTermos").append("<div id='divTermo_"+countTermo+"'>\n\
+                                <input type='hidden' name='termos["+countTermo+"].expressao' value='"+stringTermo+"'>\n\
+                                <input type='hidden' name='termos["+countTermo+"].ordem' value='"+countTermo+"'> </div>");
+        
+            
+        countElementos=0;
+        countTermo++;
+        $("#qtdCoeficientes").val(countTermo);
+        $("#termo").val("");
+        $("#coeficiente").val("b"+countTermo);
+       })    
+        
+    $('body').on('change', '#variavel',function(){
+               	if(pode("variavel")){
+                    var auxVariavel = $("#variavel").val().split(",");
+                    
+                    acrescentaElemento(auxVariavel[1]);
+                    populaElementos("variavel",auxVariavel[1].length);
+                    varElemento[countVarElem]=[auxVariavel[0], auxVariavel[1]];
+                    countVarElem++;
+                    
+                }
                 $("#variavel").val("0");
 		
-})       
-  $("#adicionarConstanteBtn").click(function(){
-        	if(pode("constante")){
-                    var stringConstante = $("#constante").val();
-                        acrescentaTermo(stringConstante);
-			populaTermos("constante", stringConstante.length);
-                }
-                $("#constante").val("");
-		
-})
+})  
  $("#multiplicacao").click(function(){
 		if(pode("operador")){
-                        acrescentaTermo("*");
-			populaTermos("operador",1);
+                        acrescentaElemento("*");
+			populaElementos("operador",1);
 		}
 })
 $("#divisao").click(function(){
 		if(pode("operador")){
-                    acrescentaTermo("/");
-                    populaTermos("operador",1);
+                    acrescentaElemento("/");
+                    populaElementos("operador",1);
 		}
 })
 $("#adicao").click(function(){
                 if(pode("operador")){
-                acrescentaTermo("+");
-		populaTermos("operador",1);
+                acrescentaElemento("+");
+		populaElementos("operador",1);
 		}
 		
 })
 $("#subtracao").click(function(){
                 if(pode("negativo")){
-                    acrescentaTermo("-");
-                    populaTermos("operador",1);
+                    acrescentaElemento("-");
+                    populaElementos("operador",1);
 		}
 		
 })
-$("#potencicao").click(function(){
+$("#potenciacao").click(function(){
 		if(pode("operador")){
-                    acrescentaTermo("^");
-                    populaTermos("operador",1);
+                    acrescentaElemento("^");
+                    populaElementos("operador",1);
                 }
 })
 $("#raiz").click(function(){
                 if(pode("operadorComParenteses")){
-                    acrescentaTermo("Raiz");
-                    populaTermos("operador",4);
+                    acrescentaElemento("sqrt");
+                    populaElementos("operador",4);
                 }
 		
 })
 $("#logaritmoNeperiano").click(function(){
                 if(pode("operadorComParenteses")){
-                    acrescentaTermo("LN");
-                    populaTermos("operador",2);
+                    acrescentaElemento("ln");
+                    populaElementos("operador",2);
 		}
 		
 })
 $("#logaritmo").click(function(){
 		if(pode("operadorComParenteses")){
-                    acrescentaTermo("Log");
-                    populaTermos("operador",3);
+                    acrescentaElemento("log");
+                    populaElementos("operador",3);
                 }
 })
 $("#exponencial").click(function(){
-		if(pode("operador")){
-                    acrescentaTermo("Exp");
-                    populaTermos("operador",3);
+		if(pode("operadorComParenteses")){
+                    acrescentaElemento("exp");
+                    populaElementos("operador",3);
                 }
 })
-$("#virgula").click(function(){
+$("#ponto").click(function(){
 		if(pode("operador")){
-                    acrescentaTermo(",");
-                    populaTermos("operador",1);
+                    acrescentaElemento(".");
+                    populaElementos("ponto",1);
 		}
 })
 $("#abreParenteses").click(function(){
                 if(pode(abreParenteses)){
-                    acrescentaTermo("(");
-                    populaTermos("abreParenteses",1);
+                    acrescentaElemento("(");
+                    populaElementos("abreParenteses",1);
                  }
 				
 })
 $("#fechaParenteses").click(function(){
-                if(pode(fechaParenteses)){
-                    acrescentaTermo(")");
-                    populaTermos("fechaParenteses",1);
+                if(pode("fechaParenteses")){
+                    acrescentaElemento(")");
+                    populaElementos("fechaParenteses",1);
+                }
+})
+
+$("#zero").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("0");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#um").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("1");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#dois").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("2");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#tres").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("3");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#quatro").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("4");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#cinco").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("5");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#seis").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("6");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#sete").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("7");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#oito").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("8");
+                    populaElementos("numero",1);
+                }
+})
+
+$("#nove").click(function(){
+                if(pode("numero")){
+                    acrescentaElemento("9");
+                    populaElementos("numero",1);
                 }
 })
 
 $('body').on('click','#CE',function(){
-     if(countTermos>0){
-        var auxVisualizacao = $("#visualizacao").val();
-        var auxExpressao = $("#expressao").val();
-        if(termos[countTermos-1].tipo==="variavel"){
-            countTermos--;
-            auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - termos[countTermos].tamanho);
-            auxExpressao = auxExpressao.substring(0, auxExpressao.length - 16);
-             countVariavel--;
-             $("#"+arrayABC[countVariavel]).remove();
-             
-
-        }else{
-            countTermos--;
-            auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - termos[countTermos].tamanho);
-            auxExpressao = auxExpressao.substring(0, auxExpressao.length - termos[countTermos].tamanho);
-           
+     if(countElementos>0){
+        var auxTermo=$("#termo").val();
+        
+        if(elementos[countElementos-1].tipo==="variavel"){
+            countVarElem--
+            varElemento[countVarElem]=[0, ""];
+        }               
+            countElementos--;
+            auxTermo = auxTermo.substring(0, auxTermo.length - elementos[countElementos].tamanho);
+            $("#termo").val(auxTermo);
         }
-            $("#visualizacao").val(auxVisualizacao);
-            $("#expressao").val(auxExpressao);
-
-            input.value = input.value.substring(0, input.value.length - 1);
-    }
             
-	})
+})
 $('body').on('click','#C', function(){
-        $("#visualizacao").val("");
-        $("#expressao").val("");
-        $("#divVariaveis").html("");
-                countVariavel=0;
-		countTermos=0;
-	})  
+        $("#termo").val("");
+        countVarElem=0;
+        varElemento = new Array();
+        countElementos=0;
+        elementos = new Array();
+        
+})
+
+$('body').on('click','#limparExpressao', function(){
+    if(countTermo>0){
+        var auxExpressao=$("#expressao").val();
+        countTermo--;
+        auxExpressao = auxExpressao.substring(0, auxExpressao.length - tamanhoTermos[countTermo]);
+        
+        if(countVariavel>0){
+            for(var i=countVariavel-1; i>=0; i--){
+                    if(auxExpressao.search(variavelUtilizada[i][1])===-1){
+                        countVariavel--;
+                        variavelUtilizada[countVariavel][0]=[-1];
+                        variavelUtilizada[countVariavel][1]=[""];
+                         $("#"+"equacaoVariavel_"+countVariavel).remove();
+                     }
+            }
+         }
+        $("#qtdCoeficientes").val(countTermo);
+        $("#coeficiente").val("b"+countTermo);
+        $("#"+"divTermo_"+countTermo).remove();
+        $("#expressao").val(auxExpressao);
+    }    
+})
+
 </script>
 }
 
@@ -215,9 +391,8 @@ $('body').on('click','#C', function(){
     
     @form(routes.Modelos.salvar(variavelInteresse)) {
         
-        <fieldset>
-                <div class="clearfix  " id="bioma_field">
-           <label for="bioma">Equação para calculo de</label>
+           <div class="clearfix>
+           <label for="bioma">Equação para cálculo de</label>
            <div class="input">
            <select id="variavel_interesse" name="variavel_interesse.id" class="input-large" disabled>
               @for(opcao<-VariavelInteresse.opcoes){
@@ -225,8 +400,7 @@ $('body').on('click','#C', function(){
               } 
            </select>
                <input type="hidden" name="variavel_interesse.id" value ="@variavelInteresse">
-               <span class="help-inline"></span>
-               <span class="help-block"></span> 
+               <input type="hidden" name="qtd_coeficientes" value ="0" id="qtdCoeficientes">
            </div>
            </div>
             <table>
@@ -244,78 +418,99 @@ $('body').on('click','#C', function(){
                     )
                     </td>
                     <td>
-                        <a href="@routes.AutoresModelos.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Autor">Novo</a>
+                        <a href="@routes.AutoresModelos.novo()" id="novo_autor" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Autor">Novo</a>
                     </td>
                     </tr>
                     </table>
-                  <div class="clearfix  " id="expressao_field">
-                   <label for="expressao">Equação:</label>
+            <div class="clearfix  " id="expressao_field">
+                   <h4 for="expressao">Modelo:</h4>
                        <div class="input">
-                           <input type="hidden" id="expressao" name ="expressao">
-                           <input type="text" id="visualizacao" name="visualizacao" readonly rel="tooltip" title="Insira a equação">
-
+                               <input type="text" id="expressao" name="expressao" readonly rel="tooltip" title="Insira a equação">
+                               <a class="btn btn-info  btn-mini" rel="tooltip" title="Apaga último termo" id="limparExpressao"/>-</a>
                                <span class="help-inline"></span>
                                <span class="help-block"></span> 
                        </div>
-          </div>
-          <div class="row">
-                   <div class="span6">
-                       <h4>Variáveis</h4>
-                       <select id="variavel" name="variavel" class="input-xlarge">
-                           <option value ="0">-- Variáveis --</option>
-                           
-                            @for(opcao<-Variavel.opcoes){
-                              <option value ="@opcao._1">@opcao._2</option>
-                             } 
-                    </select>
-                     <a href="@routes.Variaveis.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
-                    <h4>Constantes</h4>
-                        <input type="text" id="constante" name="expressao" rel="tooltip" title="Digite uma Constante">
-                        <a type="button" class="btn btn-info  btn-mini" id="adicionarConstanteBtn" rel="tooltip" title="Adicionar constante"> + </a>
-                   </div>
-          <div class="span6">
-                     <h4>Operadores</h4>
-                     <div id="corpo">
-                        <table id="operadores">
-                            <tr><td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE"/></td>
-                                <td colspan="2" ><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C"/></td>
-                            </tr>
-                            
-                            <tr>
-                                <td><input type="button" rel="tooltip" title="Adição" style="width:100%" value="+" id="adicao"/></td>
-                                <td><input type="button" rel="tooltip" title="Subtração" style="width:100%" class="operador" value="-" id="subtracao"/></td>
-                                <td><input type="button" rel="tooltip" title="Multiplicacao" style="width:100%" value="*" id="multiplicacao"/></td>
-                                <td><input type="button" rel="tooltip" title="Divisão" style="width:100%" value="/" id="divisao"/></td>
-                            </tr>
-                            
-                            <tr>
-                                <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao"/></td>
-                                <td><input type="button" rel="tooltip" title="Raiz - Usar Raiz(base,índice)" type="button"  style="width:100%" value="Raiz" id="raiz"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - LN()" type="button"  style="width:100%" value="LN" id="logaritmoNeperiano"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo na base 10" style="width:100%" value="log" id="logaritmo"/></td>
-                                
-                            </tr>
-                            
-                            <tr>
-                                <td><input type="button" rel="tooltip" title='Exponêncial - Usar Exp(b) para "e" elevado a "b"' style="width:100%" value="Exp" id="exponencial"/></td>
-                                <td><input type="button" rel="tooltip" title='Virgula - Para usar no operador "Raíz"' style="width:100%" value="," id="virgula"/></td>
-                                <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses"/></td>
-                                <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses"/></td>
-                            </tr>
-                        </table>
-                    </div>
             </div>
-           </div>
-        </fieldset>
-        <div id="divVariaveis">
-        </div>
-       
+          <fieldset>
+              <h4>Termo:</h4>
+                <div class="control-group" >
+                <div>
+                      <input type="text" class="input-micro" id="coeficiente" value="b0" name="coeficiente" disabled>
+                      <span style="font-size:xx-large">*</span>
+
+                        <input type="text" class="input-xxlarge" id="termo" value="" name="termo_display" disabled>
+                        <a type="button" class="btn btn-info  btn-mini" id="adicionarTermoBtn" rel="tooltip" title="Adicionar termo ao modelo."> + </a>
+                 </div>
+                <div class="row">
+                    <div class="span6">
+                         <div id="selectVariavel">
+                           <label>Variáveis</label>
+                           <select id="variavel" name="variavel" class="input-xlarge">
+                               <option value ="0">-- Variáveis --</option>
+
+                                @for(opcao<-Variavel.opcoes){
+                                  <option value ="@opcao._1">@opcao._2</option>
+                                 } 
+                        </select>
+                         <a href="@routes.Variaveis.novo()" id="nova_variavel" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
+
+                       </div>
+                 </div>
+                <div class="span6">
+
+                         <label>Operadores</label>
+                         <div id="corpo">
+                            <table id="operadores">
+                                <tr>
+                                    <td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE"/></td>
+                                    <td><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C"/></td>
+                                    <td><input type="button" rel="tooltip" title="Adição" style="width:100%" value="+" id="adicao"/></td>
+                                    <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potenciacao"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td><input type="button" style="width:100%" value="9" id="nove"/></td>
+                                    <td><input type="button" style="width:100%" value="8" id="oito"/></td>
+                                    <td><input type="button" style="width:100%" value="7" id="sete"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Subtração" value="-" id="subtracao"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Raiz - Usar Raiz(base,índice)" type="button" value="sqrt" id="raiz"/></td>
+                               </tr>
+
+                                <tr>
+                                    <td><input type="button" style="width:100%" value="6" id="seis"/></td>
+                                    <td><input type="button" style="width:100%" value="5" id="cinco"/></td>
+                                    <td><input type="button" style="width:100%" value="4" id="quatro"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Multiplicacao"  value="*" id="multiplicacao"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Logarítmo na base 10" value="log" id="logaritmo"/></td>
+                               </tr>
+                               <tr>
+                                    <td><input type="button" style="width:100%" value="3" id="tres"/></td>
+                                    <td><input type="button" style="width:100%" value="2" id="dois"/></td>
+                                    <td><input type="button" style="width:100%" value="1" id="um"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Divisão" value="/" id="divisao"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title="Logarítmo Neperiano - ln()" type="button"  value="ln" id="logaritmoNeperiano"/></td>
+                               </tr>
+                                <tr>
+                                    <td><input type="button" style="width:100%" value="0" id="zero"/></td>
+                                    <td><input type="button" style="width:100%" value="." id="ponto"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title='Abre Parenteses' value="(" id="abreParenteses"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title='Fecha Parenteses' s value=")" id="fechaParenteses"/></td>
+                                    <td><input type="button" style="width:100%" rel="tooltip" title='Exponêncial - Usar exp(b) para "e" elevado a "b"' value="exp" id="exponencial"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                </div>
+               </div>
+        </div>              
+      </fieldset>
+        <div id="divVariaveis"></div>
+        <div id="divTermos"></div>
         <div class="actions">
             <input type="submit" class="btn btn-primary" value="Salvar">
         </div>
         
     }
  
-     
+     <div id="modal" class="modal hide"></div>
         
 }

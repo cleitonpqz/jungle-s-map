@@ -66,7 +66,7 @@ public class Locais extends Controller{
             flash("success", "Local excluido");
             return VOLTAR;
             }catch(PersistenceException exception){
-             flash("error", "Local não permitida");
+             flash("error", "Exclusão não permitida");
              return VOLTAR;
             }
     }

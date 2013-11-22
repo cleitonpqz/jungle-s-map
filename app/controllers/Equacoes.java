@@ -26,19 +26,14 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
     }
     public static Result salvar(Long varialvelInteresse) {
        Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
-       try{
-       Equacao.testaEquacao(form().bindFromRequest().get("expressao"));
-       }catch(SQLException e){
-           flash("error","Equação mal construida");
-            return badRequest(cadastrarEquacao.render(varialvelInteresse, equacaoForm));
-       }
+       
         
         if(equacaoForm.hasErrors()) {
             flash("error","Equação não incluída");
             return badRequest(cadastrarEquacao.render(varialvelInteresse, equacaoForm));
         }
         equacaoForm.get().save();
-        flash("success", "A Equação " + equacaoForm.get().visualizacao + " foi incluida com sucesso");
+        flash("success", "A Equação " + equacaoForm.get().expressao + " foi incluida com sucesso");
         return GO_HOME;
     }
     

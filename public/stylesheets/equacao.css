@@ -1,5 +1,10 @@
-#visualizacao{
+#expressao{
     width: 700px;
+}
+
+.input-micro{
+	width: 30px;
+	font-size:12px;
 }
 
 table#operadores{
@@ -10,7 +15,10 @@ table#operadores{
 		font-family: sans-serif;
         background-color:#b8c3cd;
 	}
+
 .operador{
-           width:100% 
+           width:100%;
         }
+
+
 

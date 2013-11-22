@@ -17,66 +17,19 @@ public class Modelo extends Model {
     @Constraints.Required(message="O campo modelo é obrigatório!")
     public String expressao;
     
-    @Constraints.Required(message="O campo modelo é obrigatório!")
-    public String visualizacao;
+    public Integer qtd_coeficientes;
     
-    public String variavel_A;
-       
-    public String variavel_B;
-       
-    public String variavel_C;
-        
-    public String variavel_D;
-        
-    public String variavel_E;
-       
-    public String variavel_F;
-   
-    public String variavel_G;
-    
-    public String variavel_H;
-  
-    public String variavel_I;
-   
-    public String variavel_J;
-    
-    public String variavel_K;
-    
-    public String variavel_L;
-   
-    public String variavel_M;
-           
-    public String variavel_N;
-    
-    public String variavel_O;
-    
-    public String variavel_P;
-     
-    public String variavel_Q;
-    
-    public String variavel_R;
-   
-    public String variavel_S;
-    
-    public String variavel_T;
-    
-    public String variavel_U;
-    
-    public String variavel_V;
-    
-    public String variavel_W;
-       
-    public String variavel_X;
-   
-    public String variavel_Y;
-    
-    public String variavel_Z;
-   
     @ManyToOne
     public AutorModelo autor_modelo;
     
     @ManyToOne
     public VariavelInteresse variavel_interesse;
+    
+    @OneToMany(targetEntity = Termo.class, cascade = CascadeType.ALL)
+    public List<Termo> termos = new ArrayList<Termo>();
+    
+    @OneToMany(targetEntity = ModeloVariavel.class, cascade = CascadeType.ALL)
+    public List<ModeloVariavel> modelo_variavel = new ArrayList<ModeloVariavel>();  
     
     @OneToMany(targetEntity = TrabalhoCientificoModelo.class, cascade = CascadeType.ALL)
     public List<TrabalhoCientificoModelo> trabalho_cientifico_modelo = new ArrayList<TrabalhoCientificoModelo>();            
@@ -86,8 +39,8 @@ public class Modelo extends Model {
     public static Map<String,String> opcoes(long id) {
         
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Modelo m: Modelo.find.where().eq("variavel_interesse.id", id).orderBy("visualizacao").findList()) {
-            opcoes.put(m.id.toString(),m.autor_modelo.nome+" "+m.visualizacao);
+        for(Modelo m: Modelo.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
+            opcoes.put(m.id.toString(),m.autor_modelo.nome+" "+m.expressao);
         }
         return opcoes;
     }
@@ -95,7 +48,7 @@ public class Modelo extends Model {
     public static Page<Modelo> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()
-                .ilike("visualizacao", "%" + filter + "%")
+                .ilike("expressao", "%" + filter + "%")
                 .orderBy(sortBy + " " + order)
                 .findPagingList(pageSize)
                 .getPage(page);
