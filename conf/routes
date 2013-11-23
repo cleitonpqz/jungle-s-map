@@ -155,8 +155,16 @@ GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
 #DadosLocal novo
 
 GET	/DadosLocal/:id							controllers.DadosLocal.novo(id:Long)
-
 #--------------------------------------------------------------------------------------------------------------------------------
+#Arvores novo
+
+GET	/Arvores/:id							controllers.Arvores.novo(id:Long)
+#--------------------------------------------------------------------------------------------------------------------------------
+#Parcelas novo
+
+GET	/Parcelas/:id							controllers.Parcelas.novo(id:Long)
+#--------------------------------------------------------------------------------------------------------------------------------
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
 #--------------------------------------------------------------------------------------------------------------------------------

@@ -5,12 +5,12 @@ import play.mvc.*;
 import play.data.*;
 import static play.data.Form.*;
 import play.*;
-import views.html.dados.*;
+import views.html.parcelas.*;
 import javax.persistence.PersistenceException;
 
 import models.*;
 
-public class DadosLocal extends Controller {
+public class Parcelas extends Controller {
 
 	public static Result GO_HOME = redirect(routes.Application.index());
 	
