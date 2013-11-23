@@ -6,16 +6,15 @@
 
 @main("Cadastrar Dados de Arvores"){
 
-@form(action = routes.Arvores.novo(1), 'id -> "form") {
+@form(action = routes.DadosLocal.novo(1), 'id -> "form") {
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
     <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
-    <h4>Dados de Entrada</h4>
-    <br />
     <div class="radios">
     <h4>Tipo de Entrada</h4>
-    <label class="radio tipo" id="tipo" required>
+    <br />
+  	<label class="radio tipo" id="tipo" required>
   		<input type="radio" name="tipo" id="tipo1"  > <label>Entrada Manual (Digitação dos Dados)</label> 
     	<input type="radio" name="tipo" id="tipo2"  > <label>Importação dos Dados apartir de um arquivo txt.</label>
   	</label>
@@ -30,7 +29,10 @@
   		    </div>
   		</div>
   	</div>
-  	<div id="arvore_import" style="display: none">Teste 4</div>
+  	<div id="arvore_import" style="display: none">
+    <br />
+      <input type="file" id="files" name="files[]" multiple="" class="btn btn-small btn-info">
+    </div>
     </div>
     <br />
     <hr>
@@ -44,16 +46,17 @@ $(document).ready(function(){
     	
     	var tipo1 = $("#tipo1").is(":checked");
     	var tipo2 = $("#tipo2").is(":checked");
+    	
     	if(tipo1 == true){
     		$("#arvore_manual").show();
-    		$("#arvore_import").hide();
+            $("#arvore_import").hide();
     	}
     	else if(tipo2 == true){
     		$("#arvore_manual").hide();
     		$("#arvore_import").show();
 		}
-		else if(tipo1 == false && tipo2 == false)
-			alert("Selecione um Tipo de Entrada!!");
+		else 
+			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
 
 
     });
@@ -62,50 +65,6 @@ $(document).ready(function(){
 <script type="text/javascript">
         $(function(){
             var theme = 'base';
-
-            var parcela_source =
-            {
-                datafields:
-                [
-                    { name: 'parcela', type: 'number' },
-                    { name: 'biomassa', type: 'number' },
-                    { name: 'carbono', type: 'number' },
-                    { name: 'volume', type: 'number' }
-                ]
-            };
-            var dataAdapterParcela = new $.jqx.dataAdapter(parcela_source);
-            // inicializa grid de parcela
-            var grid_parcela = $("#jqxgrid_parcela").jqxGrid(
-            {
-                source: dataAdapterParcela,
-                editable: true,
-                columnsresize: false,
-                selectionmode: 'multiplecellsadvanced',
-                theme: theme,
-                columns: [
-                  { text: 'Parcela', datafield: 'parcela'},
-                  { text: 'Biomassa', datafield: 'biomassa' },
-                  { text: 'Carbono', datafield: 'carbono' },
-                  { text: 'Volume', datafield: 'volume' }
-                ]
-            });
-
-            grid_parcela.on('initialized', function(){
-                //pré popula com 5 linhas
-                for (var i = 5 - 1; i >= 0; i--) {
-                    grid_parcela.jqxGrid('addrow', null, {});
-                };
-            });
-
-            
-            $("#addRowParcela").on('click', function () {
-                grid_parcela.jqxGrid('addrow', null, {});
-            });
-            
-            $("#excelExportParcela").click(function () {
-                grid_parcela.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
-            });
-
 
             // inicializa grid de árvore
             var arvore_source =
@@ -159,3 +118,67 @@ $(document).ready(function(){
             });
         });
     </script>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    if(isAPIAvailable()) {
+      $('#files').bind('change', handleFileSelect);
+    }
+  });
+
+  function isAPIAvailable() {
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      // Great success! All the File APIs are supported.
+      return true;
+    } else {
+      // source: File API availability - http://caniuse.com/#feat=fileapi
+      // source: <output> availability - http://html5doctor.com/the-output-element/
+      document.writeln('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+      // 6.0 File API & 13.0 <output>
+      document.writeln(' - Google Chrome: 13.0 or later<br />');
+      // 3.6 File API & 6.0 <output>
+      document.writeln(' - Mozilla Firefox: 6.0 or later<br />');
+      // 10.0 File API & 10.0 <output>
+      document.writeln(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+      // ? File API & 5.1 <output>
+      document.writeln(' - Safari: Not supported<br />');
+      // ? File API & 9.2 <output>
+      document.writeln(' - Opera: Not supported');
+      return false;
+    }
+  }
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    var file = files[0];
+
+    printTable(file);
+  }
+
+  function printTable(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function(event){
+      var csv = event.target.result;
+      var data = $.csv.toArrays(csv);
+      var obj = new Array();
+      for(var row in data) {
+        for(var item in data[row]) {
+          obj[row] = data[row][item];
+        }
+      }
+      console.log(obj);
+      $.ajax({
+        type: 'POST',
+        url: 'saveFile',
+        data: obj
+      }).done(function(){
+        console.log('enviado');
+        alert("O Arquivo foi importado com sucesso!");
+      })
+    };
+    reader.onerror = function(){ alert('Erro ao Abrir o arquivo' + file.fileName); };
+  }
+
+</script>
