@@ -35,6 +35,28 @@ public class Locais extends Controller{
     
     public static Result  salvar() {
         Form<Local> localForm = form(Local.class).bindFromRequest();
+
+        //validações manuais
+        // if(form().bindFromRequest().get("trabalho_cientifico.id")==null 
+        //     || form().bindFromRequest().get("trabalho_cientifico.id").equals("")) {
+        //     localForm.reject("trabalho_cientifico.id", "O campo Trabalho Científico é de preenchimento obrigatório!");
+        // }
+        // if(form().bindFromRequest().get("municipios_locais")==null 
+        //     || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
+        //     localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
+        // }
+        // if(form().bindFromRequest().get("espacamento.id")==null 
+        //     || form().bindFromRequest().get("espacamento.id").equals("")) {
+        //     localForm.reject("espacamento.id", "O campo Espaçamento é de preenchimento obrigatório!");
+        // }
+        // if(form().bindFromRequest().get("formacao.id")==null 
+        //     || form().bindFromRequest().get("formacao.id").equals("")) {
+        //     localForm.reject("formacao.id", "O campo Formação é de preenchimento obrigatório!");
+        // }
+        // if(localForm.field("coordenadas")==null ) {
+        //     localForm.reject("coordenadas", "O campo Coordenadas é de preenchimento obrigatório!");
+        // }
+
         if(localForm.hasErrors()) {
            return badRequest(incluir.render(localForm));
         }
@@ -74,15 +96,38 @@ public class Locais extends Controller{
          Local local = Local.find.byId(id);
          Form<Local> localForm = form(Local.class).fill(local);
          return ok(
-         editarForm.render(id, localForm, local.coordenadas)
+            editarForm.render(id, localForm, local.coordenadas)
          );
     }
         
     public static Result atualizar(Long id) {
         Result VOLTAR = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
         Form<Local> localForm = form(Local.class).bindFromRequest();
+
+        //validações manuais
+        // if(form().bindFromRequest().get("trabalho_cientifico.id")==null 
+        //     || form().bindFromRequest().get("trabalho_cientifico.id").equals("")) {
+        //     localForm.reject("trabalho_cientifico.id", "O campo Trabalho Científico é de preenchimento obrigatório!");
+        // }
+        // if(form().bindFromRequest().get("municipios_locais")==null 
+        //     || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
+        //     localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
+        // }
+        // if(form().bindFromRequest().get("espacamento.id")==null 
+        //     || form().bindFromRequest().get("espacamento.id").equals("")) {
+        //     localForm.reject("espacamento.id", "O campo Espaçamento é de preenchimento obrigatório!");
+        // }
+        if(form().bindFromRequest().get("formacao.id")==null 
+            || form().bindFromRequest().get("formacao.id").equals("")) {
+            localForm.reject("formacao.id", "O campo Formação é de preenchimento obrigatório!");
+        }
+        // if(form().bindFromRequest().get("coordenadas")==null ) {
+        //     localForm.reject("coordenadas", "O campo Coordenadas é de preenchimento obrigatório!");
+        // }
+
+
         if(localForm.hasErrors()) {
-        return badRequest(editarForm.render(id, localForm, localForm.get().coordenadas));
+            return badRequest(editarForm.render(id, localForm, localForm.get().coordenadas));
         }
         localForm.get().update(id);
         flash("success", "O Local " + localForm.get().descricao + " foi alterado com sucesso");
