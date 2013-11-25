@@ -9,15 +9,35 @@
 }
 
 @javascript = {
-<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
-
 <script type="text/javascript">
-        var arrayABC= new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        jQuery(function(){
+
+            //inicializa modal
+            $("#modal").modal({
+                show: false
+            });
+
+            //bind para buscar conteúdo da view e mostrar na modal
+            
+            $("#nova_variavel").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+</script>
+<script type="text/javascript">
+        var variavelUtilizada = new Array();
         var countVariavel=0;
 	var termos = new Array();
         var countTermos=0;
-   
+      
     function Termo(tipo, tamanho){
         this.tipo = tipo;
         this.tamanho = tamanho;
@@ -29,8 +49,15 @@
       }
     
     function acrescentaTermo(termo){
-        $("#visualizacao").val($("#visualizacao").val()+termo);
         $("#expressao").val($("#expressao").val()+termo);
+    }
+    function existe(vetor, objeto) {
+        for (var i = 0; i < vetor.length; i++) {
+            if (vetor[i][0] === objeto) {
+                return true;
+            }
+    }
+    return false;
     }
     function pode(caso){
         switch(caso){
@@ -64,15 +91,20 @@
     }
 	
   $('body').on('change', '#variavel',function(){
-              	if(pode("variavel")){
-                    var stringVariavel=$("#variavel").val();
-                     $("#visualizacao").val($("#visualizacao").val()+stringVariavel);
-                     $("#expressao").val($("#expressao").val()+"valor_variavel_"+arrayABC[countVariavel]);
-                     $("#divVariaveis").append("<div id='"+arrayABC[countVariavel]+"'><input type='hidden' name='variavel_"+arrayABC[countVariavel]+"' value='"+stringVariavel+"'>\n\
-                                                <input type='hidden' name='valor_variavel_"+arrayABC[countVariavel]+"' value='0'> </div>");
-                    countVariavel++;
-                    populaTermos("variavel",stringVariavel.length);
-		}
+             	if(pode("variavel")){
+                   var auxVariavel = $("#variavel").val().split(",");
+                    acrescentaTermo(auxVariavel[1]);
+                    populaTermos("variavel",auxVariavel[1].length);
+                    if(!existe(variavelUtilizada, auxVariavel[0])){
+                        $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+auxVariavel[0]+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
+
+                       variavelUtilizada[countVariavel]=[auxVariavel[0], auxVariavel[1]];
+                       countVariavel++;
+                    }
+                    
+                }
                 $("#variavel").val("0");
 		
 })       
@@ -138,17 +170,12 @@ $("#logaritmo").click(function(){
                 }
 })
 $("#exponencial").click(function(){
-		if(pode("operador")){
-                    acrescentaTermo("Exp");
+		if(pode("operadorComParenteses")){
+                    acrescentaTermo("exp");
                     populaTermos("operador",3);
                 }
 })
-$("#virgula").click(function(){
-		if(pode("operador")){
-                    acrescentaTermo(",");
-                    populaTermos("operador",1);
-		}
-})
+
 $("#abreParenteses").click(function(){
                 if(pode(abreParenteses)){
                     acrescentaTermo("(");
@@ -165,36 +192,34 @@ $("#fechaParenteses").click(function(){
 
 $('body').on('click','#CE',function(){
      if(countTermos>0){
-        var auxVisualizacao = $("#visualizacao").val();
         var auxExpressao = $("#expressao").val();
         if(termos[countTermos-1].tipo==="variavel"){
             countTermos--;
-            auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - termos[countTermos].tamanho);
-            auxExpressao = auxExpressao.substring(0, auxExpressao.length - 16);
-             countVariavel--;
-             $("#"+arrayABC[countVariavel]).remove();
-             
+            auxExpressao = auxExpressao.substring(0, auxExpressao.length - termos[countTermos].tamanho);
+            
+            if(auxExpressao.search(variavelUtilizada[countVariavel-1][1])===-1){
+                countVariavel--;
+                variavelUtilizada[countVariavel][0]=[-1];
+                variavelUtilizada[countVariavel][1]=[""];
+                 $("#"+"equacaoVariavel_"+countVariavel).remove();
+             }
 
         }else{
             countTermos--;
-            auxVisualizacao = auxVisualizacao.substring(0, auxVisualizacao.length - termos[countTermos].tamanho);
             auxExpressao = auxExpressao.substring(0, auxExpressao.length - termos[countTermos].tamanho);
            
         }
-            $("#visualizacao").val(auxVisualizacao);
             $("#expressao").val(auxExpressao);
 
-            input.value = input.value.substring(0, input.value.length - 1);
-    }
+          }
             
-	})
+})
 $('body').on('click','#C', function(){
-        $("#visualizacao").val("");
         $("#expressao").val("");
         $("#divVariaveis").html("");
                 countVariavel=0;
 		countTermos=0;
-	})  
+})  
 </script>
 }
 
@@ -217,7 +242,7 @@ $('body').on('click','#C', function(){
         
         <fieldset>
                 <div class="clearfix  " id="bioma_field">
-           <label for="bioma">Equação para calculo de</label>
+           <label for="bioma">Equação para cálculo de</label>
            <div class="input">
            <select id="variavel_interesse" name="variavel_interesse.id" class="input-large" disabled>
               @for(opcao<-VariavelInteresse.opcoes){
@@ -233,8 +258,7 @@ $('body').on('click','#C', function(){
                   <div class="clearfix  " id="expressao_field">
                    <label for="expressao">Equação:</label>
                        <div class="input">
-                           <input type="hidden" id="expressao" name ="expressao">
-                           <input type="text" id="visualizacao" name="visualizacao" readonly rel="tooltip" title="Insira a equação">
+                              <input type="text" id="expressao" name="expressao" readonly rel="tooltip" title="Insira a equação">
 
                                <span class="help-inline"></span>
                                <span class="help-block"></span> 
@@ -250,9 +274,9 @@ $('body').on('click','#C', function(){
                               <option value ="@opcao._1">@opcao._2</option>
                              } 
                     </select>
-                    <a href="@routes.Variaveis.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
+                    <a href="@routes.Variaveis.novo()" id="nova_variavel" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
                     <h4>Constantes</h4>
-                        <input type="text" id="constante" name="expressao" rel="tooltip" title="Digite uma Constante">
+                        <input type="text" id="constante" name="constante" rel="tooltip" title="Digite uma Constante">
                         <a type="button" class="btn btn-info  btn-mini" id="adicionarConstanteBtn"> + </a>
                    </div>
           <div class="span6">
@@ -273,14 +297,13 @@ $('body').on('click','#C', function(){
                             <tr>
                                 <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao"/></td>
                                 <td><input type="button" rel="tooltip" title="Raiz Quadrada - Usar sqrt(número)" type="button"  style="width:100%" value="sqrt" id="sqrt"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - LN(número)" type="button"  style="width:100%" value="LN" id="logaritmoNeperiano"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo - Usar Log(logaritmando, base)" style="width:100%" value="log" id="logaritmo"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - ln(número)" type="button"  style="width:100%" value="ln" id="logaritmoNeperiano"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo base 10 - Usar Log(logaritmando)" style="width:100%" value="log" id="logaritmo"/></td>
                                 
                             </tr>
                             
                             <tr>
-                                <td><input type="button" rel="tooltip" title='Exponêncial - Usar Exp(b)' style="width:100%" value="Exp" id="exponencial"/></td>
-                                <td><input type="button" rel="tooltip" title='Virgula - Para usar no operador "Log"' style="width:100%" value="," id="virgula"/></td>
+                                <td colspan="2"><input type="button" rel="tooltip" title='Exponencial - Usar exp(b)' style="width:100%" value="exp" id="exponencial"/></td>
                                 <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses"/></td>
                                 <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses"/></td>
                             </tr>
@@ -298,6 +321,6 @@ $('body').on('click','#C', function(){
         
     }
  
-     
+     <div id="modal" class="modal hide"></div>
         
 }

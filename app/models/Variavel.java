@@ -25,9 +25,13 @@ public class Variavel extends Model {
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Variavel v: Variavel.find.orderBy("nome").findList()) {
-            opcoes.put(v.sigla, v.nome +" ("+v.sigla+")");
+            opcoes.put(v.id.toString()+","+v.sigla, v.nome +" ("+v.sigla+")");
          }
         return opcoes;
+    }
+    
+    public static List<Variavel> listar(){
+        return Variavel.find.orderBy("id").findList();
     }
     
     public static Page<Variavel> page(int page, int pageSize, String sortBy, String order, String filter) {

@@ -7,6 +7,9 @@ import static play.data.Form.*;
 import play.*;
 import views.html.variavel.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
+import play.libs.Json.*;
+import static play.libs.Json.toJson;
 
 import models.*;
 
@@ -55,11 +58,26 @@ public class Variaveis extends Controller {
         return GO_HOME;
     }
     
-    
+    public static Result novo() {
+        Form<Variavel> variavelForm = form(Variavel.class);
+        return ok(
+        novo.render(variavelForm)
+        );
+    }
+    public static Result salvarSelecionar() {
+        Form<Variavel> variavelForm = form(Variavel.class).bindFromRequest();
+        if(variavelForm.hasErrors()) {
+            return badRequest(novo.render(variavelForm));
+        }
+        variavelForm.get().save();
+        return ok(Json.toJson(variavelForm.get()));
+    }
+  
     public static Result deletar(Long id) {
         Variavel.find.ref(id).delete();
-        flash("success", "Variável excluido");
+        flash("success", "Variável excluida");
         return GO_HOME;
     
     }
+    
 }

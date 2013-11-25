@@ -1,0 +1,119 @@
+@(modelo : Modelo, campos : List[String])
+
+@import helper._
+
+@import helper.twitterBootstrap._ 
+
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/equacao.css")">
+}
+
+@javascript = {
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+            var fields = new Array();
+            var colunas = new Array();
+            @for((campo, count) <- campos.zipWithIndex) {
+                fields[@count]={ name: '@campo', type: 'number'};
+                colunas[@count] ={ text: '@campo', datafield: '@campo', width: '150' };
+            }
+                      
+            var source =
+            {
+                datafields: fields
+             };
+            var adapter = new $.jqx.dataAdapter(source);
+            var grid_modelo = $("#grid").jqxGrid(
+            {
+                source: adapter,    
+                width: '100%',
+                height: 300,
+                selectionmode: 'multiplecellsadvanced',
+                editable: true,
+                columnsresize: false,
+                columns: colunas
+            });
+            
+            for (var i = 0; i < 11; i++) {
+                    grid_modelo.jqxGrid('addrow', null, {});
+                };   
+            
+            
+        });
+</script>
+
+
+}
+
+@main("Ajustar Modelo", javascript, stylesheet) {
+    
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    }
+     <div  class="form-horizontal">
+        <div class="control-group">  
+                <label class="control-label" for="input01">Modelo</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xxlarge" id="modelo" disabled value="@modelo.expressao">  
+                </div> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="span6">
+            <div id='grid' class="jqxgrid" style="font-size: 13px; font-family: Verdana; float: left;"></div>
+
+        </div>
+       <div class="span6">
+           <div  class="form-horizontal">
+            @{var numero=0;}
+              @for(numero<-0 until modelo.qtd_coeficientes){
+              <div class="control-group">  
+                <label class="control-label" for="input" id="b@numero">b@numero</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xlarge" id="input01">  
+                </div>  
+             </div>  
+            }
+            <div class="control-group">  
+                <label class="control-label">Equação</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xlarge" id="equacao">  
+                </div>  
+             </div>
+            <div class="control-group">  
+                <label class="control-label">R2</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xlarge" id="r2">  
+                </div>  
+             </div> 
+            <div class="control-group">  
+                <label class="control-label">R2Ajust</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xlarge" id="r2ajust">  
+                </div>  
+             </div> 
+            <div class="control-group">  
+                <label class="control-label">Syx</label>  
+                <div class="controls">  
+                  <input type="text" class="input-xlarge" id="syx">  
+                </div>  
+             </div> 
+           </div> 
+        </div>
+    </div>
+    <div class="actions">
+            <a href="#" class="btn btn-primary">Ajustar</a>
+     </div>
+   
+}
+

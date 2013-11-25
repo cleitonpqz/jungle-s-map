@@ -18,6 +18,17 @@ create table arvore (
   constraint pk_arvore primary key (id))
 ;
 
+create table arvore_modelo (
+  id                        bigint not null,
+  num_arvore                bigint,
+  dap                       bigint,
+  altura                    bigint,
+  qtd_biomassa_obs          varchar(255),
+  qtd_carbono_obs           varchar(255),
+  qtd_volume_obs            varchar(255),
+  constraint pk_arvore_modelo primary key (id))
+;
+
 create table autor (
   id                        bigint not null,
   nome                      varchar(255),
@@ -68,61 +79,16 @@ create table disponibilidade (
 create table equacao (
   id                        bigint not null,
   expressao                 varchar(255),
-  visualizacao              varchar(255),
-  variavel_a                varchar(255),
-  valor_variavel_a          float,
-  variavel_b                varchar(255),
-  valor_variavel_b          float,
-  variavel_c                varchar(255),
-  valor_variavel_c          float,
-  variavel_d                varchar(255),
-  valor_variavel_d          float,
-  variavel_e                varchar(255),
-  valor_variavel_e          float,
-  variavel_f                varchar(255),
-  valor_variavel_f          float,
-  variavel_g                varchar(255),
-  valor_variavel_g          float,
-  variavel_h                varchar(255),
-  valor_variavel_h          float,
-  variavel_i                varchar(255),
-  valor_variavel_i          float,
-  variavel_j                varchar(255),
-  valor_variavel_j          float,
-  variavel_k                varchar(255),
-  valor_variavel_k          float,
-  variavel_l                varchar(255),
-  valor_variavel_l          float,
-  variavel_m                varchar(255),
-  valor_variavel_m          float,
-  variavel_n                varchar(255),
-  valor_variavel_n          float,
-  variavel_o                varchar(255),
-  valor_variavel_o          float,
-  variavel_p                varchar(255),
-  valor_variavel_p          float,
-  variavel_q                varchar(255),
-  valor_variavel_q          float,
-  variavel_r                varchar(255),
-  valor_variavel_r          float,
-  variavel_s                varchar(255),
-  valor_variavel_s          float,
-  variavel_t                varchar(255),
-  valor_variavel_t          float,
-  variavel_u                varchar(255),
-  valor_variavel_u          float,
-  variavel_v                varchar(255),
-  valor_variavel_v          float,
-  variavel_w                varchar(255),
-  valor_variavel_w          float,
-  variavel_x                varchar(255),
-  valor_variavel_x          float,
-  variavel_y                varchar(255),
-  valor_variavel_y          float,
-  variavel_z                varchar(255),
-  valor_variavel_z          float,
   variavel_interesse_id     bigint,
   constraint pk_equacao primary key (id))
+;
+
+create table equacao_variavel (
+  id                        float not null,
+  valor                     float,
+  equacao_id                bigint,
+  variavel_id               bigint,
+  constraint pk_equacao_variavel primary key (id))
 ;
 
 create table espacamento (
@@ -171,36 +137,18 @@ create table metodo_quantificacao_carbono (
 create table modelo (
   id                        bigint not null,
   expressao                 varchar(255),
-  visualizacao              varchar(255),
-  variavel_a                varchar(255),
-  variavel_b                varchar(255),
-  variavel_c                varchar(255),
-  variavel_d                varchar(255),
-  variavel_e                varchar(255),
-  variavel_f                varchar(255),
-  variavel_g                varchar(255),
-  variavel_h                varchar(255),
-  variavel_i                varchar(255),
-  variavel_j                varchar(255),
-  variavel_k                varchar(255),
-  variavel_l                varchar(255),
-  variavel_m                varchar(255),
-  variavel_n                varchar(255),
-  variavel_o                varchar(255),
-  variavel_p                varchar(255),
-  variavel_q                varchar(255),
-  variavel_r                varchar(255),
-  variavel_s                varchar(255),
-  variavel_t                varchar(255),
-  variavel_u                varchar(255),
-  variavel_v                varchar(255),
-  variavel_w                varchar(255),
-  variavel_x                varchar(255),
-  variavel_y                varchar(255),
-  variavel_z                varchar(255),
+  qtd_coeficientes          integer,
   autor_modelo_id           bigint,
   variavel_interesse_id     bigint,
   constraint pk_modelo primary key (id))
+;
+
+create table modelo_variavel (
+  id                        bigint not null,
+  valor                     float,
+  modelo_id                 bigint,
+  variavel_id               bigint,
+  constraint pk_modelo_variavel primary key (id))
 ;
 
 create table municipio (
@@ -253,6 +201,14 @@ create table parcela (
   constraint pk_parcela primary key (id))
 ;
 
+create table termo (
+  id                        float not null,
+  expressao                 varchar(255),
+  ordem                     integer,
+  modelo_id                 bigint,
+  constraint pk_termo primary key (id))
+;
+
 create table trabalho_cientifico (
   id                        bigint not null,
   autor_id                  bigint,
@@ -293,6 +249,8 @@ create table variavel_interesse (
 
 create sequence arvore_seq;
 
+create sequence arvore_modelo_seq;
+
 create sequence autor_seq;
 
 create sequence autor_modelo_seq;
@@ -309,6 +267,8 @@ create sequence disponibilidade_seq;
 
 create sequence equacao_seq;
 
+create sequence equacao_variavel_seq;
+
 create sequence espacamento_seq;
 
 create sequence estado_seq;
@@ -323,6 +283,8 @@ create sequence metodo_quantificacao_carbono_seq;
 
 create sequence modelo_seq;
 
+create sequence modelo_variavel_seq;
+
 create sequence municipio_seq;
 
 create sequence municipio_local_seq;
@@ -330,6 +292,8 @@ create sequence municipio_local_seq;
 create sequence pais_seq;
 
 create sequence parcela_seq;
+
+create sequence termo_seq;
 
 create sequence trabalho_cientifico_seq;
 
@@ -351,48 +315,60 @@ alter table coordenada add constraint fk_coordenada_local_4 foreign key (local_i
 create index ix_coordenada_local_4 on coordenada (local_id);
 alter table equacao add constraint fk_equacao_variavel_interesse_5 foreign key (variavel_interesse_id) references variavel_interesse (id);
 create index ix_equacao_variavel_interesse_5 on equacao (variavel_interesse_id);
-alter table formacao add constraint fk_formacao_bioma_6 foreign key (bioma_id) references bioma (id);
-create index ix_formacao_bioma_6 on formacao (bioma_id);
-alter table local add constraint fk_local_trabalho_cientifico_7 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_local_trabalho_cientifico_7 on local (trabalho_cientifico_id);
-alter table local add constraint fk_local_formacao_8 foreign key (formacao_id) references formacao (id);
-create index ix_local_formacao_8 on local (formacao_id);
-alter table local add constraint fk_local_espacamento_9 foreign key (espacamento_id) references espacamento (id);
-create index ix_local_espacamento_9 on local (espacamento_id);
-alter table modelo add constraint fk_modelo_autor_modelo_10 foreign key (autor_modelo_id) references autor_modelo (id);
-create index ix_modelo_autor_modelo_10 on modelo (autor_modelo_id);
-alter table modelo add constraint fk_modelo_variavel_interesse_11 foreign key (variavel_interesse_id) references variavel_interesse (id);
-create index ix_modelo_variavel_interesse_11 on modelo (variavel_interesse_id);
-alter table municipio add constraint fk_municipio_uf_12 foreign key (uf) references estado (ibge);
-create index ix_municipio_uf_12 on municipio (uf);
-alter table municipio_local add constraint fk_municipio_local_municipio_13 foreign key (municipio_ibge) references municipio (ibge);
-create index ix_municipio_local_municipio_13 on municipio_local (municipio_ibge);
-alter table municipio_local add constraint fk_municipio_local_local_14 foreign key (local_id) references local (id);
-create index ix_municipio_local_local_14 on municipio_local (local_id);
-alter table parcela add constraint fk_parcela_local_15 foreign key (local_id) references local (id);
-create index ix_parcela_local_15 on parcela (local_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_16 foreign key (autor_id) references autor (id);
-create index ix_trabalho_cientifico_autor_16 on trabalho_cientifico (autor_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_17 foreign key (disponibilidade_id) references disponibilidade (id);
-create index ix_trabalho_cientifico_dispon_17 on trabalho_cientifico (disponibilidade_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_18 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
-create index ix_trabalho_cientifico_metodo_18 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_19 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
-create index ix_trabalho_cientifico_metodo_19 on trabalho_cientifico (metodo_quantificacao_carbono_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_20 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_cientifico_equaca_20 on trabalho_cientifico_equacao (trabalho_cientifico_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_21 foreign key (equacao_id) references equacao (id);
-create index ix_trabalho_cientifico_equaca_21 on trabalho_cientifico_equacao (equacao_id);
-alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_22 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_cientifico_modelo_22 on trabalho_cientifico_modelo (trabalho_cientifico_id);
-alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_23 foreign key (modelo_id) references modelo (id);
-create index ix_trabalho_cientifico_modelo_23 on trabalho_cientifico_modelo (modelo_id);
+alter table equacao_variavel add constraint fk_equacao_variavel_equacao_6 foreign key (equacao_id) references equacao (id);
+create index ix_equacao_variavel_equacao_6 on equacao_variavel (equacao_id);
+alter table equacao_variavel add constraint fk_equacao_variavel_variavel_7 foreign key (variavel_id) references variavel (id);
+create index ix_equacao_variavel_variavel_7 on equacao_variavel (variavel_id);
+alter table formacao add constraint fk_formacao_bioma_8 foreign key (bioma_id) references bioma (id);
+create index ix_formacao_bioma_8 on formacao (bioma_id);
+alter table local add constraint fk_local_trabalho_cientifico_9 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_local_trabalho_cientifico_9 on local (trabalho_cientifico_id);
+alter table local add constraint fk_local_formacao_10 foreign key (formacao_id) references formacao (id);
+create index ix_local_formacao_10 on local (formacao_id);
+alter table local add constraint fk_local_espacamento_11 foreign key (espacamento_id) references espacamento (id);
+create index ix_local_espacamento_11 on local (espacamento_id);
+alter table modelo add constraint fk_modelo_autor_modelo_12 foreign key (autor_modelo_id) references autor_modelo (id);
+create index ix_modelo_autor_modelo_12 on modelo (autor_modelo_id);
+alter table modelo add constraint fk_modelo_variavel_interesse_13 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_modelo_variavel_interesse_13 on modelo (variavel_interesse_id);
+alter table modelo_variavel add constraint fk_modelo_variavel_modelo_14 foreign key (modelo_id) references modelo (id);
+create index ix_modelo_variavel_modelo_14 on modelo_variavel (modelo_id);
+alter table modelo_variavel add constraint fk_modelo_variavel_variavel_15 foreign key (variavel_id) references variavel (id);
+create index ix_modelo_variavel_variavel_15 on modelo_variavel (variavel_id);
+alter table municipio add constraint fk_municipio_uf_16 foreign key (uf) references estado (ibge);
+create index ix_municipio_uf_16 on municipio (uf);
+alter table municipio_local add constraint fk_municipio_local_municipio_17 foreign key (municipio_ibge) references municipio (ibge);
+create index ix_municipio_local_municipio_17 on municipio_local (municipio_ibge);
+alter table municipio_local add constraint fk_municipio_local_local_18 foreign key (local_id) references local (id);
+create index ix_municipio_local_local_18 on municipio_local (local_id);
+alter table parcela add constraint fk_parcela_local_19 foreign key (local_id) references local (id);
+create index ix_parcela_local_19 on parcela (local_id);
+alter table termo add constraint fk_termo_modelo_20 foreign key (modelo_id) references modelo (id);
+create index ix_termo_modelo_20 on termo (modelo_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_21 foreign key (autor_id) references autor (id);
+create index ix_trabalho_cientifico_autor_21 on trabalho_cientifico (autor_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_22 foreign key (disponibilidade_id) references disponibilidade (id);
+create index ix_trabalho_cientifico_dispon_22 on trabalho_cientifico (disponibilidade_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_23 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
+create index ix_trabalho_cientifico_metodo_23 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_24 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
+create index ix_trabalho_cientifico_metodo_24 on trabalho_cientifico (metodo_quantificacao_carbono_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_25 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_equaca_25 on trabalho_cientifico_equacao (trabalho_cientifico_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_26 foreign key (equacao_id) references equacao (id);
+create index ix_trabalho_cientifico_equaca_26 on trabalho_cientifico_equacao (equacao_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_27 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_modelo_27 on trabalho_cientifico_modelo (trabalho_cientifico_id);
+alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_28 foreign key (modelo_id) references modelo (id);
+create index ix_trabalho_cientifico_modelo_28 on trabalho_cientifico_modelo (modelo_id);
 
 
 
 # --- !Downs
 
 drop table if exists arvore cascade;
+
+drop table if exists arvore_modelo cascade;
 
 drop table if exists autor cascade;
 
@@ -410,6 +386,8 @@ drop table if exists disponibilidade cascade;
 
 drop table if exists equacao cascade;
 
+drop table if exists equacao_variavel cascade;
+
 drop table if exists espacamento cascade;
 
 drop table if exists estado cascade;
@@ -424,6 +402,8 @@ drop table if exists metodo_quantificacao_carbono cascade;
 
 drop table if exists modelo cascade;
 
+drop table if exists modelo_variavel cascade;
+
 drop table if exists municipio cascade;
 
 drop table if exists municipio_local cascade;
@@ -431,6 +411,8 @@ drop table if exists municipio_local cascade;
 drop table if exists pais cascade;
 
 drop table if exists parcela cascade;
+
+drop table if exists termo cascade;
 
 drop table if exists trabalho_cientifico cascade;
 
@@ -443,6 +425,8 @@ drop table if exists variavel cascade;
 drop table if exists variavel_interesse cascade;
 
 drop sequence if exists arvore_seq;
+
+drop sequence if exists arvore_modelo_seq;
 
 drop sequence if exists autor_seq;
 
@@ -460,6 +444,8 @@ drop sequence if exists disponibilidade_seq;
 
 drop sequence if exists equacao_seq;
 
+drop sequence if exists equacao_variavel_seq;
+
 drop sequence if exists espacamento_seq;
 
 drop sequence if exists estado_seq;
@@ -474,6 +460,8 @@ drop sequence if exists metodo_quantificacao_carbono_seq;
 
 drop sequence if exists modelo_seq;
 
+drop sequence if exists modelo_variavel_seq;
+
 drop sequence if exists municipio_seq;
 
 drop sequence if exists municipio_local_seq;
@@ -481,6 +469,8 @@ drop sequence if exists municipio_local_seq;
 drop sequence if exists pais_seq;
 
 drop sequence if exists parcela_seq;
+
+drop sequence if exists termo_seq;
 
 drop sequence if exists trabalho_cientifico_seq;
 

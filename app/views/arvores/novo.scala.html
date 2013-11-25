@@ -1,0 +1,187 @@
+@(id: Long)
+
+@import helper._
+@import helper.twitterBootstrap._
+
+
+@main("Cadastrar Dados de Arvores"){
+
+@form(action = routes.DadosLocal.novo(1), 'id -> "form") {
+<div class="">
+    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id">
+     
+    <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
+    <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
+    <div class="radios">
+    <h4>Tipo de Entrada</h4>
+    <br />
+  	<label class="radio tipo" id="tipo" required>
+  		<input type="radio" name="tipo" id="tipo1"  > <label>Entrada Manual (Digitação dos Dados)</label> 
+    	<input type="radio" name="tipo" id="tipo2"  > <label>Importação dos Dados apartir de um arquivo txt.</label>
+  	</label>
+  	<div id="arvore_manual" style="display: none">
+  		<div id='jqxWidget arvore'>
+  		    <div class="jqxgrid" id="jqxgrid_arvore"></div>
+  		        <div style='margin-top: 20px;'>
+  		        <div>
+  		            <input type="button" value="Export to Excel" id='excelExportArvore' class="btn" />
+  		            <input type="button" value="Adicionar Linha" id='addRowArvore' class="btn" />
+  		        </div>
+  		    </div>
+  		</div>
+  	</div>
+  	<div id="arvore_import" style="display: none">
+    <br />
+      
+      <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
+      <div id="arv"></div>
+    </div>
+    </div>
+    <br />
+    <hr>
+	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
+
+</div>
+}}
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".radios").change(function(){
+    	
+    	var tipo1 = $("#tipo1").is(":checked");
+    	var tipo2 = $("#tipo2").is(":checked");
+    	
+    	if(tipo1 == true){
+    		$("#arvore_manual").show();
+            $("#arvore_import").hide();
+    	}
+    	else if(tipo2 == true){
+    		$("#arvore_manual").hide();
+    		$("#arvore_import").show();
+		}
+		else 
+			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
+
+
+    });
+    });
+</script>
+<script type="text/javascript">
+        $(function(){
+            var theme = 'base';
+
+            // inicializa grid de árvore
+            var arvore_source =
+            {
+                datafields:
+                [
+                    { name: 'parcela', type: 'number' },
+                    { name: 'arvore', type: 'number' },
+                    { name: 'dap', type: 'number' },
+                    { name: 'altura', type: 'number' },
+                    { name: 'biomassa', type: 'number' },
+                    { name: 'carbono', type: 'number' },
+                    { name: 'volume', type: 'number' }
+                ]
+            };
+            var dataAdapterArvore = new $.jqx.dataAdapter(arvore_source);
+
+
+            var grid_arvore = $("#jqxgrid_arvore").jqxGrid(
+            {
+                source: dataAdapterArvore,
+                editable: true,
+                columnsresize: false,
+                selectionmode: 'multiplecellsadvanced',
+                theme: theme,
+                columns: [
+                  { text: 'Parcela', datafield: 'parcela'},
+                  { text: 'Árvore', datafield: 'arvore' },
+                  { text: 'DAP', datafield: 'dap' },
+                  { text: 'Altura', datafield: 'altura' },
+                  { text: 'Biomassa', datafield: 'biomassa' },
+                  { text: 'Carbono', datafield: 'carbono' },
+                  { text: 'Volume', datafield: 'volume' }
+                ]
+            });
+
+            grid_arvore.on('initialized', function(){
+                //pré popula com 5 linhas
+                for (var i = 5 - 1; i >= 0; i--) {
+                    grid_arvore.jqxGrid('addrow', null, {});
+                };
+            });
+
+            
+            $("#addRowArvore").on('click', function () {
+                grid_arvore.jqxGrid('addrow', null, {});
+            });
+            
+            $("#excelExportArvore").click(function () {
+                grid_arvore.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+            });
+        });
+    </script>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    if(isAPIAvailable()) {
+      $('#files').bind('change', handleFileSelect);
+    }
+  });
+
+  function isAPIAvailable() {
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      // Great success! All the File APIs are supported.
+      return true;
+    } else {
+      // source: File API availability - http://caniuse.com/#feat=fileapi
+      // source: <output> availability - http://html5doctor.com/the-output-element/
+      document.writeln('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+      // 6.0 File API & 13.0 <output>
+      document.writeln(' - Google Chrome: 13.0 or later<br />');
+      // 3.6 File API & 6.0 <output>
+      document.writeln(' - Mozilla Firefox: 6.0 or later<br />');
+      // 10.0 File API & 10.0 <output>
+      document.writeln(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+      // ? File API & 5.1 <output>
+      document.writeln(' - Safari: Not supported<br />');
+      // ? File API & 9.2 <output>
+      document.writeln(' - Opera: Not supported');
+      return false;
+    }
+  }
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    var file = files[0];
+
+    printTable(file);
+  }
+
+  function printTable(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function(event){
+      var csv = event.target.result;
+      var data = $.csv.toArrays(csv);
+      var itens = new Array();
+      
+      for(var row in data) {
+        for(var item in data[row]) {
+          itens[row] = data[row][item];
+        }
+      }
+      itens  = JSON.stringify(itens);
+      console.log(itens);
+       jsRoutes.controllers.Arvores.saveFile(itens).ajax({
+              success: function(data){
+                $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
+              }  
+       });
+    };
+    reader.onerror = function(){ alert('Erro ao Abrir o arquivo' + file.fileName); };
+  }
+
+</script>

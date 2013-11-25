@@ -70,7 +70,7 @@ public class Formacoes extends Controller {
             flash("success", "Formação excluida com sucesso");
             return GO_HOME;
         }catch(PersistenceException exception){
-            flash("error", "Exclusão não permitida. Existe locais vinculados a esta formação");
+            flash("error", "Exclusão não permitida. Existem locais vinculados a esta formação");
         return GO_HOME;
         }   
     }

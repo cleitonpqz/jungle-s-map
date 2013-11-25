@@ -7,8 +7,9 @@ import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
 import java.sql.SQLException;
-
+import org.nfunk.jep.*;
 import com.avaje.ebean.*;
+
 
 @Entity 
 public class Equacao extends Model {
@@ -18,89 +19,11 @@ public class Equacao extends Model {
     @Constraints.Required(message="O campo equação é obrigatório!")
     public String expressao;
     
-    @Constraints.Required(message="O campo equação é obrigatório!")
-    public String visualizacao;
-    
-    public String variavel_A;
-    public Double valor_variavel_A;
-    
-    public String variavel_B;
-    public Double valor_variavel_B;
-    
-    public String variavel_C;
-    public Double valor_variavel_C; 
-    
-    public String variavel_D;
-    public Double valor_variavel_D; 
-    
-    public String variavel_E;
-    public Double valor_variavel_E; 
-    
-    public String variavel_F;
-    public Double valor_variavel_F;
-    
-    public String variavel_G;
-    public Double valor_variavel_G; 
-    
-    public String variavel_H;
-    public Double valor_variavel_H; 
-    
-    public String variavel_I;
-    public Double valor_variavel_I; 
-    
-    public String variavel_J;
-    public Double valor_variavel_J; 
-    
-    public String variavel_K;
-    public Double valor_variavel_K; 
-    
-    public String variavel_L;
-    public Double valor_variavel_L; 
-    
-    public String variavel_M;
-    public Double valor_variavel_M;
-        
-    public String variavel_N;
-    public Double valor_variavel_N;
-    
-    public String variavel_O;
-    public Double valor_variavel_O; 
-        
-    public String variavel_P;
-    public Double valor_variavel_P;
-    
-    public String variavel_Q;
-    public Double valor_variavel_Q;
-    
-    public String variavel_R;
-    public Double valor_variavel_R; 
-    
-    public String variavel_S;
-    public Double valor_variavel_S; 
-    
-    public String variavel_T;
-    public Double valor_variavel_T; 
-    
-    public String variavel_U;
-    public Double valor_variavel_U; 
-    
-    public String variavel_V;
-    public Double valor_variavel_V;
-    
-    public String variavel_W;
-    public Double valor_variavel_W;
-        
-    public String variavel_X;
-    public Double valor_variavel_X; 
-    
-    public String variavel_Y;
-    public Double valor_variavel_Y; 
-    
-    public String variavel_Z;
-    public Double valor_variavel_Z; 
-    
     @ManyToOne
     public VariavelInteresse variavel_interesse;
+    
+    @OneToMany(targetEntity = EquacaoVariavel.class, cascade = CascadeType.ALL)
+    public List<EquacaoVariavel> equacao_variavel = new ArrayList<EquacaoVariavel>();  
     
     @OneToMany(targetEntity = TrabalhoCientificoEquacao.class, cascade = CascadeType.ALL)
     public List<TrabalhoCientificoEquacao> trabalho_cientifico_equacao = new ArrayList<TrabalhoCientificoEquacao>();  
@@ -120,8 +43,8 @@ public class Equacao extends Model {
             default: sigla="";
         }
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("visualizacao").findList()) {
-            opcoes.put(e.id.toString(), sigla+e.visualizacao);
+        for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
+            opcoes.put(e.id.toString(), sigla+e.expressao);
         }
         return opcoes;
     }
@@ -147,5 +70,16 @@ public class Equacao extends Model {
         } finally {
             conn.close();
         }
+    }
+    
+    public Double calcular(){
+        JEP myParser = new org.nfunk.jep.JEP();
+         myParser.addStandardFunctions();
+         myParser.addStandardConstants();
+         for(EquacaoVariavel equacaoVariavel : equacao_variavel)
+            myParser.addVariable(equacaoVariavel.variavel.sigla, equacaoVariavel.valor);
+         
+         myParser.parseExpression(expressao);
+         return myParser.getValue();
     }
 }

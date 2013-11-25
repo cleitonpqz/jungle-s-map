@@ -3,8 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                               controllers.Application.index()
-GET     /javascriptRoutes               controllers.Application.javascriptRoutes()
+GET     /                                   controllers.Application.index()
+GET     /javascriptRoutes                   controllers.Application.javascriptRoutes()
 
 # Trabalho Científico Listar e novo
 GET     /trabalhos                         controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
@@ -18,8 +18,8 @@ GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.dele
 #-----------------------------------------------------------------------------------------------------------------------------
 
 #Bioma Listar e novo
-GET		/biomas/novo					controllers.Biomas.novo()
-POST	/biomas/salvar					controllers.Biomas.salvareselecionar()
+GET	/biomas/novo			controllers.Biomas.novo()
+POST	/biomas/salvar			controllers.Biomas.salvareselecionar()
 GET     /biomas                         controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /biomas                         controllers.Biomas.salvar()
 # Bioma Editar                     
@@ -100,6 +100,8 @@ GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
 
 #-----------------------------------------------------------------------------------------------------------------------------
 #Variável Listar e novo
+GET	/variaveis/novo                    controllers.Variaveis.novo()
+POST	/variaveis/salvar                  controllers.Variaveis.salvarSelecionar()
 GET     /variaveis                         controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /variaveis                         controllers.Variaveis.salvar()
 # Bioma Editar                     
@@ -110,6 +112,8 @@ GET    /variaveis/:id/deletar              controllers.Variaveis.deletar(id:Long
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #AutoresModelos
+GET	/autoresModelos/novo                controllers.AutoresModelos.novo()
+POST	/autoresModelos/salvar              controllers.AutoresModelos.salvarSelecionar()
 GET     /autoresModelos                     controllers.AutoresModelos.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /autoresModelos                     controllers.AutoresModelos.salvar()
 # Formacao Editar                     
@@ -143,15 +147,25 @@ POST    /equacoes                    controllers.Equacoes.salvar(variavelInteres
 # Formacao Deletar
 # GET    /equacoes/:id/deletar           controllers.Equacoes.deletar(id:Long)
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
+#Modelos Listar e novo
 GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
 POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
+GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 
 GET	/DadosLocal/:id							controllers.DadosLocal.novo(id:Long)
-
 #--------------------------------------------------------------------------------------------------------------------------------
+#Arvores novo
+
+GET	/Arvores/:id							controllers.Arvores.novo(id:Long)
+POST /Arvores/saveFile				        controllers.Arvores.saveFile(files:String)
+#--------------------------------------------------------------------------------------------------------------------------------
+#Parcelas novo
+
+GET	/Parcelas/:id							controllers.Parcelas.novo(id:Long)
+#--------------------------------------------------------------------------------------------------------------------------------
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
 #--------------------------------------------------------------------------------------------------------------------------------

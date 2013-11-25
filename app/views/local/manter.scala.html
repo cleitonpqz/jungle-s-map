@@ -286,7 +286,10 @@ $(document).ready(function(){
                                <a type="button" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao" onclick="confirmaExclusao(@local.id, '@local.descricao')">Excluir</a>
                         </td>
                         <td> 
-                               <a href="@routes.DadosLocal.novo(local.id)" class="btn btn-info btn-small" rel="tooltip" title="Cadastrar Dados do @local.descricao">Cadastrar dados do Local</a>
+                               <a href="@routes.Arvores.novo(local.id)" class="btn btn-success btn-small" rel="tooltip" title="Cadastrar Dados do @local.descricao">Cadastrar Arvores</a>
+                        </td>
+                        <td> 
+                               <a href="@routes.Parcelas.novo(local.id)" class="btn btn-info btn-small" rel="tooltip" title="Cadastrar Dados do @local.descricao">Cadastrar Parcelas</a>
                         </td>
                     </tr>
                 }

@@ -7,6 +7,9 @@ import static play.data.Form.*;
 import play.*;
 import views.html.autor_modelo.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
+import play.libs.Json.*;
+import static play.libs.Json.toJson;
 
 import models.*;
 
@@ -66,5 +69,19 @@ public class AutoresModelos extends Controller {
         flash("error", "Exclusão não permitida. Existe Trabalho Científico vinculado a este autor");
         return GO_HOME;
     }
+    }
+     public static Result novo() {
+        Form<AutorModelo> autorModeloForm = form(AutorModelo.class);
+        return ok(
+            novo.render(autorModeloForm)
+        );
+    }
+    public static Result salvarSelecionar() {
+        Form<AutorModelo> autorModeloForm = form(AutorModelo.class).bindFromRequest();
+        if(autorModeloForm.hasErrors()) {
+            return badRequest(novo.render(autorModeloForm));
+        }
+        autorModeloForm.get().save();
+        return ok(Json.toJson(autorModeloForm.get()));
     }
 }
