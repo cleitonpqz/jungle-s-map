@@ -8,7 +8,8 @@
 
 @form(action = routes.DadosLocal.novo(1), 'id -> "form") {
 <div class="">
-    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
+    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id">
+     
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
     <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
     <div class="radios">
@@ -31,7 +32,9 @@
   	</div>
   	<div id="arvore_import" style="display: none">
     <br />
-      <input type="file" id="files" name="files[]" multiple="" class="btn btn-small btn-info">
+      
+      <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
+      <div id="arv"></div>
     </div>
     </div>
     <br />
@@ -40,6 +43,7 @@
 
 </div>
 }}
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".radios").change(function(){
@@ -162,21 +166,20 @@ $(document).ready(function(){
     reader.onload = function(event){
       var csv = event.target.result;
       var data = $.csv.toArrays(csv);
-      var obj = new Array();
+      var itens = new Array();
+      
       for(var row in data) {
         for(var item in data[row]) {
-          obj[row] = data[row][item];
+          itens[row] = data[row][item];
         }
       }
-      console.log(obj);
-      $.ajax({
-        type: 'POST',
-        url: 'saveFile',
-        data: obj
-      }).done(function(){
-        console.log('enviado');
-        alert("O Arquivo foi importado com sucesso!");
-      })
+      itens  = JSON.stringify(itens);
+      console.log(itens);
+       jsRoutes.controllers.Arvores.saveFile(itens).ajax({
+              success: function(data){
+                $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
+              }  
+       });
     };
     reader.onerror = function(){ alert('Erro ao Abrir o arquivo' + file.fileName); };
   }
