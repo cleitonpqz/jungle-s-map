@@ -23,6 +23,7 @@ public class Application extends Controller {
                 controllers.routes.javascript.Municipios.listarMunicipio(),
                 controllers.routes.javascript.TrabalhosCientificos.findById(),
                 controllers.routes.javascript.Locais.findById(),
+                controllers.routes.javascript.Modelos.fazerAjuste(),
                 controllers.routes.javascript.Arvores.saveFile()
                              
                 

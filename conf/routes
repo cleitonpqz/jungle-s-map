@@ -151,6 +151,7 @@ POST    /equacoes                    controllers.Equacoes.salvar(variavelInteres
 GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
 POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
 GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
+POST    /modelos/fazerAjuste         controllers.Modelos.fazerAjuste(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 
