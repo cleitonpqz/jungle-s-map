@@ -38,15 +38,13 @@
     </div>
     <br />
     <hr>
-<<<<<<< HEAD
-	 <a href="@routes.DadosLocal.calcular(1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
-=======
 	<input type="button" class="btn btn-small btn-info" name="Calcular" id="Calcular" title="Calcular" value="Calcular">
->>>>>>> 074a1f7316572bface7b906c94c075e2b5eed70c
+
 
 </div>
 }}
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".radios").change(function(){
@@ -117,16 +115,64 @@ $(document).ready(function(){
             });
 
             
-            $("#Calcular").click(function(){
-                var rows = grid_parcela.jqxGrid('getrows');
-                $.each(rows, function(key, value){
-                    console.log(value)
-                });
-            });
+            
         });
     </script>
     <script type="text/javascript">
-
+    $(document).ready(function() {    
+    $("#Calcular").click(function(){
+                var rows = $("#jqxgrid_parcela").jqxGrid('getrows');
+                var valoresEnviar = [];
+                var countPreenchido=0;
+                var erro = false;
+                $.each(rows, function(key, value){
+                    if(value.parcela&&value.biomassa&&value.carbono&&value.volume){
+                        valoresEnviar.push(value);
+                        countPreenchido++;
+                    }else if(!value.biomassa&&!value.carbono&&!value.volume){
+                        
+                    }else{
+                      erro=true;  
+                      return false;
+                    }
+                });
+                
+                  if(countPreenchido>0 && !erro){
+                    jsRoutes.controllers.Parcelas.saveGrid(@local.id).ajax({
+                    type :  "POST",
+                    dataType: 'json',
+                    contentType : 'application/json; charset=utf-8',
+                    data: JSON.stringify(valoresEnviar),
+                    success: function(data){
+                     bootbox.dialog({
+                        message: "Dados salvos com sucessso.",
+                        title: "Feito",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });   
+                    }, 
+                })   
+                    
+                }else{
+                    bootbox.dialog({
+                        message: "Erro no preenchimento da tabela. Linhas incompletas ou nenhuma linha preenchida.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+                }
+                
+            });    
+    });
+    
   $(document).ready(function() {
     if(isAPIAvailable()) {
       $('#files').change(handleFileSelect);
@@ -176,7 +222,7 @@ $(document).ready(function(){
           itens[row] = data[row][item];
         }
       }
-      var id = @id;
+      var id = @local.id;
        jsRoutes.controllers.Parcelas.saveFile(itens, id).ajax({
               success: function(data){
                 $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")

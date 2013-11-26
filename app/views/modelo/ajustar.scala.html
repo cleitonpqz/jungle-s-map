@@ -51,10 +51,7 @@ $("#ajustarBtn").click(function (){
                 var numeroColunas = @{campos.length + 1};
                 var griddata = $('#grid').jqxGrid('getdatainformation');
                 var rows = [];
-                 var colunasPreenchidas;
-                 var rowsteste = $('#grid').jqxGrid('getrows');
-                 for(test in rowsteste[0])
-                 console.log(test);
+                var countPreenchido=0; 
                 for (var i = 0; i < griddata.rowscount; i++){
                     rows.push($('#grid').jqxGrid('getrowdata', i));
                 }

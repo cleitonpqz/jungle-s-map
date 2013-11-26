@@ -6,6 +6,8 @@ import play.data.*;
 import static play.data.Form.*;
 import play.*;
 import views.html.parcelas.*;
+import play.libs.Json;   
+import org.codehaus.jackson.JsonNode;
 import javax.persistence.PersistenceException;
 
 import models.*;
@@ -44,5 +46,22 @@ public class Parcelas extends Controller {
 		}
 		return ok("success");
 	}
+        
+        public static Result saveGrid(long id){
+                Local local = Local.find.byId(id);
+		JsonNode json = request().body().asJson();
+                for(JsonNode row : json){
+                    Parcela parcela = new Parcela();
+				parcela.local = local;
+				parcela.numParcela = Long.valueOf(row.get("parcela").toString());
+				parcela.biomassa = Long.valueOf(row.get("biomassa").toString());
+				parcela.carbono = Long.valueOf(row.get("carbono").toString());
+				parcela.volume = Long.valueOf(row.get("volume").toString());
+
+				parcela.save();
+                }
+		
+            return ok(Json.toJson("mensagem : sucesso"));
+        }
 
 }
