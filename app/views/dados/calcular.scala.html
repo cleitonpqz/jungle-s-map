@@ -1,0 +1,27 @@
+@import helper._
+@import helper.twitterBootstrap._
+
+
+@main("Calcular Biomassa - Carbono - Volume"){
+
+
+<div class="">
+   
+    <label>Biomassa  Equação </label><input type="text" name="biomassa" class="large" placeholder="Biomassa">  
+    <label>Carbono   Equação</label><input type="text" name="carbono" class="large" placeholder="Carbono">
+    <label>Volume    Equação</label><input type="text" name="volume" class="large" placeholder="Volume">
+   	<br />
+    <input type="button" value="Calcular" id='calcular' class="btn" />
+    <br />
+    <br />
+    <h4>Resultados</h4> 
+    <br />                  
+    <br />                  
+	<label>Biomassa  Total(ton) </label><input type="text" name="biomassat" class="large" placeholder="Biomassa">
+	<input type="button" value="Detalhes" id='Detalhesb' class="btn btn-info" />  
+	<label>Carbono   Total(ton)</label><input type="text" name="carbonot" class="large" placeholder="Carbono">
+	<input type="button" value="Detalhes" id='Detalhesc' class="btn btn-info" />
+	<label>Volume  	 Total(m3)</label><input type="text" name="volumet" class="large" placeholder="Volume"> 
+	<input type="button" value="Detalhes" id='Detalhesv' class="btn btn-info" />                 
+</div>
+}

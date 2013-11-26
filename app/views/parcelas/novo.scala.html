@@ -6,7 +6,7 @@
 
 @main("Cadastrar Dados de Parcelas"){
 
-@form(action = routes.DadosLocal.novo(1), 'id -> "form") {
+@form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
@@ -31,14 +31,18 @@
         </div>
 
     </div>
-  	<div id="biomassa_import" style="display: none">Teste 3</div>
+  	<div id="biomassa_import" style="display: none">
+       <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
+       <div id="arv"></div> 
+    </div>
     </div>
     <br />
     <hr>
-	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
+	 <a href="@routes.DadosLocal.calcular(1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
 
 </div>
 }}
+<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".radios").change(function(){
@@ -109,3 +113,65 @@ $(document).ready(function(){
             });
         });
     </script>
+    <script type="text/javascript">
+
+  $(document).ready(function() {
+    if(isAPIAvailable()) {
+      $('#files').change(handleFileSelect);
+    }
+  });
+
+  function isAPIAvailable() {
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      // Great success! All the File APIs are supported.
+      return true;
+    } else {
+      // source: File API availability - http://caniuse.com/#feat=fileapi
+      // source: <output> availability - http://html5doctor.com/the-output-element/
+      document.writeln('The HTML5 APIs used in this form are only available in the following browsers:<br />');
+      // 6.0 File API & 13.0 <output>
+      document.writeln(' - Google Chrome: 13.0 or later<br />');
+      // 3.6 File API & 6.0 <output>
+      document.writeln(' - Mozilla Firefox: 6.0 or later<br />');
+      // 10.0 File API & 10.0 <output>
+      document.writeln(' - Internet Explorer: Not supported (partial support expected in 10.0)<br />');
+      // ? File API & 5.1 <output>
+      document.writeln(' - Safari: Not supported<br />');
+      // ? File API & 9.2 <output>
+      document.writeln(' - Opera: Not supported');
+      return false;
+    }
+  }
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    var file = files[0];
+
+    printTable(file);
+  }
+
+  function printTable(file) {
+    var reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function(event){
+      var csv = event.target.result;
+      var data = $.csv.toArrays(csv);
+      var itens = new Array();
+      
+      for(var row in data) {
+        for(var item in data[row]) {
+          itens[row] = data[row][item];
+        }
+      }
+      var id = @id;
+       jsRoutes.controllers.Parcelas.saveFile(itens, id).ajax({
+              success: function(data){
+                $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
+              }  
+       });
+    };
+    reader.onerror = function(){ alert('Erro ao Abrir o arquivo' + file.fileName); };
+  }
+
+</script>

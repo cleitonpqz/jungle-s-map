@@ -18,8 +18,8 @@ public class DadosLocal extends Controller {
 	    return GO_HOME;
 	}
 
-	public static Result novo(long id){
-		return ok( novo.render(id));
+	public static Result calcular(long id){
+		return ok( calcular.render());
 	}
 
 }

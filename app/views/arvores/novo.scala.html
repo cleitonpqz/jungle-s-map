@@ -6,7 +6,7 @@
 
 @main("Cadastrar Dados de Arvores"){
 
-@form(action = routes.DadosLocal.novo(1), 'id -> "form") {
+@form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id" id="local.id">
      
@@ -39,7 +39,7 @@
     </div>
     <br />
     <hr>
-	<input type="button" class="btn btn-small btn-info" name="Calcular" title="Calcular" value="Calcular">
+	   <a href="@routes.DadosLocal.calcular(1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
 
 </div>
 }}

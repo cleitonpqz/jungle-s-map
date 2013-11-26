@@ -22,4 +22,26 @@ public class Parcelas extends Controller {
 		return ok( novo.render(id));
 	}
 
+	public static Result saveFile(String files, long id){
+		Local local = Local.find.byId(id);
+		String linhas[] = files.split(",");
+		int cont = linhas.length;
+		for(int i = 0; i < cont ; i++){
+			String temp = linhas[i];
+			String itens[] = temp.split(";");
+			if(itens[0] != null){
+				Parcela parcela = new Parcela();
+				parcela.local = local;
+				parcela.numParcela = Long.valueOf(itens[0]);
+				parcela.biomassa = Long.valueOf(itens[0]);
+				parcela.carbono = Long.valueOf(itens[0]);
+				parcela.volume = Long.valueOf(itens[0]);
+
+				parcela.save();
+			}
+
+		}
+		return ok("success");
+	}
+
 }

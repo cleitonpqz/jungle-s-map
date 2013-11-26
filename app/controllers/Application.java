@@ -24,7 +24,8 @@ public class Application extends Controller {
                 controllers.routes.javascript.TrabalhosCientificos.findById(),
                 controllers.routes.javascript.Locais.findById(),
                 controllers.routes.javascript.Modelos.fazerAjuste(),
-                controllers.routes.javascript.Arvores.saveFile()
+                controllers.routes.javascript.Arvores.saveFile(),
+                controllers.routes.javascript.Parcelas.saveFile()
                              
                 
             )
