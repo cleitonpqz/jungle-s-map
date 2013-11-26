@@ -22,14 +22,17 @@
     
         <div id='jqxWidget biomassa'>
             <div class="jqxgrid" id="jqxgrid_parcela"></div>
-                <div style='margin-top: 20px;'>
+                <div style='margin-top: 10px; text-align: center'>
                 <div>
                     <input type="button" value="Export to Excel" id='excelExportParcela' class="btn" />
                     <input type="button" value="Adicionar Linha" id='addRowParcela' class="btn" />
                 </div>
+                
             </div>
+                <div style='margin-top: 10px;'>
+                   <input type="button" class="btn  btn-success btn-large" name="salvar" rel="tooltip" title="Salvar dados da grid." id="salvarGridBtn"  value="Salvar">
+                </div>
         </div>
-
     </div>
   	<div id="biomassa_import" style="display: none">
        <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
@@ -38,7 +41,7 @@
     </div>
     <br />
     <hr>
-	<input type="button" class="btn btn-small btn-info" name="Calcular" id="Calcular" title="Calcular" value="Calcular">
+	<a href="@routes.DadosLocal.calcular(local.id)" class="btn btn-primary" rel="tooltip" title="Calcular Biomassa, Carbono">Calcular</a>
 
 
 </div>
@@ -120,7 +123,7 @@ $(document).ready(function(){
     </script>
     <script type="text/javascript">
     $(document).ready(function() {    
-    $("#Calcular").click(function(){
+    $("#salvarGridBtn").click(function(){
                 var rows = $("#jqxgrid_parcela").jqxGrid('getrows');
                 var valoresEnviar = [];
                 var countPreenchido=0;
