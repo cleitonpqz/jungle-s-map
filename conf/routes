@@ -164,7 +164,7 @@ POST /Arvores/saveFile				        controllers.Arvores.saveFile(files:String)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Parcelas novo
 
-GET	/Parcelas/:id							controllers.Parcelas.novo(id:Long)
+GET	/Local/:id/Parcelas							controllers.Parcelas.novo(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # Map static resources from the /public folder to the /assets URL path
