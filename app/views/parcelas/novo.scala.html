@@ -1,4 +1,4 @@
-@(id: Long)
+@(local: Local)
 
 @import helper._
 @import helper.twitterBootstrap._
@@ -8,9 +8,9 @@
 
 @form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
 <div class="">
-    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id"> 
-    <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
-    <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
+    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
+    <label>Área Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
+    <label>Área da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
     <div class="radios">
     <h4>Tipo de Entrada</h4>
     <br />
@@ -38,7 +38,11 @@
     </div>
     <br />
     <hr>
+<<<<<<< HEAD
 	 <a href="@routes.DadosLocal.calcular(1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
+=======
+	<input type="button" class="btn btn-small btn-info" name="Calcular" id="Calcular" title="Calcular" value="Calcular">
+>>>>>>> 074a1f7316572bface7b906c94c075e2b5eed70c
 
 </div>
 }}
@@ -89,27 +93,35 @@ $(document).ready(function(){
                 selectionmode: 'multiplecellsadvanced',
                 theme: theme,
                 columns: [
-                  { text: 'Parcela', datafield: 'parcela'},
-                  { text: 'Biomassa', datafield: 'biomassa' },
-                  { text: 'Carbono', datafield: 'carbono' },
-                  { text: 'Volume', datafield: 'volume' }
+                  { text: 'Parcela', datafield: 'parcela', cellsformat: 'n'},
+                  { text: 'Biomassa(ton)', datafield: 'biomassa', cellsformat: 'd' },
+                  { text: 'Carbono(ton)', datafield: 'carbono', cellsformat: 'd' },
+                  { text: 'Volume(m³)', datafield: 'volume', cellsformat: 'd' }
                 ]
             });
 
             grid_parcela.on('initialized', function(){
                 //pré popula com 5 linhas
                 for (var i = 5 - 1; i >= 0; i--) {
-                    grid_parcela.jqxGrid('addrow', null, {});
+                    grid_parcela.jqxGrid('addrow', null, { "parcela": grid_parcela.jqxGrid('getrows').length + 1 });
                 };
             });
 
             
             $("#addRowParcela").on('click', function () {
-                grid_parcela.jqxGrid('addrow', null, {});
+                grid_parcela.jqxGrid('addrow', null, { "parcela": grid_parcela.jqxGrid('getrows').length + 1 });
             });
             
             $("#excelExportParcela").click(function () {
                 grid_parcela.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+            });
+
+            
+            $("#Calcular").click(function(){
+                var rows = grid_parcela.jqxGrid('getrows');
+                $.each(rows, function(key, value){
+                    console.log(value)
+                });
             });
         });
     </script>
