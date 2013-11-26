@@ -19,7 +19,8 @@ public class DadosLocal extends Controller {
 	}
 
 	public static Result calcular(long id){
-		return ok( calcular.render());
+                Local local = Local.find.byId(id);
+		return ok( calcular.render(local));
 	}
 
 }

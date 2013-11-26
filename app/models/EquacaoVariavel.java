@@ -10,10 +10,10 @@ import com.avaje.ebean.*;
 @Entity 
 public class EquacaoVariavel extends Model {
    
-    @Id
-    public Double id;
+  @Id
+  public Double id;
     
-    public Double valor;
+  public Double valor;
    
    @ManyToOne
    public Equacao equacao;

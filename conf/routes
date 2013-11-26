@@ -151,7 +151,7 @@ POST    /modelos/fazerAjuste         controllers.Modelos.fazerAjuste(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 
-GET	/DadosLocal/:id                	controllers.DadosLocal.calcular(id:Long)
+GET	/DadosLocal/:id              controllers.DadosLocal.calcular(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Arvores novo, saveFile
 
