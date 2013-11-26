@@ -19,7 +19,8 @@ public class Parcelas extends Controller {
 	}
 
 	public static Result novo(long id){
-		return ok( novo.render(id));
+		Local local = Local.find.byId(id);
+		return ok( novo.render(local));
 	}
 
 }
