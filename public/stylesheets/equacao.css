@@ -9,16 +9,22 @@
 
 table#operadores{
 	border-style:double;
-		border-color:black;
-		padding-left: 5px;
-		padding-right:5px;
-		font-family: sans-serif;
+	border-color:black;
+	padding-left: 5px;
+	padding-right:5px;
+	font-family: sans-serif;
         background-color:#b8c3cd;
-	}
+}
 
 .operador{
            width:100%;
-        }
+}
 
+.button-grid{
+	margin-top: 20px;
+	text-align:right
+}
 
-
+.legenda{
+	font-size: small
+}
