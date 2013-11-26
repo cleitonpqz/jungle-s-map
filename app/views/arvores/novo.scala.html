@@ -8,7 +8,7 @@
 
 @form(action = routes.DadosLocal.novo(1), 'id -> "form") {
 <div class="">
-    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id">
+    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id" id="local.id">
      
     <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
     <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
@@ -173,9 +173,10 @@ $(document).ready(function(){
           itens[row] = data[row][item];
         }
       }
-      itens  = JSON.stringify(itens);
+      var id = @id;
       console.log(itens);
-       jsRoutes.controllers.Arvores.saveFile(itens).ajax({
+      console.log("ID = "+ id);
+       jsRoutes.controllers.Arvores.saveFile(itens, id).ajax({
               success: function(data){
                 $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
               }  
