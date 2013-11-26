@@ -118,7 +118,13 @@
     $('body').on('click','#adicionarTermoBtn', function(){
        var stringExpressao =$("#expressao").val();
        var stringTermo=$("#termo").val();
-       var stringAux = "b"+countTermo+"*("+stringTermo+")";
+       var stringAux
+       if(stringTermo===""){
+         stringAux = "b"+countTermo;
+         stringTermo=1;
+        }else{
+            stringAux = "b"+countTermo+"*("+stringTermo+")";
+        }
        if(countTermo>0){
            stringExpressao = stringExpressao+"+"+stringAux;
            tamanhoTermos[countTermo]=stringAux.length+1;
