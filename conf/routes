@@ -24,17 +24,6 @@ POST    /biomas/:id/:quemChama/salvar                         controllers.Biomas
 # Bioma Deletar
 GET    /biomas/:id/deletar                                    controllers.Biomas.deletar(id:Long)
 #-----------------------------------------------------------------------------------------------------------------------------
-
-#Camportimento Listar e novo
-GET     /compartimentos                 controllers.Compartimentos.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
-POST    /compartimentos                 controllers.Compartimentos.salvar()
-# Compartimento Editar                     
-GET     /compartimentos/:id             controllers.Compartimentos.editar(id:Long)
-POST    /compartimentos/:id             controllers.Compartimentos.update(id:Long)
-# Compartimento Deletar
-GET    /compartimentos/:id/deletar      controllers.Compartimentos.deletar(id:Long)
-
-#-----------------------------------------------------------------------------------------------------------------------------
 #Formacoes
 GET	/formacoes/:id/:quemChama/novaEditar         controllers.Formacoes.novaEditar(id:Long, quemChama:Integer)
 GET     /formacoes                                   controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
