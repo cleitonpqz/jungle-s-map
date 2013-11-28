@@ -6,6 +6,7 @@ import play.data.*;
 import static play.data.Form.*;
 import play.*;
 import views.html.autor.*;
+import play.libs.Json;
 import javax.persistence.PersistenceException;
 
 import models.*;
@@ -19,43 +20,43 @@ public class Autores extends Controller {
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<Autor> autorForm = form(Autor.class);
-        return ok(
+            return ok(
             manter.render(
-                Autor.page(page, 10, sortBy, order, filter),sortBy, order, filter, autorForm)
+                Autor.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
     
-    public static Result editar(Long id) {
-        Form<Autor> autorForm = form(Autor.class).fill(
-                Autor.find.byId(id)
-        );
+    public static Result novoEditar(Long id, int quemChama) {
+        Form<Autor> autorForm;
+        if(id==0){
+                autorForm = form(Autor.class);
+        }else{
+                autorForm = form(Autor.class).fill(Autor.find.byId(id));
+        }
+        
         return ok(
-            editarForm.render(id, autorForm)
+            novoEditar.render(id, autorForm, quemChama)
         );
     }
-    
-     public static Result update(Long id) {
+
+    public static Result salvar(Long id, int quemChama) {
         Form<Autor> autorForm = form(Autor.class).bindFromRequest();
         if(autorForm.hasErrors()) {
-            return badRequest(editarForm.render(id, autorForm));
+            return badRequest(novoEditar.render(id, autorForm, quemChama));
         }
-        autorForm.get().update(id);
-        flash("success", "O Autor " + autorForm.get().nome + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
-   public static Result salvar() {
-        Form<Autor> autorForm = form(Autor.class).bindFromRequest();
-        if(autorForm.hasErrors()) {
-            return badRequest(manter.render(Autor.page(0, 10, "nome", "asc", ""), "nome", "asc", "", autorForm));
+        if(quemChama==2 && id!=0){
+            flash("success", "Autor " + autorForm.get().nome + " foi editado com sucesso");
+            autorForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "Autor " + autorForm.get().nome + " foi incluido com sucesso");
+            autorForm.get().save();
+        }else{
+            autorForm.get().save();
         }
-        autorForm.get().save();
-        flash("success", "O Autor " + autorForm.get().nome + " foi incluido com sucesso");
-        return GO_HOME;
+        
+        return ok(Json.toJson(autorForm.get()));
     }
-    
-    
+     
     public static Result deletar(Long id) {
         try{
         Autor.find.ref(id).delete();

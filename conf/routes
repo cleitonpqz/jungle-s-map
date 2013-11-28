@@ -17,16 +17,12 @@ GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.dele
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
-#Bioma Listar e novo
-GET	/biomas/novo			controllers.Biomas.novo()
-POST	/biomas/salvar			controllers.Biomas.salvareselecionar()
-GET     /biomas                         controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /biomas                         controllers.Biomas.salvar()
-# Bioma Editar                     
-GET     /biomas/:id                     controllers.Biomas.editar(id:Long)
-POST    /biomas/:id                     controllers.Biomas.update(id:Long)
+#Bioma Listar, novo, editar
+GET	/biomas/:id/:quemChama/:idFormacao/novoEditar         controllers.Biomas.novoEditar(id:Long, quemChama:Integer, idFormacao:Long)
+GET     /biomas                                               controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /biomas/:id/:quemChama/salvar                         controllers.Biomas.salvar(id:Long, quemChama:Integer, idFormacao:Long)
 # Bioma Deletar
-GET    /biomas/:id/deletar              controllers.Biomas.deletar(id:Long)
+GET    /biomas/:id/deletar                                    controllers.Biomas.deletar(id:Long)
 #-----------------------------------------------------------------------------------------------------------------------------
 
 #Camportimento Listar e novo
@@ -40,88 +36,57 @@ GET    /compartimentos/:id/deletar      controllers.Compartimentos.deletar(id:Lo
 
 #-----------------------------------------------------------------------------------------------------------------------------
 #Formacoes
-GET     /formacoes                      controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /formacoes                      controllers.Formacoes.salvar()
-# Formacao Editar                     
-GET     /formacoes/:id                  controllers.Formacoes.editar(id:Long)
-POST    /formacoes/:id                  controllers.Formacoes.update(id:Long)
-# Formacao Deletar
-GET    /formacoes/:id/deletar           controllers.Formacoes.deletar(id:Long)
+GET	/formacoes/:id/:quemChama/novaEditar         controllers.Formacoes.novaEditar(id:Long, quemChama:Integer)
+GET     /formacoes                                   controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST    /formacoes/:id/:quemChama/salvar             controllers.Formacoes.salvar(id:Long, quemChama:Integer)
+GET    /formacoes/:id/deletar                        controllers.Formacoes.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Espacamentos
-GET     /espacamentos                      controllers.Espacamentos.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
-POST    /espacamentos                      controllers.Espacamentos.salvar()
-# Formacao Editar                     
-GET     /espacamentos/:id                  controllers.Espacamentos.editar(id:Long)
-POST    /espacamentos/:id                  controllers.Espacamentos.update(id:Long)
-# Formacao Deletar
-GET    /espacamentos/:id/deletar           controllers.Espacamentos.deletar(id:Long)
+GET    /espacamentos/:id/:quemChama/novaEditar         controllers.Espacamentos.novoEditar(id:Long, quemChama:Integer)
+GET    /espacamentos                                   controllers.Espacamentos.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
+POST   /espacamentos/:id/:quemChama/salvar             controllers.Espacamentos.salvar(id:Long, quemChama:Integer)
+GET    /espacamentos/:id/deletar                       controllers.Espacamentos.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Autores
-GET     /autores                      controllers.Autores.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /autores                      controllers.Autores.salvar()
-# Formacao Editar                     
-GET     /autores/:id                  controllers.Autores.editar(id:Long)
-POST    /autores/:id                  controllers.Autores.update(id:Long)
-# Formacao Deletar
-GET    /autores/:id/deletar           controllers.Autores.deletar(id:Long)
-
+GET    /autores/:id/:quemChama/novaEditar         controllers.Autores.novoEditar(id:Long, quemChama:Integer)
+GET    /autores                                   controllers.Autores.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST   /autores/:id/:quemChama/salvar             controllers.Autores.salvar(id:Long, quemChama:Integer)
+GET    /autores/:id/deletar                       controllers.Autores.deletar(id:Long)
 #-------------------------------------------------------------------------------------------------------------------------------
 #Disponibilidade
-GET     /disponibilidades                      controllers.Disponibilidades.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
-POST    /disponibilidades                      controllers.Disponibilidades.salvar()
-# Formacao Editar                     
-GET     /disponibilidades/:id                  controllers.Disponibilidades.editar(id:Long)
-POST    /disponibilidades/:id                  controllers.Disponibilidades.update(id:Long)
-# Formacao Deletar
-GET    /disponibilidades/:id/deletar           controllers.Disponibilidades.deletar(id:Long)
+GET    /disponibilidades/:id/:quemChama/novaEditar         controllers.Disponibilidades.novaEditar(id:Long, quemChama:Integer)
+GET    /disponibilidades                                   controllers.Disponibilidades.manter(p:Int ?= 0, s ?= "descricao", o ?= "asc", f ?= "")
+POST   /disponibilidades/:id/:quemChama/salvar             controllers.Disponibilidades.salvar(id:Long, quemChama:Integer)
+GET    /disponibilidades/:id/deletar                       controllers.Disponibilidades.deletar(id:Long)
+#-------------------------------------------------------------------------------------------------------------------------------
+#Método de quantificação de Biomassa
+GET    /metodosQB/:id/:quemChama/novaEditar         controllers.MetodosQB.novoEditar(id:Long, quemChama:Integer)
+GET    /metodosQB                                   controllers.MetodosQB.manter()
+POST   /metodosQB/:id/:quemChama/salvar             controllers.MetodosQB.salvar(id:Long, quemChama:Integer)
+GET    /metodosQB/:id/deletar                       controllers.MetodosQB.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
-GET     /metodosQB                      controllers.MetodosQB.manter()
-POST    /metodosQB                      controllers.MetodosQB.salvar()
-# Formacao Editar                     
-GET     /metodosQB/:id                  controllers.MetodosQB.editar(id:Long)
-POST    /metodosQB/:id                  controllers.MetodosQB.update(id:Long)
-# Formacao Deletar
-GET    /metodosQB/:id/deletar           controllers.MetodosQB.deletar(id:Long)
-
-#-------------------------------------------------------------------------------------------------------------------------------
-#Formacao Listar e novo
-GET     /metodosQC                      controllers.MetodosQC.manter()
-POST    /metodosQC                      controllers.MetodosQC.salvar()
-# Formacao Editar                     
-GET     /metodosQC/:id                  controllers.MetodosQC.editar(id:Long)
-POST    /metodosQC/:id                  controllers.MetodosQC.update(id:Long)
-# Formacao Deletar
-GET    /metodosQC/:id/deletar           controllers.MetodosQC.deletar(id:Long)
-
+#Método de quantificação de Carbono
+GET    /metodosQC/:id/:quemChama/novaEditar         controllers.MetodosQC.novoEditar(id:Long, quemChama:Integer)
+GET    /metodosQC                                   controllers.MetodosQC.manter()
+POST   /metodosQC/:id/:quemChama/salvar             controllers.MetodosQC.salvar(id:Long, quemChama:Integer)
+GET    /metodosQC/:id/deletar                       controllers.MetodosQC.deletar(id:Long)
 #-----------------------------------------------------------------------------------------------------------------------------
-#Variável Listar e novo
-GET	/variaveis/novo                    controllers.Variaveis.novo()
-POST	/variaveis/salvar                  controllers.Variaveis.salvarSelecionar()
-GET     /variaveis                         controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /variaveis                         controllers.Variaveis.salvar()
-# Bioma Editar                     
-GET     /variaveis/:id                     controllers.Variaveis.editar(id:Long)
-POST    /variaveis/:id                     controllers.Variaveis.update(id:Long)
-# Bioma Deletar
-GET    /variaveis/:id/deletar              controllers.Variaveis.deletar(id:Long)
+#Variável
+GET    /variaveis/:id/:quemChama/novaEditar         controllers.Variaveis.novaEditar(id:Long, quemChama:Integer)
+GET    /variaveis                                   controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST   /variaveis/:id/:quemChama/salvar             controllers.Variaveis.salvar(id:Long, quemChama:Integer)
+GET    /variaveis/:id/deletar                       controllers.Variaveis.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #AutoresModelos
-GET	/autoresModelos/novo                controllers.AutoresModelos.novo()
-POST	/autoresModelos/salvar              controllers.AutoresModelos.salvarSelecionar()
-GET     /autoresModelos                     controllers.AutoresModelos.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /autoresModelos                     controllers.AutoresModelos.salvar()
-# Formacao Editar                     
-GET     /autoresModelos/:id                 controllers.AutoresModelos.editar(id:Long)
-POST    /autoresModelos/:id                 controllers.AutoresModelos.update(id:Long)
-# Formacao Deletar
-GET    /autoresModelos/:id/deletar          controllers.AutoresModelos.deletar(id:Long)
-
+#Autores
+GET    /autoresModelos/:id/:quemChama/novaEditar         controllers.AutoresModelos.novoEditar(id:Long, quemChama:Integer)
+GET    /autoresModelos                                   controllers.AutoresModelos.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
+POST   /autoresModelos/:id/:quemChama/salvar             controllers.AutoresModelos.salvar(id:Long, quemChama:Integer)
+GET    /autoresModelos/:id/deletar                       controllers.AutoresModelos.deletar(id:Long)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #Locais 

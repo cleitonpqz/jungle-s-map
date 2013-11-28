@@ -1,0 +1,58 @@
+@(id:Long,  disponibilidadeForm: Form[Disponibilidade], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formDisponibilidade").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formDisponibilidade").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#disponibilidade_id").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
+                    }else{
+                        location.reload();
+                    }   
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Disponibilidade"}else{"Editar Disponibilidade"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.Disponibilidades.salvar(id, quemChama), 'role -> "form", 'id -> "formDisponibilidade") {
+        
+        <fieldset>
+                        
+            @inputText(
+                disponibilidadeForm("descricao"), 
+                '_label -> "Disponibilidade",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite a descrição da disponibilidade",
+                '_help -> "",
+                '_error -> disponibilidadeForm.error("descricao")
+            )
+                 
+        </fieldset>
+
+    }
+   <hr>
+    
+}    

@@ -48,6 +48,7 @@ public class TrabalhosCientificos extends Controller {
     public static Result salvar() {
         Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class).bindFromRequest();
         if(trabalhoCientificoForm.hasErrors()) {
+            flash("error", "O trabalho não foi incluido com sucesso");
             return badRequest(manter.render(TrabalhoCientifico.page(0, 10, "nome", "asc", ""), "nome", "asc", "", trabalhoCientificoForm));
         }
         trabalhoCientificoForm.get().save();

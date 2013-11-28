@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Autor], currentSortBy: String, currentOrder: String, currentFilter: String)
+@(currentPage: com.avaje.ebean.Page[Espacamento], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -22,7 +22,7 @@
     }
     
     // Generate the link
-    routes.Autores.manter(newPage, sortBy, order, currentFilter)
+    routes.Espacamentos.manter(newPage, sortBy, order, currentFilter)
     
 }
 @**********************************
@@ -43,7 +43,7 @@
                 show: false
             });
             
-            $(".novo_editar_autor").click(function(e){
+            $(".novo_editar_espacamento").click(function(e){
                 var url = $(this).attr("href");
                 jQuery.ajax(url).done(function(data){
                     $("#modal").html(data).modal('show');
@@ -55,9 +55,9 @@
             });
         });
         
-    function confirmaExclusao(url, nome){
+    function confirmaExclusao(url, descricao){
         bootbox.dialog({
-            message: "Tem certeza que deseja excluir o autor "+nome,
+            message: "Tem certeza que deseja excluir o espaçamento "+descricao,
             title: "Confirmar a Exclusão",
             buttons: {
               success: {
@@ -79,17 +79,20 @@
 </script>
     
 }
+
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Manter Autor", javascript){
+@main("Manter Espaçamento", javascript){
+    
     <div class="actions">
-            <a href="@routes.Autores.novoEditar(0, 0)" align="bottom" class="novo_editar_autor btn btn-primary input-large" rel="tooltip" title="Cadastrar novo Autor">Incluir</a>
+            <a href="@routes.Espacamentos.novoEditar(0, 0)" align="bottom" class="novo_editar_espacamento btn btn-primary input-large" rel="tooltip" title="Cadastrar novo Espaçamento">Incluir</a>
             
-     </div>
+        </div>
     <br>
  
-   <div id="modal" class="modal hide"></div>
+    <div id="modal" class="modal hide"></div>
+    
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -108,7 +111,7 @@
     @if(currentPage.getTotalRowCount == 0) {
         
         <div class="well">
-            <em>Nenhum Autor Cadastrado</em>
+            <em>Nenhum Espaçamento Cadastrado</em>
         </div>
         
     } else {
@@ -116,7 +119,7 @@
         <table class="table">
             <thead>
                 <tr class="tablehead">
-                    @header("nome", "Nome do Autor")
+                    @header("nome", "Descrição")
                     <th></th>
                     <th></th>
                     
@@ -124,17 +127,17 @@
             </thead>
             <tbody>
 
-                @for(autor <- currentPage.getList) {
+                @for(espacamento <- currentPage.getList) {
                     <tr>
                         <td>
-                            @autor.nome
+                            @espacamento.descricao
                         </td>
                         <td>
-                               <a href="@routes.Autores.novoEditar(autor.id, 2)" class="novo_editar_autor btn btn-primary btn-small" rel="tooltip" title="Editar @autor.nome">Editar</a>
+                               <a href="@routes.Espacamentos.novoEditar(espacamento.id, 2)" class="novo_editar_espacamento btn btn-primary btn-small" rel="tooltip" title="Editar @espacamento.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a onclick="confirmaExclusao('@routes.Autores.deletar(autor.id)', '@autor.nome')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @autor.nome">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Espacamentos.deletar(espacamento.id)', '@espacamento.descricao')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @espacamento.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

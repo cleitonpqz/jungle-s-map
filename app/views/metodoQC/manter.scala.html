@@ -1,33 +1,64 @@
-@(metodoQCList: List[MetodoQuantificacaoCarbono], metodoQCForm: Form[MetodoQuantificacaoCarbono])
+@(metodoQCList: List[MetodoQuantificacaoCarbono])
+
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+    
+         jQuery(function(){
+
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_metodoQC").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+        
+    function confirmaExclusao(url, descricao){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir o metodo de quantificação de Carbono "+descricao,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+    
+</script>
+} 
 
 
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Cadastrar Método de Quantificação de Carbono"){
+@main("Manter Método de Quantificação de Carbono", javascript){
     
-    @form(action = routes.MetodosQC.salvar) {
-        
-        <fieldset>
-           @inputText(
-                metodoQCForm("descricao"), 
-                '_label -> "Método de Quantificação de Carbono",
-                'class ->"input-xlarge",
-                'placeholder->"Digite a descricao do método",
-                '_help -> "",
-                '_error -> metodoQCForm.error("nome")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
+    <div class="actions">
+            <a href="@routes.MetodosQC.novoEditar(0, 0)" align="bottom" class="novo_editar_metodoQC btn btn-primary input-large" rel="tooltip" title="Cadastrar novo Método quant. Carbono">Incluir</a>
             
-        </div>
+     </div>
     <br>
-        <h3 id="homeTitle">@Messages("Método de Quantificação de Carbono")</h3>
-}
+ 
+   <div id="modal" class="modal hide"></div>
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -68,11 +99,11 @@
                             @metodo.descricao
                         </td>
                         <td>
-                               <a href="@routes.MetodosQC.editar(metodo.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @metodo.descricao">Editar</a>
+                               <a href="@routes.MetodosQC.novoEditar(metodo.id, 2)" class="novo_editar_metodoQC btn btn-primary btn-small" rel="tooltip" title="Editar @metodo.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.MetodosQC.deletar(metodo.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @metodo.descricao">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.MetodosQC.deletar(metodo.id)', '@metodo.descricao')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @metodo.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

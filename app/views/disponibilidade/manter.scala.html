@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Disponibilidade], currentSortBy: String, currentOrder: String, currentFilter: String, disponibilidadeForm: Form[Disponibilidade])
+@(currentPage: com.avaje.ebean.Page[Disponibilidade], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -33,34 +33,64 @@
         <a href="@link(0, key)">@title</a>
     </th>
 }
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+    
+         jQuery(function(){
 
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_disponibilidade").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+        
+    function confirmaExclusao(url, descricao){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir a disponibilidade "+descricao,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+    
+</script>
+    
+}
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Cadastrar Disponibilidade"){
+@main("Manter Disponibilidade", javascript){
     
-    @form(action = routes.Disponibilidades.salvar) {
-        
-        <fieldset class form-inline>
-           @inputText(
-                disponibilidadeForm("descricao"), 
-                '_label -> "Disponibilidade",
-                'class ->"input-xlarge",
-                'placeholder->"Digite a descricao da disponibilidade",
-                '_help -> "",
-                '_error -> disponibilidadeForm.error("descricao")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
+    <div class="actions">
+            <a href="@routes.Disponibilidades.novaEditar(0, 0)" align="bottom" class="novo_editar_disponibilidade btn btn-primary input-large" rel="tooltip" title="Cadastrar nova Disponibilidade">Incluir</a>
             
-        </div>
+    </div>
     <br>
-        <h3 id="homeTitle">@Messages("Disponibilidades", currentPage.getTotalRowCount)</h3>
-}
+ 
+   <div id="modal" class="modal hide"></div>
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -87,7 +117,7 @@
         <table class="table">
             <thead>
                 <tr class="tablehead">
-                    @header("descricao", "Nome do Disponibilidade")
+                    @header("descricao", "Descrição da Disponibilidade")
                     <th></th>
                     <th></th>
                     
@@ -101,11 +131,11 @@
                             @disponibilidade.descricao
                         </td>
                         <td>
-                               <a href="@routes.Disponibilidades.editar(disponibilidade.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @disponibilidade.descricao">Editar</a>
+                               <a href="@routes.Disponibilidades.novaEditar(disponibilidade.id, 2)" class="novo_editar_disponibilidade btn btn-primary btn-small" rel="tooltip" title="Editar @disponibilidade.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Disponibilidades.deletar(disponibilidade.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @disponibilidade.descricao">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Disponibilidades.deletar(disponibilidade.id)', '@disponibilidade.descricao')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @disponibilidade.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

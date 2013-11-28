@@ -58,6 +58,7 @@ public class Locais extends Controller{
         // }
 
         if(localForm.hasErrors()) {
+           flash("error", "O Local não foi incluido com sucesso");
            return badRequest(incluir.render(localForm));
         }
         localForm.get().save();

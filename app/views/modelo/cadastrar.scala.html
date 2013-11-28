@@ -417,6 +417,7 @@ $('body').on('click','#limparExpressao', function(){
                         options(AutorModelo.opcoes), 
                         '_label -> "Autor",
                         'class ->"input-xlarge",
+                        'id->"autor_modelo_id",
                         '_default -> "-- Escolha o Autor --",
                         '_showConstraints -> false,
                         '_error -> modeloForm.error("autor")
@@ -424,7 +425,7 @@ $('body').on('click','#limparExpressao', function(){
                     )
                     </td>
                     <td>
-                        <a href="@routes.AutoresModelos.novo()" id="novo_autor" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Autor">Novo</a>
+                        <a href="@routes.AutoresModelos.novoEditar(0, 1)" id="novo_autor" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Autor">Novo</a>
                     </td>
                     </tr>
                     </table>
@@ -458,7 +459,7 @@ $('body').on('click','#limparExpressao', function(){
                                   <option value ="@opcao._1">@opcao._2</option>
                                  } 
                         </select>
-                         <a href="@routes.Variaveis.novo()" id="nova_variavel" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
+                         <a href="@routes.Variaveis.novaEditar(0, 1)" id="nova_variavel" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
 
                        </div>
                  </div>

@@ -21,59 +21,43 @@ public class Biomas extends Controller {
         return GO_HOME;
     }
 
-    public static Result novo() {
-        Form<Bioma> biomaForm = form(Bioma.class);
+    public static Result novoEditar(Long id, int quemChama, Long idFormacao) {
+        Form<Bioma> biomaForm;
+        if(id==0){
+                biomaForm = form(Bioma.class);
+        }else{
+                biomaForm = form(Bioma.class).fill(Bioma.find.byId(id));
+        }
+        
         return ok(
-            novo.render(biomaForm)
+            novoEditar.render(id, biomaForm, quemChama, idFormacao)
         );
     }
 
-    public static Result salvareselecionar() {
+    public static Result salvar(Long id, int quemChama, Long idFormacao) {
         Form<Bioma> biomaForm = form(Bioma.class).bindFromRequest();
         if(biomaForm.hasErrors()) {
-            return badRequest(novo.render(biomaForm));
+            return badRequest(novoEditar.render(id, biomaForm, quemChama, idFormacao));
         }
-        biomaForm.get().save();
+        if(quemChama==2 && id!=0){
+            flash("success", "O Bioma " + biomaForm.get().nome + " foi editado com sucesso");
+            biomaForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "O Bioma " + biomaForm.get().nome + " foi incluido com sucesso");
+            biomaForm.get().save();
+        }else{
+            biomaForm.get().save();
+        }
+        
         return ok(Json.toJson(biomaForm.get()));
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<Bioma> biomaForm = form(Bioma.class);
         return ok(
             manter.render(
-                Bioma.page(page, 10, sortBy, order, filter),sortBy, order, filter, biomaForm)
+                Bioma.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
-    
-    public static Result editar(Long id) {
-        Form<Bioma> biomaForm = form(Bioma.class).fill(
-                Bioma.find.byId(id)
-        );
-        return ok(
-            editarForm.render(id, biomaForm)
-        );
-    }
-    
-     public static Result update(Long id) {
-        Form<Bioma> biomaForm = form(Bioma.class).bindFromRequest();
-        if(biomaForm.hasErrors()) {
-            return badRequest(editarForm.render(id, biomaForm));
-        }
-        biomaForm.get().update(id);
-        flash("success", "O Bioma " + biomaForm.get().nome + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result salvar() {
-        Form<Bioma> biomaForm = form(Bioma.class).bindFromRequest();
-        if(biomaForm.hasErrors()) {
-            return badRequest(manter.render(Bioma.page(0, 10, "nome", "asc", ""), "nome", "asc", "", biomaForm));
-        }
-        biomaForm.get().save();
-        flash("success", "O Bioma " + biomaForm.get().nome + " foi incluido com sucesso");
-        return GO_HOME;
-    }
-    
     
     public static Result deletar(Long id) {
         try{

@@ -1,0 +1,55 @@
+@(id:Long,  metodoQCForm: Form[MetodoQuantificacaoCarbono], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formMetodoQC").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formMetodoQC").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#metodoQC_id").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
+                    }else{
+                        location.reload();
+                    }   
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Espaçamento"}else{"Editar Espaçamento"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.MetodosQC.salvar(id, quemChama), 'role -> "form", 'id -> "formMetodoQC") {
+        
+       <fieldset>
+           @inputText(
+                metodoQCForm("descricao"), 
+                '_label -> "Método de Quantificação de Carbono",
+                'class ->"input-xlarge",
+                'placeholder->"Digite a descricao do método",
+                '_help -> "",
+                '_error -> metodoQCForm.error("descricao")
+            )
+                 
+        </fieldset>
+    }
+   <hr>
+    
+}    

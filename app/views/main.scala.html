@@ -8,7 +8,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-
+    <script type="text/javascript">
+    function stopEnterKey(evt) {
+        var evt = (evt) ? evt : ((event) ? event : null);
+        var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+        if ((evt.keyCode == 13) && (node.type == "text")) { return false; }
+    }
+    document.onkeypress = stopEnterKey;
+    </script>
     <title>@title</title>
 
     <!-- Bootstrap core CSS -->
@@ -70,6 +77,7 @@
                             <li><a href="@routes.MetodosQC.manter()">MétodoQC</a></li>
                             <li><a href="@routes.Variaveis.manter()">Variáveis</a></li>
                             <li><a href="@routes.AutoresModelos.manter()">Autores Modelos</a></li>
+                            <li><a href="@routes.Modelos.ajustar(21)">Ajustar Modelo</a></li>
                             
                         </ul>  
                     </li>

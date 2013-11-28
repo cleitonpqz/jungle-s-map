@@ -1,0 +1,60 @@
+@(id:Long,  autorForm: Form[Autor], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formAutor").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formAutor").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#autor_id").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id)
+                        $("#modal").modal("hide");
+                    }else{
+                        $("#modal").modal("hide");
+                        location.reload();
+                    }   
+                    
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Espaçamento"}else{"Editar Espaçamento"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.Autores.salvar(id, quemChama), 'role -> "form", 'id -> "formAutor") {
+        
+        <fieldset>
+                        
+            @inputText(
+                autorForm("nome"), 
+                '_label -> "Autor",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite o nome do autor",
+                '_help -> "",
+                '_error -> autorForm.error("nome")
+            )
+                 
+        </fieldset>
+
+    }
+   <hr>
+    
+}    

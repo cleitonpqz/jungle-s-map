@@ -8,9 +8,6 @@ import play.*;
 import views.html.autor_modelo.*;
 import javax.persistence.PersistenceException;
 import play.libs.Json;
-import play.libs.Json.*;
-import static play.libs.Json.toJson;
-
 import models.*;
 
 public class AutoresModelos extends Controller {
@@ -22,43 +19,42 @@ public class AutoresModelos extends Controller {
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<AutorModelo> autorForm = form(AutorModelo.class);
-        return ok(
+            return ok(
             manter.render(
-                AutorModelo.page(page, 10, sortBy, order, filter),sortBy, order, filter, autorForm)
+                AutorModelo.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
     
-    public static Result editar(Long id) {
-        Form<AutorModelo> autorForm = form(AutorModelo.class).fill(
-                AutorModelo.find.byId(id)
-        );
-        return ok(
-            editarForm.render(id, autorForm)
-        );
-    }
-    
-     public static Result update(Long id) {
-        Form<AutorModelo> autorForm = form(AutorModelo.class).bindFromRequest();
-        if(autorForm.hasErrors()) {
-            return badRequest(editarForm.render(id, autorForm));
+    public static Result novoEditar(Long id, int quemChama) {
+        Form<AutorModelo> autorForm;
+        if(id==0){
+                autorForm = form(AutorModelo.class);
+        }else{
+                autorForm = form(AutorModelo.class).fill(AutorModelo.find.byId(id));
         }
-        autorForm.get().update(id);
-        flash("success", "O Autor " + autorForm.get().nome + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
         
-    public static Result salvar() {
+        return ok(
+            novoEditar.render(id, autorForm, quemChama)
+        );
+    }
+
+    public static Result salvar(Long id, int quemChama) {
         Form<AutorModelo> autorForm = form(AutorModelo.class).bindFromRequest();
         if(autorForm.hasErrors()) {
-            return badRequest(manter.render(AutorModelo.page(0, 10, "nome", "asc", ""), "nome", "asc", "", autorForm));
+            return badRequest(novoEditar.render(id, autorForm, quemChama));
         }
-        autorForm.get().save();
-        flash("success", "O Autor " + autorForm.get().nome + " foi incluido com sucesso");
-        return GO_HOME;
+        if(quemChama==2 && id!=0){
+            flash("success", "Autor " + autorForm.get().nome + " foi editado com sucesso");
+            autorForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "Autor " + autorForm.get().nome + " foi incluido com sucesso");
+            autorForm.get().save();
+        }else{
+            autorForm.get().save();
+        }
+        
+        return ok(Json.toJson(autorForm.get()));
     }
-    
     
     public static Result deletar(Long id) {
         try{
@@ -70,18 +66,5 @@ public class AutoresModelos extends Controller {
         return GO_HOME;
     }
     }
-     public static Result novo() {
-        Form<AutorModelo> autorModeloForm = form(AutorModelo.class);
-        return ok(
-            novo.render(autorModeloForm)
-        );
-    }
-    public static Result salvarSelecionar() {
-        Form<AutorModelo> autorModeloForm = form(AutorModelo.class).bindFromRequest();
-        if(autorModeloForm.hasErrors()) {
-            return badRequest(novo.render(autorModeloForm));
-        }
-        autorModeloForm.get().save();
-        return ok(Json.toJson(autorModeloForm.get()));
-    }
+     
 }

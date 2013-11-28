@@ -8,8 +8,6 @@ import play.*;
 import views.html.variavel.*;
 import javax.persistence.PersistenceException;
 import play.libs.Json;
-import play.libs.Json.*;
-import static play.libs.Json.toJson;
 
 import models.*;
 
@@ -22,62 +20,52 @@ public class Variaveis extends Controller {
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<Variavel> variavelForm = form(Variavel.class);
-        return ok(
+            return ok(
             manter.render(
-                Variavel.page(page, 10, sortBy, order, filter),sortBy, order, filter, variavelForm)
+                Variavel.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
     
-    public static Result editar(Long id) {
-        Form<Variavel> variavelForm = form(Variavel.class).fill(
-                Variavel.find.byId(id)
-        );
+    public static Result novaEditar(Long id, int quemChama) {
+        Form<Variavel> variavelForm;
+        if(id==0){
+                variavelForm = form(Variavel.class);
+        }else{
+                variavelForm = form(Variavel.class).fill(Variavel.find.byId(id));
+        }
+        
         return ok(
-            editarForm.render(id, variavelForm)
+            novoEditar.render(id, variavelForm, quemChama)
         );
     }
-    
-     public static Result update(Long id) {
+
+    public static Result salvar(Long id, int quemChama) {
         Form<Variavel> variavelForm = form(Variavel.class).bindFromRequest();
         if(variavelForm.hasErrors()) {
-            return badRequest(editarForm.render(id, variavelForm));
+            return badRequest(novoEditar.render(id, variavelForm, quemChama));
         }
-        variavelForm.get().update(id);
-        flash("success", "O Variável " + variavelForm.get().nome + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result salvar() {
-        Form<Variavel> variavelForm = form(Variavel.class).bindFromRequest();
-        if(variavelForm.hasErrors()) {
-            return badRequest(manter.render(Variavel.page(0, 10, "nome", "asc", ""), "nome", "asc", "", variavelForm));
+        if(quemChama==2 && id!=0){
+            flash("success", "Variável " + variavelForm.get().nome + " foi editada com sucesso");
+            variavelForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "Variável " + variavelForm.get().nome + " foi incluida com sucesso");
+            variavelForm.get().save();
+        }else{
+            variavelForm.get().save();
         }
-        variavelForm.get().save();
-        flash("success", "A Variável " + variavelForm.get().nome + " foi incluida com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result novo() {
-        Form<Variavel> variavelForm = form(Variavel.class);
-        return ok(
-        novo.render(variavelForm)
-        );
-    }
-    public static Result salvarSelecionar() {
-        Form<Variavel> variavelForm = form(Variavel.class).bindFromRequest();
-        if(variavelForm.hasErrors()) {
-            return badRequest(novo.render(variavelForm));
-        }
-        variavelForm.get().save();
+        
         return ok(Json.toJson(variavelForm.get()));
     }
-  
-    public static Result deletar(Long id) {
-        Variavel.find.ref(id).delete();
-        flash("success", "Variável excluida");
-        return GO_HOME;
     
+    public static Result deletar(Long id) {
+        try{
+            Variavel.find.ref(id).delete();
+            flash("success", "Variavel excluída com sucesso");
+            return GO_HOME;
+        }catch(PersistenceException exception){
+            flash("error", "Exclusão não permitida. Existem equações vinculadas a variavel");
+        return GO_HOME;
+        }   
     }
     
 }

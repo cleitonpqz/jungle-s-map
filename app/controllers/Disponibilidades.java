@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.*;
 import views.html.disponibilidade.*;
 import javax.persistence.PersistenceException;
+import play.libs.Json;
 import models.*;
 
 public class Disponibilidades extends Controller {
@@ -18,43 +19,43 @@ public class Disponibilidades extends Controller {
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<Disponibilidade> disponibilidadeForm = form(Disponibilidade.class);
-        return ok(
+            return ok(
             manter.render(
-                Disponibilidade.page(page, 10, sortBy, order, filter),sortBy, order, filter, disponibilidadeForm)
+                Disponibilidade.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
     
-    public static Result editar(Long id) {
-        Form<Disponibilidade> disponibilidadeForm = form(Disponibilidade.class).fill(
-                Disponibilidade.find.byId(id)
-        );
+    public static Result novaEditar(Long id, int quemChama) {
+        Form<Disponibilidade> disponibilidadeForm;
+        if(id==0){
+                disponibilidadeForm = form(Disponibilidade.class);
+        }else{
+                disponibilidadeForm = form(Disponibilidade.class).fill(Disponibilidade.find.byId(id));
+        }
+        
         return ok(
-            editarForm.render(id, disponibilidadeForm)
+            novoEditar.render(id, disponibilidadeForm, quemChama)
         );
     }
-    
-     public static Result update(Long id) {
+
+    public static Result salvar(Long id, int quemChama) {
         Form<Disponibilidade> disponibilidadeForm = form(Disponibilidade.class).bindFromRequest();
         if(disponibilidadeForm.hasErrors()) {
-            return badRequest(editarForm.render(id, disponibilidadeForm));
+            return badRequest(novoEditar.render(id, disponibilidadeForm, quemChama));
         }
-        disponibilidadeForm.get().update(id);
-        flash("success", "A Disponibilidade " + disponibilidadeForm.get().descricao + " foi alterada com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result salvar() {
-        Form<Disponibilidade> disponibilidadeForm = form(Disponibilidade.class).bindFromRequest();
-        if(disponibilidadeForm.hasErrors()) {
-            return badRequest(manter.render(Disponibilidade.page(0, 10, "descricao", "asc", ""), "descricao", "asc", "", disponibilidadeForm));
+        if(quemChama==2 && id!=0){
+            flash("success", "Disponibilidade " + disponibilidadeForm.get().descricao + " foi editada com sucesso");
+            disponibilidadeForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "Disponibilidade " + disponibilidadeForm.get().descricao + " foi incluida com sucesso");
+            disponibilidadeForm.get().save();
+        }else{
+            disponibilidadeForm.get().save();
         }
-        disponibilidadeForm.get().save();
-        flash("success", "A Disponibilidade " + disponibilidadeForm.get().descricao + " foi incluida com sucesso");
-        return GO_HOME;
+        
+        return ok(Json.toJson(disponibilidadeForm.get()));
     }
-    
-    
+  
     public static Result deletar(Long id) {
         try{
             Disponibilidade.find.ref(id).delete();
