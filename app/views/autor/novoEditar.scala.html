@@ -36,7 +36,7 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal(if(quemChama!=2){"Cadastrar Espaçamento"}else{"Editar Espaçamento"}, "Salvar", quemChama, javascript){
+@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
     
     @form(action = routes.Autores.salvar(id, quemChama), 'role -> "form", 'id -> "formAutor") {
         

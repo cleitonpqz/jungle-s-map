@@ -51,14 +51,15 @@
                     <li class=""><a href="@routes.Application.index()"><i class="icon-home icon-white"></i>Home</a></li>
                      <li class="dropdown">  
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Local <b class="caret"></b></a>  
-                        <ul class="dropdown-menu">  
-                            <li><a  href="@routes.Locais.manter()">Manter</a></li>  
+                        <ul class="dropdown-menu">
                             <li><a href="@routes.Locais.incluir()">Incluir</a></li>  
+                            <li><a  href="@routes.Locais.manter()">Manter</a></li>  
+                            
                         </ul>  
                     </li>
                     
                     <li class="dropdown">  
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Dados do Local <b class="caret"></b></a>  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domínios do Local<b class="caret"></b></a>  
                         <ul class="dropdown-menu">  
                             <li><a  href="@routes.Biomas.manter(0, "nome", "asc", "")">Bioma</a></li>  
                             <li><a href="@routes.Formacoes.manter(0, "nome", "asc", "")">Formação</a></li>  
@@ -67,17 +68,24 @@
                         </ul>  
                     </li>
                     <li class="dropdown">  
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Trabalho Científico<b class="caret"></b></a>  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Trabalho Científico<b class="caret"></b></a>  
                         <ul class="dropdown-menu">  
-                            <li><a href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Trabalho Científico</a></li>  
-                            <li><a href="@routes.Autores.manter(0, "nome", "asc", "")">Autor</a></li>  
+                            <li><a href="@routes.TrabalhosCientificos.incluirEditar(0)">Incluir</a></li>   
+                            <li><a href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Manter</a></li>
+                        </ul>  
+                    </li>
+                                        
+                    <li class="dropdown">  
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Domínios do Trabalho <b class="caret"></b></a>   
+                        <ul class="dropdown-menu">
+                             <li><a href="@routes.Autores.manter(0, "nome", "asc", "")">Autor</a></li>  
                             <li><a href="@routes.Disponibilidades.manter(0, "descricao", "asc", "")">Disponibilidades</a></li>
                             <li><a href="@routes.MetodosQB.manter()">MétodoQB</a></li>
                             <li><a href="@routes.MetodosQC.manter()">MétodoQC</a></li>
                             <li><a href="@routes.Variaveis.manter()">Variáveis</a></li>
                             <li><a href="@routes.AutoresModelos.manter()">Autores Modelos</a></li>
                             <li><a href="@routes.Modelos.ajustar(21)">Ajustar Modelo</a></li>
-                            
+                    
                         </ul>  
                     </li>
                 </ul>

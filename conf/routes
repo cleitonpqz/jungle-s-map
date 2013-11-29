@@ -7,13 +7,12 @@ GET     /                                   controllers.Application.index()
 GET     /javascriptRoutes                   controllers.Application.javascriptRoutes()
 
 # Trabalho Científico Listar e novo
-GET     /trabalhos                         controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
-POST    /trabalhos                         controllers.TrabalhosCientificos.salvar()
-# Trabalho Científico Editar                     
-GET     /trabalhos/:id                     controllers.TrabalhosCientificos.editar(id:Long)
-POST    /trabalhos/:id                     controllers.TrabalhosCientificos.update(id:Long)
+GET     /trabalhos/manter                 controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
+GET     /trabalhos                        controllers.TrabalhosCientificos.incluirEditar(id : Long)
+POST    /trabalhos                        controllers.TrabalhosCientificos.salvar(id : Long)
 # Trabalho Científico Deletar
 GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.deletar(id:Long)
+POST    /TrabalhosCientificos/findById     controllers.TrabalhosCientificos.findById(id:Long)
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -85,7 +84,6 @@ GET     /Locais                             controllers.Locais.incluir()
 POST    /Formacoes/listarFormacao           controllers.Formacoes.listarFormacao(id:Long)
 POST    /Municipios/listarMunicipio         controllers.Municipios.listarMunicipio(id:Long)
 POST    /Locais                             controllers.Locais.salvar()
-POST    /TrabalhosCientificos/findById      controllers.TrabalhosCientificos.findById(id:Long)
 GET     /Locais/:id/excluir                 controllers.Locais.excluir(id:Long)
 POST    /Locais/findById                    controllers.Locais.findById(id:Long)
 GET     /Locais/localizarSimilar            controllers.Locais.localizarSimilar(p:Int ?= 0, s ?= "descricao", o ?= "asc", b :Int ?= -1, f:Int ?= -1, l ?= "", e:Int ?= -1, m:Int ?= -1)

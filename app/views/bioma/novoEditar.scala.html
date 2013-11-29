@@ -27,7 +27,9 @@
                     }
                 });
                 dataFilterRequest.done(function(data){
-                    @if(quemChama==1){$("#bioma_id").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id);}
+                    @if(quemChama==1){$("#bioma").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id);
+                    $("#modal").modal("hide");
+                    }
                     @if(quemChama==3){@if(id==0){showModalFormacao(@idFormacao, 0);}else{showModalFormacao(@idFormacao, 2)}};
                     @if(quemChama==4){showModalFormacao(@idFormacao, 1);}
                     @if(quemChama==2 ||quemChama==0){location.reload();}

@@ -30,8 +30,7 @@ public class Biomas extends Controller {
         }
         
         return ok(
-            novoEditar.render(id, biomaForm, quemChama, idFormacao)
-        );
+            novoEditar.render(id, biomaForm, quemChama, idFormacao));
     }
 
     public static Result salvar(Long id, int quemChama, Long idFormacao) {

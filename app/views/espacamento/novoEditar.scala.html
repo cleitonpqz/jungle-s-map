@@ -17,7 +17,7 @@
                 });
                 dataFilterRequest.done(function(data){
                     @if(quemChama==1){
-                        $("#espacamento_id").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
+                        $("#espacamento").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
                     }else{
                         location.reload();
                     }   
