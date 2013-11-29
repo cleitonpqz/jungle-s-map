@@ -1,4 +1,4 @@
-@(variavelInteresse : Long =0 , modeloForm: Form[Modelo])
+@(variavelInteresse : Long =0 , equacaoForm: Form[Equacao])
 
 @import helper._
 
@@ -138,16 +138,16 @@
                  if(countVariavel>0){
                       if(!existe(variavelUtilizada, varElemento[i][0])){
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
                    }
                    }else{
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='hidden' name='modelo_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
@@ -413,14 +413,14 @@ $('body').on('click','#limparExpressao', function(){
                 <tr>
                     <td>
             @select(
-                        modeloForm("autor_modelo.id"), 
+                        equacaoForm("autor_modelo.id"), 
                         options(AutorModelo.opcoes), 
                         '_label -> "Autor",
                         'class ->"input-xlarge",
                         'id->"autor_modelo_id",
                         '_default -> "-- Escolha o Autor --",
                         '_showConstraints -> false,
-                        '_error -> modeloForm.error("autor")
+                        '_error -> equacaoForm.error("autor")
 
                     )
                     </td>

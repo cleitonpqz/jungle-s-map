@@ -16,11 +16,20 @@ public class Equacao extends Model {
    @Id
     public Long id;
     
-    @Constraints.Required(message="O campo equação é obrigatório!")
     public String expressao;
+    
+    public String expressao_modelo;
+    
+    public Integer qtd_coeficientes;
+    
+    @ManyToOne
+    public AutorModelo autor_modelo;
     
     @ManyToOne
     public VariavelInteresse variavel_interesse;
+    
+    @OneToMany(targetEntity = Termo.class, cascade = CascadeType.ALL)
+    public List<Termo> termos = new ArrayList<Termo>();
     
     @OneToMany(targetEntity = EquacaoVariavel.class, cascade = CascadeType.ALL)
     public List<EquacaoVariavel> equacao_variavel = new ArrayList<EquacaoVariavel>();  
@@ -31,7 +40,7 @@ public class Equacao extends Model {
     
     public static Model.Finder<Long,Equacao> find = new Model.Finder<Long,Equacao>(Long.class, Equacao.class);
 
-    public static Map<String,String> opcoes(long id) {
+    public static Map<String,String> opcoesEquacao(long id) {
         String sigla;
         switch((int)id){
             case 1: sigla= "B = ";
@@ -44,7 +53,39 @@ public class Equacao extends Model {
         }
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
-            opcoes.put(e.id.toString(), sigla+e.expressao);
+            String auxOpcao= sigla;
+            if(e.expressao!=null){
+                auxOpcao = sigla+e.expressao;
+            }else{
+                auxOpcao="";
+           }
+            
+            opcoes.put(e.id.toString(), auxOpcao);
+        }
+        return opcoes;
+    }
+    
+    public static Map<String,String> opcoesModelo(long id) {
+        String sigla;
+        switch((int)id){
+            case 1: sigla= "B = ";
+                    break;
+            case 2: sigla= "C = ";
+                break;
+            case 3: sigla ="V = ";
+                break;
+            default: sigla="";
+        }
+        
+        LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
+        for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
+             String auxOpcao= sigla;
+            if(e.expressao_modelo!=null){
+                auxOpcao = sigla+e.expressao_modelo;
+            }else{
+                auxOpcao="";
+           }
+            opcoes.put(e.id.toString(), auxOpcao);
         }
         return opcoes;
     }

@@ -11,37 +11,37 @@
    <legend>Biomassa</legend>
    <div class="row">
         <div class="span6">
-            <label>Equação</label><input type="text" name="equacaoBiomassa" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1){value="@equacao.equacao.expressao"}}class="input-xlarge" placeholder="Equação Biomassa">
+            <label>Equação</label><input type="text" name="equacaoBiomassa" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 && equacao.equacao.expressao != null){value="@equacao.equacao.expressao"}}class="input-xlarge" placeholder="Equação Biomassa">
         </div>
         <div class="span6">
-            <label>Modelo</label><input type="text" name="modeloBiomassa" @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==1){value="@modelo.modelo.expressao"}} class="input-xlarge" placeholder="Modelo Biomassa">
-            @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==1){
-                <a href="@routes.Modelos.ajustar(modelo.modelo.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            <label>Modelo</label><input type="text" name="modeloBiomassa" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 != equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Biomassa">
+            @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}
         </div> 
    </div>      
    <legend>Carbono</legend>
    <div class="row">
         <div class="span6">
-            <label>Equação</label><input type="text" name="equacaoCarbono" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2){value="@equacao.equacao.expressao"}} class="input-xlarge" placeholder="Equação Carbono">
+            <label>Equação</label><input type="text" name="equacaoCarbono" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2 &&equacao.equacao.expressao!=null){value="@equacao.equacao.expressao"}} class="input-xlarge" placeholder="Equação Carbono">
         </div>
         <div class="span6">
             <label>Modelo</label>
-            <input type="text" name="modeloCarbono" @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==2){value="@modelo.modelo.expressao"}} class="input-xlarge" placeholder="Modelo Carbono">
-             @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==2){
-                <a href="@routes.Modelos.ajustar(modelo.modelo.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            <input type="text" name="modeloCarbono" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Carbono">
+             @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2&& equacao.equacao.expressao_modelo!=null){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}
         </div> 
    </div> 
    <legend>Volume</legend>
    <div class="row">
         <div class="span6">
-            <label>Equação</label><input type="text" class="input-xlarge" name="equacaoVolume" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3){value="@equacao.equacao.expressao"}}  placeholder="Equação Volume">
+            <label>Equação</label><input type="text" class="input-xlarge" name="equacaoVolume" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao!=null){value="@equacao.equacao.expressao"}}  placeholder="Equação Volume">
         </div>
         <div class="span6">
-            <label>Modelo</label><input type="text" class="input-xlarge" name="modeloVolume" @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==3){value="@modelo.modelo.expressao"}} placeholder="Modelo Volume">
-            @for(modelo<-local.trabalho_cientifico.trabalho_cientifico_modelo){@if(modelo.modelo.variavel_interesse.id ==3){
-                <a href="@routes.Modelos.ajustar(modelo.modelo.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            <label>Modelo</label><input type="text" class="input-xlarge" name="modeloVolume" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} placeholder="Modelo Volume">
+            @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}
         </div> 
    </div>      

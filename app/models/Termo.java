@@ -18,6 +18,6 @@ public class Termo extends Model {
    public Integer ordem;
    
    @ManyToOne
-   public Modelo modelo;
+   public Equacao equacao;
 
 }

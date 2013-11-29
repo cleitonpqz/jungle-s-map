@@ -24,42 +24,42 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
     }
     
     public static Result cadastrar(Long varialvelInteresse) {
-        Form<Modelo> modeloForm = form(Modelo.class);
+        Form<Equacao> equacaoForm = form(Equacao.class);
         return ok(
-            cadastrar.render(varialvelInteresse ,modeloForm)
+            cadastrar.render(varialvelInteresse ,equacaoForm)
             );
     }
     public static Result salvar(Long varialvelInteresse) {
-       Form<Modelo> modeloForm = form(Modelo.class).bindFromRequest();
+       Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
         
-        if(modeloForm.hasErrors()) {
+        if(equacaoForm.hasErrors()) {
             flash("error","Modelo não incluído");
-            return badRequest(cadastrar.render(varialvelInteresse, modeloForm));
+            return badRequest(cadastrar.render(varialvelInteresse, equacaoForm));
         }
-        modeloForm.get().save();
+        equacaoForm.get().save();
         flash("success", "O Modelo foi incluido com sucesso");
         return GO_HOME;
     }
-    public static Result ajustar(Long idModelo){
-        Modelo modelo = Modelo.find.byId(idModelo);
+    public static Result ajustar(Long idEquacao){
+        Equacao equacao = Equacao.find.byId(idEquacao);
         List<String> campos = new ArrayList<String>();
         campos.add("Árvore");
-        for (ModeloVariavel modeloVariavel : modelo.modelo_variavel){
-            campos.add(modeloVariavel.variavel.sigla);
+        for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
+            campos.add(equacaoVariavel.variavel.sigla);
         }
          campos.add("Valor Observado");
-         return ok(ajustar.render(modelo, campos));
+         return ok(ajustar.render(equacao, campos));
     }
     
-    public static Result fazerAjuste(Long idModelo){
+    public static Result fazerAjuste(Long idEquacao){
         //Pegando os dados
-        Modelo modelo = Modelo.find.byId(idModelo);
+        Equacao equacao = Equacao.find.byId(idEquacao);
         JsonNode json = request().body().asJson();
         List<JsonNode> linhasPreenchidas =new ArrayList<JsonNode>();
         List<String> campos = new ArrayList<String>();
         campos.add("Árvore");
-         for (ModeloVariavel modeloVariavel : modelo.modelo_variavel){
-            campos.add(modeloVariavel.variavel.sigla);
+         for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
+            campos.add(equacaoVariavel.variavel.sigla);
         }
         campos.add("Valor Observado");
         //validando dados da grid
@@ -76,7 +76,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                 }
             } 
             if(colunasPreenchidas > 0 && colunasPreenchidas< numeroColunas){
-                return badRequest(ajustar.render(modelo, campos));   
+                return badRequest(ajustar.render(equacao, campos));   
             }else if(colunasPreenchidas==numeroColunas){
                 linhasPreenchidas.add(row);
                 numlinhasPreenchidas++;
@@ -84,20 +84,20 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
        }
             
         if(numlinhasPreenchidas<1){
-            return badRequest(ajustar.render(modelo, campos));  
+            return badRequest(ajustar.render(equacao, campos));  
         }
         //Calculando
-        double[][] valorEntrada= new double[linhasPreenchidas.size()][modelo.termos.size()];
+        double[][] valorEntrada= new double[linhasPreenchidas.size()][equacao.termos.size()];
         double[] valorObservado= new double[linhasPreenchidas.size()];
         for(int linha =0; linha<linhasPreenchidas.size(); linha++){
             int numTermo = 0;
-             for(Termo termo : modelo.termos){
+             for(Termo termo : equacao.termos){
                 JEP myParser = new JEP();
                 myParser.addStandardFunctions();
                 myParser.addStandardConstants();
-                for (ModeloVariavel modeloVariavel : modelo.modelo_variavel){
-                  Double valor = Double.parseDouble(linhasPreenchidas.get(linha).get(modeloVariavel.variavel.sigla).toString());
-                  myParser.addVariable(modeloVariavel.variavel.sigla, valor);
+                for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
+                  Double valor = Double.parseDouble(linhasPreenchidas.get(linha).get(equacaoVariavel.variavel.sigla).toString());
+                  myParser.addVariable(equacaoVariavel.variavel.sigla, valor);
                 }
                 myParser.parseExpression(termo.expressao);
                 valorEntrada[linha][numTermo]=myParser.getValue();
@@ -110,9 +110,9 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         double[] valorCoeficiente = regression.estimateRegressionParameters();
         
         Equacao novaEquacao = new Equacao();
-        String expressao = modelo.expressao;
+        String expressao = equacao.expressao_modelo;
         ObjectNode result = Json.newObject();
-        for(Integer i=0; i<modelo.qtd_coeficientes; i++){
+        for(Integer i=0; i<equacao.qtd_coeficientes; i++){
           expressao=expressao.replaceAll("b"+i.toString(), String.valueOf(valorCoeficiente[i]));
           result.put("b"+i.toString(), String.valueOf(valorCoeficiente[i]));
         }
