@@ -137,25 +137,62 @@ public class Locais extends Controller{
     
      public static Result findById(Long id) {
         ObjectNode result = Json.newObject();
+        ObjectNode municipio = Json.newObject();
         String coordenadas ="";
         String municipios="";
         Local local = Local.find.byId(id);
-       	result.put("id", local.id);
+        result.put("id", local.id);
 	result.put("descricao", local.descricao);
         result.put("area_total", local.area_total);
-	result.put("trabalho_cientifico", Json.toJson(local.trabalho_cientifico));
+        if(local.trabalho_cientifico!=null){
+            result.put("auto", Json.toJson(local.trabalho_cientifico.autor));
+            result.put("ano", Json.toJson(local.trabalho_cientifico.ano));
+            result.put("disponibilidade", Json.toJson(local.trabalho_cientifico.disponibilidade));
+            result.put("metodo_quantificacao_biomassa", Json.toJson(local.trabalho_cientifico.metodo_quantificacao_biomassa.descricao));
+            result.put("metodo_quantificacao_carbono", Json.toJson(local.trabalho_cientifico.metodo_quantificacao_carbono.descricao));
+            for(TrabalhoCientificoEquacao equacaoTrabalho : local.trabalho_cientifico.trabalho_cientifico_equacao){
+                if(equacaoTrabalho.equacao.variavel_interesse.id==Long.valueOf(1)){
+                   if(equacaoTrabalho.equacao.expressao!=null)
+                        result.put("equacaoBiomassa", Json.toJson(equacaoTrabalho.equacao.expressao));
+                   else
+                       result.put("equacaoBiomassa", Json.toJson(""));
+                   if(equacaoTrabalho.equacao.expressao_modelo!=null)
+                        result.put("modeloBiomassa", Json.toJson(equacaoTrabalho.equacao.expressao_modelo));
+                   else
+                       result.put("modeloBiomassa", Json.toJson(""));
+                }
+                if(equacaoTrabalho.equacao.variavel_interesse.id==Long.valueOf(2)){
+                    if(equacaoTrabalho.equacao.expressao!=null)
+                        result.put("equacaoCarbono", Json.toJson(equacaoTrabalho.equacao.expressao));
+                     else
+                       result.put("equacaoCarbono", Json.toJson(""));
+                    if(equacaoTrabalho.equacao.expressao_modelo!=null)                        
+                        result.put("modeloCarbono", Json.toJson(equacaoTrabalho.equacao.expressao_modelo));
+                     else
+                       result.put("modeloCarbono", Json.toJson(""));
+                }
+                if(equacaoTrabalho.equacao.variavel_interesse.id==3){
+                    if(equacaoTrabalho.equacao.expressao!=null)
+                        result.put("equacaoVolume", Json.toJson(equacaoTrabalho.equacao.expressao));
+                    else
+                       result.put("equacaoVolume", Json.toJson(""));
+                    if(equacaoTrabalho.equacao.expressao_modelo!=null)
+                        result.put("modeloVolume", Json.toJson(equacaoTrabalho.equacao.expressao_modelo));
+                    else
+                       result.put("modeloVolume", Json.toJson(""));
+                }
+            }
+        }
         result.put("formacao", Json.toJson(local.formacao));
 	result.put("espacamento", Json.toJson(local.espacamento.descricao));
         result.put("area_total", local.area_total);
-	result.put("trabalho_cientifico", Json.toJson(local.trabalho_cientifico));
-        
-        for(Coordenada coordenada: local.coordenadas){
+	for(Coordenada coordenada: local.coordenadas){
              coordenadas = coordenadas+"("+coordenada.latitude+","+coordenada.longitude+")";
         }
         result.put("coordenadas", Json.toJson(coordenadas));
         
         for(MunicipioLocal municipioLocal: local.municipios_locais){
-             municipios = municipios+municipioLocal.municipio.nome+", ";
+            municipios = municipios+municipioLocal.municipio.nome+", ";
         }
         result.put("municipios", Json.toJson(municipios));
  
