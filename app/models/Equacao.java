@@ -53,43 +53,28 @@ public class Equacao extends Model {
         }
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
         for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
-            String auxOpcao= sigla;
+            String auxOpcao="";
             if(e.expressao!=null){
-                auxOpcao = sigla+e.expressao;
+                if(e.expressao!=""){
+                    auxOpcao = sigla+e.expressao;
+                }
             }else{
-                auxOpcao="";
-           }
+                auxOpcao="Não possui equação.";
+            }
+             if(e.expressao_modelo!=null){
+                 auxOpcao=auxOpcao+" | "+sigla+e.expressao_modelo;
+             }else{
+                 auxOpcao= auxOpcao+" | Não possue modelo cadastrado";
+             }
+                    
+               
             
             opcoes.put(e.id.toString(), auxOpcao);
         }
         return opcoes;
     }
     
-    public static Map<String,String> opcoesModelo(long id) {
-        String sigla;
-        switch((int)id){
-            case 1: sigla= "B = ";
-                    break;
-            case 2: sigla= "C = ";
-                break;
-            case 3: sigla ="V = ";
-                break;
-            default: sigla="";
-        }
-        
-        LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Equacao e: Equacao.find.where().eq("variavel_interesse.id", id).orderBy("expressao").findList()) {
-             String auxOpcao= sigla;
-            if(e.expressao_modelo!=null){
-                auxOpcao = sigla+e.expressao_modelo;
-            }else{
-                auxOpcao="";
-           }
-            opcoes.put(e.id.toString(), auxOpcao);
-        }
-        return opcoes;
-    }
-    
+       
     public static Page<Equacao> page(int page, int pageSize, String sortBy, String order, String filter) {
         return 
             find.where()

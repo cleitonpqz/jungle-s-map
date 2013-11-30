@@ -25,12 +25,14 @@
             });
         });
         
-    
+    function popUpCadastrarModelo() {
+      popup = window.open('@routes.Locais.localizarSimilar(0, "descricao", "asc", -1, -1, "", -1, -1)', 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
+    }
 </script>
     
 }
 
-@main("Alterar TrabalhoCientifico", javascript) {
+@main(if(id != 0){"Editar Trabalho Científico"}else{"Cadastrar Trabalho Científico"}, javascript) {
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -151,99 +153,55 @@
        
     
     
-     <legend class="equacao-border">Equações</legend>
-       <div class="row">
-        <div class="span6">
-            <div class="control-group">
+     <legend class="equacao-border">Equações / Modelos</legend>
+             <div class="control-group">
                <h5>Biomassa</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[0].equacao.id" class="selectBiomassa input-xlarge">  
-                            <option>--Escolha uma Equacao--</option>
+                      <select name="trabalho_cientifico_equacao[0].equacao.id" class="selectBiomassa" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(1)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
+                    <a href="#" align="bottom" class="btn btn-info btn-mini" onclick="popUpCadastrarEquacao(1) rel="tooltip" title="Cadastrar nova equaçao de biomassa">NOVA EQUAÇÃO</a>
+                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(1)" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVO MODELO</a>
                 </div>
             </div>
-            <div class="control-group">
-                 <div>
-                        <select name="modelo1" class="selectBiomassa input-xlarge">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Equacao.opcoesModelo(1)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-         </div>
-     </div>
-      <div class="span6">       
-            <div class="control-group">
+           <div class="control-group">
                <h5>Carbono</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[1].equacao.id" class="input-xlarge">  
-                            <option>--Escolha uma Equacao--</option>
+                      <select name="trabalho_cientifico_equacao[1].equacao.id" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(2)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="@routes.Equacoes.cadastrar(2)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
+                    <a href="#" align="bottom" class="btn btn-info btn-mini" rel="tooltip" onclick="popUpCadastrarEquacao(2) title="Cadastrar nova equaçao de carbono">NOVA EQUAÇÃO</a>
+                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(2)" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVO MODELO</a>
                 </div>
             </div>
-            <div class="control-group">
-                 <div>
-                        <select name="trabalho_cientifico_modelo[1].modelo.id" class="selectCarbono input-xlarge">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Equacao.opcoesModelo(2)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(2)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-         </div>
-          </div>  
-         <div class="row">  
-         <div class="span6">
-               <div class="control-group">
+                      
+           <div class="control-group">
                <h5>Volume</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[2].equacao.id" class="input-xlarge">  
-                            <option>--Escolha uma Equacao--</option>
+                      <select name="trabalho_cientifico_equacao[2].equacao.id" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(3)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="@routes.Equacoes.cadastrar(3)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
+                    <a href="#" class="btn btn-info btn-mini" onclick="popUpCadastrarEquacao(3)" rel="tooltip" title="Cadastrar nova equaçao de volume">NOVA EQUAÇÃO</a>
+                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(3)" rel="tooltip" title="Cadastrar novo modelo de volume">NOVO MODELO</a>
                 </div>
-              <div class="control-group">
-                 <div>
-                        <select name="trabalho_cientifico_modelo[2].modelo.id" class="input-xlarge">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Equacao.opcoesModelo(3)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(3)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo modelo de biomassa">Nova</a>
- 
-                </div>
-            </div>
+              
         </div>
-       </div>
-    </div>
-   
+          
  </fielset>
         
        
         <div class="actions">
             <input type="submit" class="btn btn-primary" value="Incluir">
-            <input type="submit" class="btn btn-primary" value="Cancelar">
+            <input type="submit" class="btn btn-info" value="Cancelar">
         </div>
    
         
