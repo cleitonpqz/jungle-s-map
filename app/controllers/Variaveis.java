@@ -9,6 +9,7 @@ import views.html.variavel.*;
 import javax.persistence.PersistenceException;
 import play.libs.Json;
 import play.libs.Json.*;
+import com.avaje.ebean.*;
 import static play.libs.Json.toJson;
 
 import models.*;
@@ -79,5 +80,35 @@ public class Variaveis extends Controller {
         return GO_HOME;
     
     }
-    
+
+    public static Result findByLocal(Long id) {
+         
+        String sql =" SELECT " 
+                      +"variavel.id," 
+                      +"variavel.sigla," 
+                      +"variavel.nome "
+                    +" FROM "
+                      +"public.variavel," 
+                      +"public.local, "
+                      +"public.trabalho_cientifico, "
+                      +"public.trabalho_cientifico_equacao," 
+                      +"public.trabalho_cientifico_modelo," 
+                      +"public.modelo," 
+                      +"public.equacao," 
+                      +"public.modelo_variavel," 
+                      +"public.equacao_variavel"
+                    +" WHERE "
+                      +"local.trabalho_cientifico_id = trabalho_cientifico.id AND " 
+                      +"trabalho_cientifico.id = trabalho_cientifico_equacao.trabalho_cientifico_id AND "
+                      +"trabalho_cientifico.id = trabalho_cientifico_modelo.trabalho_cientifico_id AND "
+                      +"trabalho_cientifico_equacao.equacao_id = equacao.id AND "
+                      +"trabalho_cientifico_modelo.modelo_id = modelo.id AND "
+                      +"modelo.id = modelo_variavel.modelo_id AND "
+                      +"equacao.id = equacao_variavel.equacao_id AND "
+                      +"modelo_variavel.variavel_id = variavel.id AND "
+                      +"equacao_variavel.variavel_id = variavel.id AND "
+                      +"local.id = '" + id + "'";
+         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        return ok(Json.toJson(sqlQuery.findList()));
+}
 }

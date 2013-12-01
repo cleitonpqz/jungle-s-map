@@ -26,7 +26,9 @@ public class Application extends Controller {
                 controllers.routes.javascript.Modelos.fazerAjuste(),
                 controllers.routes.javascript.Arvores.saveFile(),
                 controllers.routes.javascript.Parcelas.saveFile(),
-                controllers.routes.javascript.Parcelas.saveGrid()             
+                controllers.routes.javascript.Parcelas.saveGrid(),
+                controllers.routes.javascript.Arvores.saveGrid(),
+                controllers.routes.javascript.Variaveis.findByLocal()          
                 
             )
         );

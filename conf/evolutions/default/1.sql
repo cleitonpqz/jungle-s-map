@@ -7,8 +7,6 @@ create table arvore (
   id                        bigint not null,
   parcela_id                bigint,
   num_arvore                bigint,
-  dap                       bigint,
-  altura                    bigint,
   qtd_biomassa_obs          varchar(255),
   qtd_carbono_obs           varchar(255),
   qtd_carbono_est           bigint,
@@ -240,6 +238,14 @@ create table variavel (
   constraint pk_variavel primary key (id))
 ;
 
+create table variavel_arvore (
+  id                        bigint not null,
+  arvore_id                 bigint,
+  variavel_id               bigint,
+  valor                     bigint,
+  constraint pk_variavel_arvore primary key (id))
+;
+
 create table variavel_interesse (
   id                        bigint not null,
   sigla                     varchar(255),
@@ -303,6 +309,8 @@ create sequence trabalho_cientifico_modelo_seq;
 
 create sequence variavel_seq;
 
+create sequence variavel_arvore_seq;
+
 create sequence variavel_interesse_seq;
 
 alter table arvore add constraint fk_arvore_parcela_1 foreign key (parcela_id) references parcela (id);
@@ -361,6 +369,10 @@ alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_mod
 create index ix_trabalho_cientifico_modelo_27 on trabalho_cientifico_modelo (trabalho_cientifico_id);
 alter table trabalho_cientifico_modelo add constraint fk_trabalho_cientifico_modelo_28 foreign key (modelo_id) references modelo (id);
 create index ix_trabalho_cientifico_modelo_28 on trabalho_cientifico_modelo (modelo_id);
+alter table variavel_arvore add constraint fk_variavel_arvore_arvore_29 foreign key (arvore_id) references arvore (id);
+create index ix_variavel_arvore_arvore_29 on variavel_arvore (arvore_id);
+alter table variavel_arvore add constraint fk_variavel_arvore_variavel_30 foreign key (variavel_id) references variavel (id);
+create index ix_variavel_arvore_variavel_30 on variavel_arvore (variavel_id);
 
 
 
@@ -422,6 +434,8 @@ drop table if exists trabalho_cientifico_modelo cascade;
 
 drop table if exists variavel cascade;
 
+drop table if exists variavel_arvore cascade;
+
 drop table if exists variavel_interesse cascade;
 
 drop sequence if exists arvore_seq;
@@ -479,6 +493,8 @@ drop sequence if exists trabalho_cientifico_equacao_seq;
 drop sequence if exists trabalho_cientifico_modelo_seq;
 
 drop sequence if exists variavel_seq;
+
+drop sequence if exists variavel_arvore_seq;
 
 drop sequence if exists variavel_interesse_seq;
 

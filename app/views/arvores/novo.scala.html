@@ -1,17 +1,15 @@
-@(id: Long)
+@(local: Local)
 
 @import helper._
 @import helper.twitterBootstrap._
-
 
 @main("Cadastrar Dados de Arvores"){
 
 @form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
 <div class="">
-    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@id" id="local.id">
-     
-    <label>Area Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total">  
-    <label>Area da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
+
+   <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
+   <label>Área Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
     <div class="radios">
     <h4>Tipo de Entrada</h4>
     <br />
@@ -23,12 +21,15 @@
   		<div id='jqxWidget arvore'>
   		    <div class="jqxgrid" id="jqxgrid_arvore"></div>
   		        <div style='margin-top: 20px;'>
-  		        <div>
-  		            <input type="button" value="Export to Excel" id='excelExportArvore' class="btn" />
-  		            <input type="button" value="Adicionar Linha" id='addRowArvore' class="btn" />
+  		            <div>
+  		                <input type="button" value="Export to Excel" id='excelExportArvore' class="btn" />
+  		                <input type="button" value="Adicionar Linha" id='addRowArvore' class="btn" />
+  		            </div>
   		        </div>
-  		    </div>
-  		</div>
+              <div style='margin-top: 10px;'>
+                 <input type="button" class="btn  btn-success btn-large" name="salvar" rel="tooltip" title="Salvar dados da grid." id="salvarGridBtn"  value="Salvar">
+              </div>
+      </div>
   	</div>
   	<div id="arvore_import" style="display: none">
     <br />
@@ -70,6 +71,21 @@ $(document).ready(function(){
         $(function(){
             var theme = 'base';
 
+            var temp =  Array();
+            temp[0] = 'dap';
+            temp[1] = 'altura';
+            
+
+            jsRoutes.controllers.Variaveis.findByLocal(@local.id).ajax({
+              success: function(data){
+                if(data.length > 0){
+                  for (var i = 0 ; i < data.length; i++) {
+                    temp[i] = data[i];
+                  };
+                }
+              }
+            });
+                
             // inicializa grid de árvore
             var arvore_source =
             {
@@ -77,13 +93,24 @@ $(document).ready(function(){
                 [
                     { name: 'parcela', type: 'number' },
                     { name: 'arvore', type: 'number' },
-                    { name: 'dap', type: 'number' },
-                    { name: 'altura', type: 'number' },
                     { name: 'biomassa', type: 'number' },
                     { name: 'carbono', type: 'number' },
-                    { name: 'volume', type: 'number' }
+                    { name: 'volume', type: 'number' },
                 ]
             };
+           
+            if(temp.length > 0){
+              for (var i = 0 ; i < temp.length; i++) {
+                arvore_source.datafields[arvore_source.datafields.length] = {name: temp[i], type: 'number'} 
+              };
+            }
+            
+            var columns =  Array();
+            for (var i = 0; i < arvore_source.datafields.length; i++) {
+              columns[i] =  { text: arvore_source.datafields[i].name.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
+            };
+
+           
             var dataAdapterArvore = new $.jqx.dataAdapter(arvore_source);
 
 
@@ -94,15 +121,7 @@ $(document).ready(function(){
                 columnsresize: false,
                 selectionmode: 'multiplecellsadvanced',
                 theme: theme,
-                columns: [
-                  { text: 'Parcela', datafield: 'parcela'},
-                  { text: 'Árvore', datafield: 'arvore' },
-                  { text: 'DAP', datafield: 'dap' },
-                  { text: 'Altura', datafield: 'altura' },
-                  { text: 'Biomassa', datafield: 'biomassa' },
-                  { text: 'Carbono', datafield: 'carbono' },
-                  { text: 'Volume', datafield: 'volume' }
-                ]
+                columns: columns
             });
 
             grid_arvore.on('initialized', function(){
@@ -122,13 +141,68 @@ $(document).ready(function(){
             });
         });
     </script>
-<script type="text/javascript">
+    <script type="text/javascript">
+    $(document).ready(function() {    
+    $("#salvarGridBtn").click(function(){
+                var rows = $("#jqxgrid_arvore").jqxGrid('getrows');
+                var valoresEnviar = [];
+                var countPreenchido=0;
+                var erro = false;
+                $.each(rows, function(key, value){
+                    if(value.parcela&&value.biomassa&&value.carbono&&value.volume){
+                        valoresEnviar.push(value);
+                        countPreenchido++;
+                    }else if(!value.biomassa&&!value.carbono&&!value.volume){
+                        
+                    }else{
+                      erro=true;  
+                      return false;
+                    }
+                });
+                
+                  if(countPreenchido>0 && !erro){
+                    jsRoutes.controllers.Arvores.saveGrid(@local.id).ajax({
+                    type :  "POST",
+                    dataType: 'json',
+                    contentType : 'application/json; charset=utf-8',
+                    data: JSON.stringify(valoresEnviar),
+                    success: function(data){
+                     bootbox.dialog({
+                        message: "Dados salvos com sucessso.",
+                        title: "Feito",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });   
+                    }, 
+                })   
+                    
+                }else{
+                    bootbox.dialog({
+                        message: "Erro no preenchimento da tabela. Linhas incompletas ou nenhuma linha preenchida.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+                }
+                
+            });    
+    });
+ </script> 
+ <script type="text/javascript">
 
-  $(document).ready(function() {
-    if(isAPIAvailable()) {
-      $('#files').bind('change', handleFileSelect);
-    }
-  });
+    $(document).ready(function() {
+      if(isAPIAvailable()) {
+        $('#files').bind('change', handleFileSelect);
+      }
+    });
 
   function isAPIAvailable() {
     // Check for the various File API support.
@@ -173,10 +247,9 @@ $(document).ready(function(){
           itens[row] = data[row][item];
         }
       }
-      var id = @id;
-      console.log(itens);
-      console.log("ID = "+ id);
-       jsRoutes.controllers.Arvores.saveFile(itens, id).ajax({
+      
+      
+       jsRoutes.controllers.Arvores.saveFile(itens, @local.id).ajax({
               success: function(data){
                 $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
               }  

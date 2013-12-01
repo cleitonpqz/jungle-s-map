@@ -1,12 +1,11 @@
 package models;
 
 import java.util.*;
+import javax.persistence.EntityManager;
 import javax.persistence.*;
-
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
-
 import com.avaje.ebean.*;
 
 @Entity 
@@ -19,6 +18,9 @@ public class Variavel extends Model {
     
     @Constraints.Required(message="O campo nome é obrigatório!")
     public String nome;
+
+    @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
+    public VariavelArvore variavelArvore;
     
     public static Model.Finder<Long,Variavel> find = new Model.Finder<Long,Variavel>(Long.class, Variavel.class);
 
@@ -42,4 +44,55 @@ public class Variavel extends Model {
                 .findPagingList(pageSize)
                 .getPage(page);
     }
+
+    public static List<SqlRow> findByLocal(Long id) {
+         
+        String sql =" SELECT " 
+                      +"variavel.id," 
+                      +"variavel.sigla," 
+                      +"variavel.nome "
+                    +" FROM "
+                      +"public.variavel," 
+                      +"public.local, "
+                      +"public.trabalho_cientifico, "
+                      +"public.trabalho_cientifico_equacao," 
+                      +"public.trabalho_cientifico_modelo," 
+                      +"public.modelo," 
+                      +"public.equacao," 
+                      +"public.modelo_variavel," 
+                      +"public.equacao_variavel"
+                    +" WHERE "
+                      +"local.trabalho_cientifico_id = trabalho_cientifico.id AND " 
+                      +"trabalho_cientifico.id = trabalho_cientifico_equacao.trabalho_cientifico_id AND "
+                      +"trabalho_cientifico.id = trabalho_cientifico_modelo.trabalho_cientifico_id AND "
+                      +"trabalho_cientifico_equacao.equacao_id = equacao.id AND "
+                      +"trabalho_cientifico_modelo.modelo_id = modelo.id AND "
+                      +"modelo.id = modelo_variavel.modelo_id AND "
+                      +"equacao.id = equacao_variavel.equacao_id AND "
+                      +"modelo_variavel.variavel_id = variavel.id AND "
+                      +"equacao_variavel.variavel_id = variavel.id AND "
+                      +"local.id = '" + id + "'";
+
+        
+         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+         List<SqlRow> rows = sqlQuery.findList();
+
+        
+        return rows;
+  }
+
+  public static List<Variavel> _findByLocal(long id){
+    List<Variavel> variaveis = 
+    Ebean.find(Variavel.class)
+      .fetch("ArvoreAjusteVariavel")
+      .fetch("ArvoreAjusteVariavel.variavel_id")
+      .fetch("ArvoreAjuste")
+      .fetch("ArvoreAjuste.id")
+      .fetch("local")
+      .fetch("local.id")
+      .where().eq("local.id", id)
+      .findList();
+
+      return variaveis;
+  }
 }

@@ -18,14 +18,15 @@ public class Arvore extends Model {
     public Parcela parcela;
 
     public Long numArvore;
-    public long dap;
-    public Long altura;
     public String qtdBiomassaObs;
     public String qtdCarbonoObs;
     public Long qtdCarbonoEst;
     public String qtdVolumeObs;
     public Long qtdVolumeEst;
     public Long qtdBiomassaEst;
+
+    @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
+    public VariavelArvore variavelArvore;
     
    public static Model.Finder<Long,Arvore> find = new Model.Finder<Long,Arvore>(Long.class, Arvore.class);
 
