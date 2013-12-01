@@ -16,15 +16,25 @@ create table arvore (
   constraint pk_arvore primary key (id))
 ;
 
-create table arvore_modelo (
+create table arvore_ajuste (
   id                        bigint not null,
+  local_id                  bigint not null,
   num_arvore                bigint,
-  dap                       bigint,
-  altura                    bigint,
   qtd_biomassa_obs          varchar(255),
   qtd_carbono_obs           varchar(255),
+  qtd_carbono_est           bigint,
   qtd_volume_obs            varchar(255),
-  constraint pk_arvore_modelo primary key (id))
+  qtd_volume_est            bigint,
+  qtd_biomassa_est          bigint,
+  constraint pk_arvore_ajuste primary key (id))
+;
+
+create table arvore_ajuste_variavel (
+  id                        float not null,
+  valor                     float,
+  arvore_ajuste_id          bigint,
+  variavel_id               bigint,
+  constraint pk_arvore_ajuste_variavel primary key (id))
 ;
 
 create table autor (
@@ -102,10 +112,74 @@ create table local (
   id                        bigint not null,
   descricao                 varchar(255),
   area_total                float,
+  area_parcela              float,
+  qtde_biomassa             float,
+  qtde_carbono              float,
+  qtde_volume               float,
+  tipo_estimativa_id        bigint,
   trabalho_cientifico_id    bigint,
   formacao_id               bigint,
   espacamento_id            bigint,
   constraint pk_local primary key (id))
+;
+
+create table local_detalhe_biomassa (
+  id                        bigint not null,
+  local_id                  bigint not null,
+  qtde_biomassa_min         float,
+  qtde_biomassa_med         float,
+  qtde_biomassa_max         float,
+  media_parcela             float,
+  variancia                 float,
+  desvio_padrao             float,
+  variancia_media           float,
+  erro_padrao               float,
+  coeficiente_variacao      float,
+  erro_absoluto             float,
+  erro_relativo             float,
+  intervalo_confianca_min_parcela float,
+  intervalo_confiancam_max_parcela float,
+  constraint pk_local_detalhe_biomassa primary key (id))
+;
+
+create table local_detalhe_carbono (
+  id                        bigint not null,
+  local_id                  bigint not null,
+  num_local                 bigint,
+  qtde_carbono_min          float,
+  qtde_carbono_med          float,
+  qtde_carbono_max          float,
+  media_parcela             float,
+  variancia                 float,
+  desvio_padrao             float,
+  variancia_media           float,
+  erro_padrao               float,
+  coeficiente_variacao      float,
+  erro_absoluto             float,
+  erro_relativo             float,
+  intervalo_confianca_min_parcela float,
+  intervalo_confiancam_max_parcela float,
+  constraint pk_local_detalhe_carbono primary key (id))
+;
+
+create table local_detalhe_volume (
+  id                        bigint not null,
+  local_id                  bigint not null,
+  num_local                 bigint,
+  qtde_volume_min           float,
+  qtde_volume_med           float,
+  qtde_volume_max           float,
+  media_parcela             float,
+  variancia                 float,
+  desvio_padrao             float,
+  variancia_media           float,
+  erro_padrao               float,
+  coeficiente_variacao      float,
+  erro_absoluto             float,
+  erro_relativo             float,
+  intervalo_confianca_min_parcela float,
+  intervalo_confiancam_max_parcela float,
+  constraint pk_local_detalhe_volume primary key (id))
 ;
 
 create table metodo_quantificacao_biomassa (
@@ -178,6 +252,12 @@ create table termo (
   constraint pk_termo primary key (id))
 ;
 
+create table tipo_estimativa (
+  id                        bigint not null,
+  descricao                 varchar(255),
+  constraint pk_tipo_estimativa primary key (id))
+;
+
 create table trabalho_cientifico (
   id                        bigint not null,
   autor_id                  bigint,
@@ -219,7 +299,9 @@ create table variavel_interesse (
 
 create sequence arvore_seq;
 
-create sequence arvore_modelo_seq;
+create sequence arvore_ajuste_seq;
+
+create sequence arvore_ajuste_variavel_seq;
 
 create sequence autor_seq;
 
@@ -243,6 +325,12 @@ create sequence formacao_seq;
 
 create sequence local_seq;
 
+create sequence local_detalhe_biomassa_seq;
+
+create sequence local_detalhe_carbono_seq;
+
+create sequence local_detalhe_volume_seq;
+
 create sequence metodo_quantificacao_biomassa_seq;
 
 create sequence metodo_quantificacao_carbono_seq;
@@ -257,6 +345,8 @@ create sequence parcela_seq;
 
 create sequence termo_seq;
 
+create sequence tipo_estimativa_seq;
+
 create sequence trabalho_cientifico_seq;
 
 create sequence trabalho_cientifico_equacao_seq;
@@ -269,50 +359,64 @@ create sequence variavel_interesse_seq;
 
 alter table arvore add constraint fk_arvore_parcela_1 foreign key (parcela_id) references parcela (id);
 create index ix_arvore_parcela_1 on arvore (parcela_id);
-alter table coordenada add constraint fk_coordenada_local_2 foreign key (local_id) references local (id);
-create index ix_coordenada_local_2 on coordenada (local_id);
-alter table equacao add constraint fk_equacao_autor_modelo_3 foreign key (autor_modelo_id) references autor_modelo (id);
-create index ix_equacao_autor_modelo_3 on equacao (autor_modelo_id);
-alter table equacao add constraint fk_equacao_variavel_interesse_4 foreign key (variavel_interesse_id) references variavel_interesse (id);
-create index ix_equacao_variavel_interesse_4 on equacao (variavel_interesse_id);
-alter table equacao_variavel add constraint fk_equacao_variavel_equacao_5 foreign key (equacao_id) references equacao (id);
-create index ix_equacao_variavel_equacao_5 on equacao_variavel (equacao_id);
-alter table equacao_variavel add constraint fk_equacao_variavel_variavel_6 foreign key (variavel_id) references variavel (id);
-create index ix_equacao_variavel_variavel_6 on equacao_variavel (variavel_id);
-alter table formacao add constraint fk_formacao_bioma_7 foreign key (bioma_id) references bioma (id);
-create index ix_formacao_bioma_7 on formacao (bioma_id);
-alter table local add constraint fk_local_trabalho_cientifico_8 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_local_trabalho_cientifico_8 on local (trabalho_cientifico_id);
-alter table local add constraint fk_local_formacao_9 foreign key (formacao_id) references formacao (id);
-create index ix_local_formacao_9 on local (formacao_id);
-alter table local add constraint fk_local_espacamento_10 foreign key (espacamento_id) references espacamento (id);
-create index ix_local_espacamento_10 on local (espacamento_id);
-alter table municipio add constraint fk_municipio_uf_11 foreign key (uf) references estado (ibge);
-create index ix_municipio_uf_11 on municipio (uf);
-alter table municipio_local add constraint fk_municipio_local_municipio_12 foreign key (municipio_ibge) references municipio (ibge);
-create index ix_municipio_local_municipio_12 on municipio_local (municipio_ibge);
-alter table municipio_local add constraint fk_municipio_local_local_13 foreign key (local_id) references local (id);
-create index ix_municipio_local_local_13 on municipio_local (local_id);
-alter table parcela add constraint fk_parcela_local_14 foreign key (local_id) references local (id);
-create index ix_parcela_local_14 on parcela (local_id);
-alter table termo add constraint fk_termo_equacao_15 foreign key (equacao_id) references equacao (id);
-create index ix_termo_equacao_15 on termo (equacao_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_16 foreign key (autor_id) references autor (id);
-create index ix_trabalho_cientifico_autor_16 on trabalho_cientifico (autor_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_17 foreign key (disponibilidade_id) references disponibilidade (id);
-create index ix_trabalho_cientifico_dispon_17 on trabalho_cientifico (disponibilidade_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_18 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
-create index ix_trabalho_cientifico_metodo_18 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
-alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_19 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
-create index ix_trabalho_cientifico_metodo_19 on trabalho_cientifico (metodo_quantificacao_carbono_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_20 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
-create index ix_trabalho_cientifico_equaca_20 on trabalho_cientifico_equacao (trabalho_cientifico_id);
-alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_21 foreign key (equacao_id) references equacao (id);
-create index ix_trabalho_cientifico_equaca_21 on trabalho_cientifico_equacao (equacao_id);
-alter table variavel_arvore add constraint fk_variavel_arvore_arvore_22 foreign key (arvore_id) references arvore (id);
-create index ix_variavel_arvore_arvore_22 on variavel_arvore (arvore_id);
-alter table variavel_arvore add constraint fk_variavel_arvore_variavel_23 foreign key (variavel_id) references variavel (id);
-create index ix_variavel_arvore_variavel_23 on variavel_arvore (variavel_id);
+alter table arvore_ajuste add constraint fk_arvore_ajuste_local_2 foreign key (local_id) references local (id);
+create index ix_arvore_ajuste_local_2 on arvore_ajuste (local_id);
+alter table arvore_ajuste_variavel add constraint fk_arvore_ajuste_variavel_arvo_3 foreign key (arvore_ajuste_id) references arvore_ajuste (id);
+create index ix_arvore_ajuste_variavel_arvo_3 on arvore_ajuste_variavel (arvore_ajuste_id);
+alter table arvore_ajuste_variavel add constraint fk_arvore_ajuste_variavel_vari_4 foreign key (variavel_id) references variavel (id);
+create index ix_arvore_ajuste_variavel_vari_4 on arvore_ajuste_variavel (variavel_id);
+alter table coordenada add constraint fk_coordenada_local_5 foreign key (local_id) references local (id);
+create index ix_coordenada_local_5 on coordenada (local_id);
+alter table equacao add constraint fk_equacao_autor_modelo_6 foreign key (autor_modelo_id) references autor_modelo (id);
+create index ix_equacao_autor_modelo_6 on equacao (autor_modelo_id);
+alter table equacao add constraint fk_equacao_variavel_interesse_7 foreign key (variavel_interesse_id) references variavel_interesse (id);
+create index ix_equacao_variavel_interesse_7 on equacao (variavel_interesse_id);
+alter table equacao_variavel add constraint fk_equacao_variavel_equacao_8 foreign key (equacao_id) references equacao (id);
+create index ix_equacao_variavel_equacao_8 on equacao_variavel (equacao_id);
+alter table equacao_variavel add constraint fk_equacao_variavel_variavel_9 foreign key (variavel_id) references variavel (id);
+create index ix_equacao_variavel_variavel_9 on equacao_variavel (variavel_id);
+alter table formacao add constraint fk_formacao_bioma_10 foreign key (bioma_id) references bioma (id);
+create index ix_formacao_bioma_10 on formacao (bioma_id);
+alter table local add constraint fk_local_tipo_estimativa_11 foreign key (tipo_estimativa_id) references tipo_estimativa (id);
+create index ix_local_tipo_estimativa_11 on local (tipo_estimativa_id);
+alter table local add constraint fk_local_trabalho_cientifico_12 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_local_trabalho_cientifico_12 on local (trabalho_cientifico_id);
+alter table local add constraint fk_local_formacao_13 foreign key (formacao_id) references formacao (id);
+create index ix_local_formacao_13 on local (formacao_id);
+alter table local add constraint fk_local_espacamento_14 foreign key (espacamento_id) references espacamento (id);
+create index ix_local_espacamento_14 on local (espacamento_id);
+alter table local_detalhe_biomassa add constraint fk_local_detalhe_biomassa_loc_15 foreign key (local_id) references local (id);
+create index ix_local_detalhe_biomassa_loc_15 on local_detalhe_biomassa (local_id);
+alter table local_detalhe_carbono add constraint fk_local_detalhe_carbono_loca_16 foreign key (local_id) references local (id);
+create index ix_local_detalhe_carbono_loca_16 on local_detalhe_carbono (local_id);
+alter table local_detalhe_volume add constraint fk_local_detalhe_volume_local_17 foreign key (local_id) references local (id);
+create index ix_local_detalhe_volume_local_17 on local_detalhe_volume (local_id);
+alter table municipio add constraint fk_municipio_uf_18 foreign key (uf) references estado (ibge);
+create index ix_municipio_uf_18 on municipio (uf);
+alter table municipio_local add constraint fk_municipio_local_municipio_19 foreign key (municipio_ibge) references municipio (ibge);
+create index ix_municipio_local_municipio_19 on municipio_local (municipio_ibge);
+alter table municipio_local add constraint fk_municipio_local_local_20 foreign key (local_id) references local (id);
+create index ix_municipio_local_local_20 on municipio_local (local_id);
+alter table parcela add constraint fk_parcela_local_21 foreign key (local_id) references local (id);
+create index ix_parcela_local_21 on parcela (local_id);
+alter table termo add constraint fk_termo_equacao_22 foreign key (equacao_id) references equacao (id);
+create index ix_termo_equacao_22 on termo (equacao_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_autor_23 foreign key (autor_id) references autor (id);
+create index ix_trabalho_cientifico_autor_23 on trabalho_cientifico (autor_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_dispon_24 foreign key (disponibilidade_id) references disponibilidade (id);
+create index ix_trabalho_cientifico_dispon_24 on trabalho_cientifico (disponibilidade_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_25 foreign key (metodo_quantificacao_biomassa_id) references metodo_quantificacao_biomassa (id);
+create index ix_trabalho_cientifico_metodo_25 on trabalho_cientifico (metodo_quantificacao_biomassa_id);
+alter table trabalho_cientifico add constraint fk_trabalho_cientifico_metodo_26 foreign key (metodo_quantificacao_carbono_id) references metodo_quantificacao_carbono (id);
+create index ix_trabalho_cientifico_metodo_26 on trabalho_cientifico (metodo_quantificacao_carbono_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_27 foreign key (trabalho_cientifico_id) references trabalho_cientifico (id);
+create index ix_trabalho_cientifico_equaca_27 on trabalho_cientifico_equacao (trabalho_cientifico_id);
+alter table trabalho_cientifico_equacao add constraint fk_trabalho_cientifico_equaca_28 foreign key (equacao_id) references equacao (id);
+create index ix_trabalho_cientifico_equaca_28 on trabalho_cientifico_equacao (equacao_id);
+alter table variavel_arvore add constraint fk_variavel_arvore_arvore_29 foreign key (arvore_id) references arvore (id);
+create index ix_variavel_arvore_arvore_29 on variavel_arvore (arvore_id);
+alter table variavel_arvore add constraint fk_variavel_arvore_variavel_30 foreign key (variavel_id) references variavel (id);
+create index ix_variavel_arvore_variavel_30 on variavel_arvore (variavel_id);
 
 
 
@@ -320,7 +424,9 @@ create index ix_variavel_arvore_variavel_23 on variavel_arvore (variavel_id);
 
 drop table if exists arvore cascade;
 
-drop table if exists arvore_modelo cascade;
+drop table if exists arvore_ajuste cascade;
+
+drop table if exists arvore_ajuste_variavel cascade;
 
 drop table if exists autor cascade;
 
@@ -344,6 +450,12 @@ drop table if exists formacao cascade;
 
 drop table if exists local cascade;
 
+drop table if exists local_detalhe_biomassa cascade;
+
+drop table if exists local_detalhe_carbono cascade;
+
+drop table if exists local_detalhe_volume cascade;
+
 drop table if exists metodo_quantificacao_biomassa cascade;
 
 drop table if exists metodo_quantificacao_carbono cascade;
@@ -358,6 +470,8 @@ drop table if exists parcela cascade;
 
 drop table if exists termo cascade;
 
+drop table if exists tipo_estimativa cascade;
+
 drop table if exists trabalho_cientifico cascade;
 
 drop table if exists trabalho_cientifico_equacao cascade;
@@ -370,7 +484,9 @@ drop table if exists variavel_interesse cascade;
 
 drop sequence if exists arvore_seq;
 
-drop sequence if exists arvore_modelo_seq;
+drop sequence if exists arvore_ajuste_seq;
+
+drop sequence if exists arvore_ajuste_variavel_seq;
 
 drop sequence if exists autor_seq;
 
@@ -394,6 +510,12 @@ drop sequence if exists formacao_seq;
 
 drop sequence if exists local_seq;
 
+drop sequence if exists local_detalhe_biomassa_seq;
+
+drop sequence if exists local_detalhe_carbono_seq;
+
+drop sequence if exists local_detalhe_volume_seq;
+
 drop sequence if exists metodo_quantificacao_biomassa_seq;
 
 drop sequence if exists metodo_quantificacao_carbono_seq;
@@ -407,6 +529,8 @@ drop sequence if exists pais_seq;
 drop sequence if exists parcela_seq;
 
 drop sequence if exists termo_seq;
+
+drop sequence if exists tipo_estimativa_seq;
 
 drop sequence if exists trabalho_cientifico_seq;
 
