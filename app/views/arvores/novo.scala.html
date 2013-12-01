@@ -69,76 +69,75 @@ $(document).ready(function(){
 </script>
 <script type="text/javascript">
         $(function(){
-            var theme = 'base';
-
-            var temp =  Array();
-            temp[0] = 'dap';
-            temp[1] = 'altura';
             
 
             jsRoutes.controllers.Variaveis.findByLocal(@local.id).ajax({
               success: function(data){
+
+                var theme = 'base';
+
+
+                // inicializa grid de árvore
+                var arvore_source =
+                {
+                    datafields:
+                    [
+                        { name: 'parcela', type: 'number' },
+                        { name: 'arvore', type: 'number' },
+                        { name: 'biomassa', type: 'number' },
+                        { name: 'carbono', type: 'number' },
+                        { name: 'volume', type: 'number' },
+                    ]
+                };
                 if(data.length > 0){
-                  for (var i = 0 ; i < data.length; i++) {
-                    temp[i] = data[i];
+                  for (i in data) {
+                    arvore_source.datafields[arvore_source.datafields.length] = {name: data[i].id, type: 'number'} 
                   };
                 }
+                
+                var columns =  Array();
+                for (var i = 0; i < 5; i++) {
+                  columns[i] =  { text: arvore_source.datafields[i].name.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
+                };
+                
+                for (var i = 5; i < arvore_source.datafields.length; i++){
+                  columns[i] = { text: data[i - 5].sigla.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
+                }
+                
+               
+                var dataAdapterArvore = new $.jqx.dataAdapter(arvore_source);
+
+
+                var grid_arvore = $("#jqxgrid_arvore").jqxGrid(
+                {
+                    source: dataAdapterArvore,
+                    editable: true,
+                    columnsresize: false,
+                    selectionmode: 'multiplecellsadvanced',
+                    theme: theme,
+                    columns: columns
+                });
+
+                grid_arvore.on('initialized', function(){
+                    //pré popula com 5 linhas
+                    for (var i = 5 - 1; i >= 0; i--) {
+                        grid_arvore.jqxGrid('addrow', null, {});
+                    };
+                });
+
+                
+                $("#addRowArvore").on('click', function () {
+                    grid_arvore.jqxGrid('addrow', null, {});
+                });
+                
+                $("#excelExportArvore").click(function () {
+                    grid_arvore.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+                });
+
               }
             });
-                
-            // inicializa grid de árvore
-            var arvore_source =
-            {
-                datafields:
-                [
-                    { name: 'parcela', type: 'number' },
-                    { name: 'arvore', type: 'number' },
-                    { name: 'biomassa', type: 'number' },
-                    { name: 'carbono', type: 'number' },
-                    { name: 'volume', type: 'number' },
-                ]
-            };
-           
-            if(temp.length > 0){
-              for (var i = 0 ; i < temp.length; i++) {
-                arvore_source.datafields[arvore_source.datafields.length] = {name: temp[i], type: 'number'} 
-              };
-            }
             
-            var columns =  Array();
-            for (var i = 0; i < arvore_source.datafields.length; i++) {
-              columns[i] =  { text: arvore_source.datafields[i].name.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
-            };
-
-           
-            var dataAdapterArvore = new $.jqx.dataAdapter(arvore_source);
-
-
-            var grid_arvore = $("#jqxgrid_arvore").jqxGrid(
-            {
-                source: dataAdapterArvore,
-                editable: true,
-                columnsresize: false,
-                selectionmode: 'multiplecellsadvanced',
-                theme: theme,
-                columns: columns
-            });
-
-            grid_arvore.on('initialized', function(){
-                //pré popula com 5 linhas
-                for (var i = 5 - 1; i >= 0; i--) {
-                    grid_arvore.jqxGrid('addrow', null, {});
-                };
-            });
-
             
-            $("#addRowArvore").on('click', function () {
-                grid_arvore.jqxGrid('addrow', null, {});
-            });
-            
-            $("#excelExportArvore").click(function () {
-                grid_arvore.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
-            });
         });
     </script>
     <script type="text/javascript">

@@ -11,11 +11,15 @@ import com.avaje.ebean.*;
 
 @Entity 
 public class Arvore extends Model {
+   
    @Id
     public Long id;
 
     @ManyToOne
     public Parcela parcela;
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    public Local local;
 
     public Long numArvore;
     public String qtdBiomassaObs;
@@ -26,9 +30,9 @@ public class Arvore extends Model {
     public Long qtdBiomassaEst;
 
     @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
-    public VariavelArvore variavelArvore;
+    public List<VariavelArvore> variavelArvore;
     
-   public static Model.Finder<Long,Arvore> find = new Model.Finder<Long,Arvore>(Long.class, Arvore.class);
+    public static Model.Finder<Long,Arvore> find = new Model.Finder<Long,Arvore>(Long.class, Arvore.class);
 
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();

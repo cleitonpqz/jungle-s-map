@@ -82,7 +82,7 @@ public class Arvores extends Controller {
 		Long idParcela = null;
 		String numParcela = "";
 
-		List<SqlRow> variaveis = Variavel.findByLocal(id);
+		//List<Variavel> variaveis = Variavel.findByLocal(id);
         
         for(JsonNode row : json){
 
@@ -97,6 +97,7 @@ public class Arvores extends Controller {
         		Arvore arvore = new Arvore();
         		
         		arvore.parcela= parcela;
+        		arvore.numArvore = Long.valueOf(row.get("arvore").toString());
 				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
 				arvore.qtdCarbonoObs = (row.get("carbono").toString());
 				arvore.qtdVolumeObs = (row.get("volume").toString());
@@ -105,6 +106,7 @@ public class Arvores extends Controller {
         	else{
 				Arvore arvore = new Arvore();
 				arvore.parcela = Parcela.find.byId(idParcela);
+				arvore.numArvore = Long.valueOf(row.get("arvore").toString());
 				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
 				arvore.qtdCarbonoObs = (row.get("carbono").toString());
 				arvore.qtdVolumeObs = (row.get("volume").toString());
@@ -113,8 +115,8 @@ public class Arvores extends Controller {
         	}
         }
 		
-            //return ok(Json.toJson("mensagem : sucesso"));
-            return ok(Json.toJson(variaveis));
+            return ok(Json.toJson("mensagem : sucesso"));
+            //return ok(Json.toJson(variaveis));
         }
 
 }
