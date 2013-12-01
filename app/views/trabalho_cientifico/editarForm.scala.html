@@ -3,11 +3,14 @@
 @import helper._
 
 @import helper.twitterBootstrap._ 
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/equacao.css")">
+}
 @javascript = {
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+
 <script type="text/javascript">
-    
-         jQuery(function(){
+ jQuery(function(){
 
             $("#modal").modal({
                 show: false
@@ -23,16 +26,55 @@
 
                 e.preventDefault();
             });
-        });
-        
-    function popUpCadastrarModelo() {
-      popup = window.open('@routes.Locais.localizarSimilar(0, "descricao", "asc", -1, -1, "", -1, -1)', 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
-    }
+        });   
+       
+ $(".nova_variavel").click(function(e){
+            var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                  }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+   $("#novo_autor").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+  
+     $(".cadastrar_equacao").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modalEquacao").html(data).modal('show');
+                 }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+       $(".cadastrar_modelo").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modalModelo").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+        });     
+     
 </script>
     
 }
 
-@main(if(id != 0){"Editar Trabalho Científico"}else{"Cadastrar Trabalho Científico"}, javascript) {
+@main(if(id != 0){"Editar Trabalho Científico"}else{"Cadastrar Trabalho Científico"}, javascript, stylesheet) {
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -154,44 +196,45 @@
     
     
      <legend class="equacao-border">Equações / Modelos</legend>
+     <a href="@routes.Variaveis.novaEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Cadastrar Nova Variável</a>
+     <a href="@routes.AutoresModelos.novoEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo autor de Modelo">Cadastrar Novo Autor de Modelo</a>
              <div class="control-group">
                <h5>Biomassa</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[0].equacao.id" class="selectBiomassa" style="width: 700px;">  
+                      <select name="trabalho_cientifico_equacao[0].equacao.id" id="modeloEquacaoBiomassa" class="selectBiomassa" style="width: 700px;">  
                             <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(1)){
                                     <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="#" align="bottom" class="btn btn-info btn-mini" onclick="popUpCadastrarEquacao(1) rel="tooltip" title="Cadastrar nova equaçao de biomassa">NOVA EQUAÇÃO</a>
-                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(1)" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVO MODELO</a>
+                    <a href="@routes.Equacoes.cadastrarModal(1)"  class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVA EQUAÇÃO</a>
+                    <a href="@routes.Modelos.cadastrarModal(1)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVO MODELO</a>  
                 </div>
             </div>
            <div class="control-group">
                <h5>Carbono</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[1].equacao.id" style="width: 700px;">  
+                      <select name="trabalho_cientifico_equacao[1].equacao.id" id="modeloEquacaoCarbono" style="width: 700px;">  
                             <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(2)){
                                     <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="#" align="bottom" class="btn btn-info btn-mini" rel="tooltip" onclick="popUpCadastrarEquacao(2) title="Cadastrar nova equaçao de carbono">NOVA EQUAÇÃO</a>
-                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(2)" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVO MODELO</a>
-                </div>
+                    <a href="@routes.Equacoes.cadastrarModal(2)" class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVA EQUAÇÃO</a> 
+                    <a href="@routes.Modelos.cadastrarModal(2)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVO MODELO</a>  
             </div>
                       
            <div class="control-group">
                <h5>Volume</h5>
                 <div>
-                      <select name="trabalho_cientifico_equacao[2].equacao.id" style="width: 700px;">  
+                      <select name="trabalho_cientifico_equacao[2].equacao.id" id="modeloEquacaoVolume" style="width: 700px;">  
                             <option>--Escolha uma Equacao/Modelo--</option>
                                 @for(opcao<-Equacao.opcoesEquacao(3)){
                                     <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
                                 }
                         </select> 
-                    <a href="#" class="btn btn-info btn-mini" onclick="popUpCadastrarEquacao(3)" rel="tooltip" title="Cadastrar nova equaçao de volume">NOVA EQUAÇÃO</a>
-                    <a href="#" class="btn btn-success btn-mini" onclick="popUpCadastrarModelo(3)" rel="tooltip" title="Cadastrar novo modelo de volume">NOVO MODELO</a>
+                    <a href="@routes.Equacoes.cadastrarModal(3)" class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de volume">NOVA EQUAÇÃO</a> 
+                    <a href="@routes.Modelos.cadastrarModal(3)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de volume">NOVO MODELO</a>               
                 </div>
               
         </div>
@@ -207,4 +250,7 @@
         
 }
 <div id="modal" class="modal hide"></div>
+
+<div id="modalEquacao" class="modal hide fade" style=" height:80%; width:70%; margin-left: -35%; "></div>
+<div id="modalModelo" class="modal hide fade" style=" height:85%; width:70%; margin-left: -35%; "></div>
 }

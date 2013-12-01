@@ -1,48 +1,8 @@
-@(variavelInteresse : Long =0 , equacaoForm: Form[Equacao])
+@(variavelInteresse : Long =0 ,equacaoForm: Form[Equacao], quemChama : Integer)
 
-@import helper._
-
-@import helper.twitterBootstrap._ 
-
-@stylesheet = {
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/equacao.css")">
-}
 
 @javascript = {
-<script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
- <script type="text/javascript">
-        jQuery(function(){
-
-            //inicializa modal
-            $("#modal").modal({
-                show: false
-            });
-
-            //bind para buscar conteúdo da view e mostrar na modal
-            $("#novo_autor").click(function(e){
-                var url = $(this).attr("href");
-                jQuery.ajax(url).done(function(data){
-                    $("#modal").html(data).modal('show');
-                }).fail(function(data){
-                    alert("erro");
-                });
-
-                e.preventDefault();
-            });
-            
-            $("#nova_variavel").click(function(e){
-                var url = $(this).attr("href");
-                jQuery.ajax(url).done(function(data){
-                    $("#modal").html(data).modal('show');
-                }).fail(function(data){
-                    alert("erro");
-                });
-
-                e.preventDefault();
-            });
-        });
-</script>
-<script type="text/javascript">
+   <script type="text/javascript">
         var variavelUtilizada = new Array();
         var countVariavel=0;
 	var elementos = new Array();
@@ -138,16 +98,16 @@
                  if(countVariavel>0){
                       if(!existe(variavelUtilizada, varElemento[i][0])){
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='text' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='text' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
                    }
                    }else{
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='text' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='text' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
@@ -159,8 +119,8 @@
         }
        $("#expressao").val(stringExpressao);
        $("#divTermos").append("<div id='divTermo_"+countTermo+"'>\n\
-                                <input type='hidden' name='termos["+countTermo+"].expressao' value='"+stringTermo+"'>\n\
-                                <input type='hidden' name='termos["+countTermo+"].ordem' value='"+countTermo+"'> </div>");
+                                <input type='text' name='termos["+countTermo+"].expressao' value='"+stringTermo+"'>\n\
+                                <input type='text' name='termos["+countTermo+"].ordem' value='"+countTermo+"'> </div>");
         
             
         countElementos=0;
@@ -379,7 +339,7 @@ $('body').on('click','#limparExpressao', function(){
 
 </script>
 <script type="text/javascript">
-        $("#salvarModeloBtn").click(function(e){
+        $("#saveModalButton").click(function(e){
                  var dataFilterRequest = jQuery.ajax({
                     url: '@routes.Modelos.salvarAjax(variavelInteresse)',
                     type: 'post',
@@ -389,9 +349,21 @@ $('body').on('click','#limparExpressao', function(){
                     }
                 });
                 dataFilterRequest.done(function(data){
-                       alert("deucerto")
+                    @if(variavelInteresse==1){
+                        $("#modeloEquacaoBiomassa").append("<option value='" + data.id + "'>Não possue equação cadastrada | B= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modalModelo").modal("hide");
+                    }
+                    @if(variavelInteresse==2){
+                        $("#modeloEquacaoCarbono").append("<option value='" + data.id + "'>Não possue equação cadastrada | C= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modalModelo").modal("hide");
+                    }
+                    @if(variavelInteresse==3){
+                        $("#modeloEquacaoVolume").append("<option value='" + data.id + "'>Não possue equação cadastrada | V= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modalModelo").modal("hide");
+                    } 
+                       
                 }).fail(function(jqXHR, textStatus){
-                    $("#modeloForm").html(jqXHR.responseText);
+                    $("#equacaoForm").html(jqXHR.responseText);
                 });
                 e.preventDefault();
             });
@@ -399,23 +371,13 @@ $('body').on('click','#limparExpressao', function(){
 </script>
 }
 
-@main("Cadastrar Modelo", javascript, stylesheet) {
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
     
-    @if(flash.containsKey("success")) {
-        <div class="alert alert-info">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Feito!</strong> @flash.get("success")
-        </div>
-    } 
-    @if(flash.containsKey("error")) {
-        <div class="alert alert-error">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>ERRO!</strong> @flash.get("error")
-        </div>
-    } 
-    
-    @form(routes.Modelos.salvar(variavelInteresse), 'id -> "modeloForm") {
-        
+     @form(routes.Modelos.salvar(variavelInteresse), 'id -> "modeloForm") {
+     <fieldset style="margin-left:10%; margin-right:auto;">
            <div class="clearfix>
            <label for="bioma">Equação para cálculo de</label>
            <div class="input">
@@ -443,16 +405,14 @@ $('body').on('click','#limparExpressao', function(){
 
                     )
                     </td>
-                    <td>
-                        <a href="@routes.AutoresModelos.novoEditar(0, 1)" id="novo_autor" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Autor">Novo</a>
-                    </td>
+                    
                     </tr>
                     </table>
             <div class="clearfix  " id="expressao_field">
                    <h4 for="expressao">Modelo:</h4>
                        <div class="input">
-                               <input type="text" id="expressao" name="expressao_modelo" readonly rel="tooltip" title="Insira a equação">
-                               <a class="btn btn-info  btn-mini" rel="tooltip" title="Apaga último termo" id="limparExpressao"/>-</a>
+                               <input type="text" id="expressao" style="width: 700px;" name="expressao_modelo" readonly rel="tooltip" title="Insira a equação">
+                               <a class="btn btn-info  btn-mini" rel="tooltip" title="Apaga último termo" id="limparExpressao">-</a>
                                <span class="help-inline"></span>
                                <span class="help-block"></span> 
                        </div>
@@ -478,7 +438,7 @@ $('body').on('click','#limparExpressao', function(){
                                   <option value ="@opcao._1">@opcao._2</option>
                                  } 
                         </select>
-                         <a href="@routes.Variaveis.novaEditar(0, 1)" id="nova_variavel" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Nova</a>
+                        
 
                        </div>
                  </div>
@@ -486,7 +446,8 @@ $('body').on('click','#limparExpressao', function(){
 
                          <label>Operadores</label>
                          <div id="corpo">
-                            <table id="operadores">
+                            <table id="operadores" style="border-style:double;border-color:black; padding-left: 5px;padding-right:5px;font-family: sans-serif;
+                            background-color:#b8c3cd;">
                                 <tr>
                                     <td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE"/></td>
                                     <td><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C"/></td>
@@ -531,12 +492,10 @@ $('body').on('click','#limparExpressao', function(){
       </fieldset>
         <div id="divVariaveis"></div>
         <div id="divTermos"></div>
-        <div class="actions">
-            <input type="button" id="salvarModeloBtn" class="btn btn-primary" value="Salvar">
-        </div>
         
+      </fieldset>  
     }
- 
-     <div id="modal" class="modal hide"></div>
-        
-}
+    
+   <hr>
+    
+}    

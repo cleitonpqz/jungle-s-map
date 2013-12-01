@@ -59,7 +59,7 @@ public class Equacao extends Model {
                     auxOpcao = sigla+e.expressao;
                 }
             }else{
-                auxOpcao="Não possui equação.";
+                auxOpcao="Não possui equação cadastrado.";
             }
              if(e.expressao_modelo!=null){
                  auxOpcao=auxOpcao+" | "+sigla+e.expressao_modelo;

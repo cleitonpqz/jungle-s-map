@@ -93,13 +93,17 @@ GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0
 #Equações Listar e novo
 GET     /equacoes                    controllers.Equacoes.cadastrar(variavelInteresse:Long)
 POST    /equacoes                    controllers.Equacoes.salvar(variavelInteresse:Long)
+POST    /equacoes/salvarAjax         controllers.Equacoes.salvarAjax(variavelInteresse:Long)
+GET    /equacoes/cadastrarModal      controllers.Equacoes.cadastrarModal(variavelInteresse:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Modelos Listar e novo
 GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
 POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
+POST    /modelos/salvarAjax          controllers.Modelos.salvarAjax(variavelInteresse:Long)
 GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
 POST    /modelos/fazerAjuste         controllers.Modelos.fazerAjuste(id:Long)
+GET    /modelos/cadastrarModal        controllers.Modelos.cadastrarModal(variavelInteresse:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 

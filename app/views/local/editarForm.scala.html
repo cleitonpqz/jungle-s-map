@@ -1,4 +1,4 @@
-@(id: Long, localForm: Form[Local], polyCoordenadas: List[Coordenada])
+@(id: Long, localForm: Form[Local])
 @map_canvas={<div id="map-canvas"></div>}
 @import helper._
 @import helper.twitterBootstrap._ 
@@ -171,7 +171,7 @@ function apagarControl(controlDiv, map) {
         
         var arrayCoordendas = new Array();
         polyCoordenadas:
-        @for((coordenada, count) <- polyCoordenadas.zipWithIndex) {
+        @for((coordenada, count) <- localForm.get().coordenadas.zipWithIndex) {
             arrayCoordendas[@count] = new google.maps.LatLng(@coordenada.latitude, @coordenada.longitude);
          }
         

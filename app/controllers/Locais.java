@@ -97,14 +97,21 @@ public class Locais extends Controller{
          Local local = Local.find.byId(id);
          Form<Local> localForm = form(Local.class).fill(local);
          return ok(
-            editarForm.render(id, localForm, local.coordenadas)
+            editarForm.render(id, localForm)
          );
     }
         
     public static Result atualizar(Long id) {
         Result VOLTAR = redirect(routes.Locais.manter(0,"descricao", "asc", -1, -1, "", -1,-1));
         Form<Local> localForm = form(Local.class).bindFromRequest();
-
+        
+        
+        if(form().bindFromRequest().get("descricao")==null 
+            || form().bindFromRequest().get("descricao").equals("")) {
+             localForm.reject("trabalho_cientifico.id", "O campo Trabalho Científico é de preenchimento obrigatório!");
+             return badRequest(editarForm.render(id, localForm));
+         }
+        
         //validações manuais
         // if(form().bindFromRequest().get("trabalho_cientifico.id")==null 
         //     || form().bindFromRequest().get("trabalho_cientifico.id").equals("")) {
@@ -128,7 +135,7 @@ public class Locais extends Controller{
 
 
         if(localForm.hasErrors()) {
-            return badRequest(editarForm.render(id, localForm, localForm.get().coordenadas));
+            return badRequest(editarForm.render(id, localForm));
         }
         localForm.get().update(id);
         flash("success", "O Local " + localForm.get().descricao + " foi alterado com sucesso");

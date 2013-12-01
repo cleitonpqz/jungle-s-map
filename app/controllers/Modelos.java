@@ -51,6 +51,26 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
          return ok(ajustar.render(equacao, campos));
     }
     
+     public static Result salvarAjax(Long varialvelInteresse) {
+        Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
+        if(form().bindFromRequest().get("expressao_modelo")==null 
+            || form().bindFromRequest().get("expressao_modelo").equals("")) {
+            equacaoForm.reject("expressao_modelo", "Campo de preenchimento obrigatório");
+        }
+        if(equacaoForm.hasErrors()) {
+            return badRequest(cadastrar.render(varialvelInteresse, equacaoForm));
+        }
+        equacaoForm.get().save();
+        return ok(Json.toJson(equacaoForm.get()));
+    }
+     
+     public static Result cadastrarModal(Long variavelInteresse) {
+        Form<Equacao> equacaoForm = form(Equacao.class);
+        return ok(
+            novo.render(variavelInteresse ,equacaoForm, 0)
+        );
+    }
+    
     public static Result fazerAjuste(Long idEquacao){
         //Pegando os dados
         Equacao equacao = Equacao.find.byId(idEquacao);
@@ -120,6 +140,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         
         return ok(result);
     }
+    
     
     
 }
