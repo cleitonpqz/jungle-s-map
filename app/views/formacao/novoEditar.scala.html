@@ -1,0 +1,100 @@
+@(id:Long,  formacaoForm: Form[Formacao], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+            $("#modal").modal({
+                show: false
+            });
+
+            $("#novo_bioma").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formacaoForm").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formacaoForm").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#formacao").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id)
+                        $("#bioma").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.bioma.id)
+                        $("#modal").modal("hide");
+                    }else{
+                       location.reload();
+                    }   
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+        
+ 
+ </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Formação"}else{"Editar Formação"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.Formacoes.salvar(id, quemChama), 'role -> "form", 'id -> "formacaoForm") {
+        
+        <fielset>
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        formacaoForm("bioma.id"), 
+                        options(Bioma.opcoes), 
+                        '_label -> "Bioma",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Bioma --",
+                        '_showConstraints -> false,
+                        '_error -> formacaoForm.error("bioma")
+
+                    )
+                    </td>
+                    @if(quemChama!=1){
+                     <td>
+                         <input type="button" id="novo_bioma" href="@routes.Biomas.novoEditar(0, if(quemChama==0||quemChama==2){3}else{4}, id)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar e selecionar nova formação" value="Novo"> 
+                     </td>}
+                 </tr>
+             </table>
+           @inputText(
+                formacaoForm("nome"), 
+                '_label -> "Formacao",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o nome da formação",
+                '_help -> "",
+                '_error -> formacaoForm.error("nome")
+            )
+                 
+        </fielset>
+
+    }
+ 
+     <div class="alert alert-error" style="display: none">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ERRO!</strong>
+    </div>
+
+    <hr>
+    
+}    

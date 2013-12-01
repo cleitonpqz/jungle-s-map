@@ -47,7 +47,6 @@
 }
 @javascript = {
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 
 <script type="text/javascript">     
@@ -126,7 +125,7 @@ $(document).ready(function(){
 </script>
 
 <script type="text/javascript">
-    function confirmaExclusao(id, descricao){
+    function confirmaExclusao(url, descricao){
         bootbox.dialog({
             message: "Tem certeza que deseja excluir o Local: "+descricao,
             title: "Confirmar a Exclusão",
@@ -135,7 +134,7 @@ $(document).ready(function(){
                 label: "Confirmar",
                 className: "btn-danger",
                 callback: function() {
-                   window.location.href="/Locais/"+id+"/excluir";
+                   window.location.href=url;
                 }
               },
               main: {
@@ -283,7 +282,7 @@ $(document).ready(function(){
                         </td>
                          
                         <td> 
-                               <a type="button" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao" onclick="confirmaExclusao(@local.id, '@local.descricao')">Excluir</a>
+                               <a type="button" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @local.descricao" onclick="confirmaExclusao('@routes.Locais.excluir(local.id)', '@local.descricao')">Excluir</a>
                         </td>
                         <td> 
                                <a href="@routes.Arvores.novo(local.id)" class="btn btn-success btn-small" rel="tooltip" title="Cadastrar Dados do @local.descricao">Cadastrar Arvores</a>

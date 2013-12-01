@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[TrabalhoCientifico], currentSortBy: String, currentOrder: String, currentFilter: String, trabalhoCientificoForm: Form[TrabalhoCientifico])
+@(currentPage: com.avaje.ebean.Page[TrabalhoCientifico], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -39,183 +39,7 @@
 
 @main("Cadastrar Trabalho Científico"){
     
-    @form(action = routes.TrabalhosCientificos.salvar) {
-        
-        <fielset>
-
-           <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("autor.id"), 
-                        options(Autor.opcoes), 
-                        '_label -> "Autor",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Autor --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("autor")
-                    ) 
-                    </td>
-                     <td>
-                          <a href="@routes.Autores.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo autor">Novo</a>
-                   </td>
-                 </tr>
-             </table>
-
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("disponibilidade.id"), 
-                        options(Disponibilidade.opcoes), 
-                        '_label -> "Disponibilidade",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha a Disponibilidade --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("disponibilidade")
-                    )
-                    </td>
-                     <td>
-                          <a href="@routes.Disponibilidades.manter(0, "nome", "asc", "")" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova Disponibilidade">Nova</a>
-                    </td>
-                 </tr>
-             </table>
-
-            @inputText(
-                trabalhoCientificoForm("ano"), 
-                '_label -> "Ano",
-                'class ->"input-xlarge",
-                'placeholder->"Digite o ano",
-                '_help -> "",
-                '_error -> trabalhoCientificoForm.error("ano")
-            )
-            <legend>Método de Quantificação</legend>
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
-                        options(MetodoQuantificacaoBiomassa.opcoes), 
-                        '_label -> "Biomassa",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
-                    )
-                    </td>
-                     <td>
-                          <a href="@routes.MetodosQB.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Biomassa">Novo</a>
-                     </td>
-                 </tr>
-             </table>
-
-            <table>
-                <tr>
-                    <td>
-                    @select(
-                        trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
-                        options(MetodoQuantificacaoCarbono.opcoes), 
-                        '_label -> "Carbono",
-                        'class ->"input-xlarge",
-                        '_default -> "-- Escolha o Método de Quantificação de Carbono --",
-                        '_showConstraints -> false,
-                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
-                    ) 
-                    </td>
-                     <td>
-                          <a href="@routes.MetodosQC.manter()" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo Método de Quantificação de Carbono">Novo</a>
-                    </td>
-                 </tr>
-             </table>
-        </fielset>
-         <fieldset class="equacao-border">
-            <legend class="equacao-border">Equações</legend>
-            <div class="control-group">
-               <h5>Biomassa</h5>
-                <div>
-                      <select name="equacoes[1]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Equacao--</option>
-                                @for(opcao<-Equacao.opcoes(1)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Equacoes.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-            <div class="control-group">
-                 <div>
-                        <select name="modelos[1]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Modelo.opcoes(1)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(1)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-            <div class="control-group">
-               <h5>Carbono</h5>
-                <div>
-                      <select name="equacoes[2]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Equacao--</option>
-                                @for(opcao<-Equacao.opcoes(2)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Equacoes.cadastrar(2)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-            <div class="control-group">
-                 <div>
-                        <select name="modelos[2]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Modelo.opcoes(2)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(2)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-            <div class="control-group">
-               <h5>Volume</h5>
-                <div>
-                      <select name="equacoes[3]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Equacao--</option>
-                                @for(opcao<-Equacao.opcoes(3)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Equacoes.cadastrar(3)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova equaçao de biomassa">Nova</a>
- 
-                </div>
-            </div>
-            <div class="control-group">
-                 <div>
-                        <select name="modelo[3]" class="input-xlarge") value="">  
-                            <option>--Escolha uma Modelo--</option>
-                                @for(opcao<-Modelo.opcoes(3)){
-                                    <option value ="@opcao._1" >@opcao._2</option>
-                                }
-                        </select> 
-                    <a href="@routes.Modelos.cadastrar(3)" align="bottom" class="btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo modelo de biomassa">Nova</a>
- 
-                </div>
-            </div>
-        </fieldset>  
-
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
-            
-        </div>
-    <br>
-        <h3 id="homeTitle">@Messages("Trabalhos Científicos", currentPage.getTotalRowCount)</h3>
-}
+    
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -256,7 +80,7 @@
                             @TrabalhoCientifico.autor.nome
                         </td>
                         <td>
-                               <a href="@routes.TrabalhosCientificos.editar(TrabalhoCientifico.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar Trabalho Científico">Editar</a>
+                               <a href="@routes.TrabalhosCientificos.incluirEditar(TrabalhoCientifico.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar Trabalho Científico">Editar</a>
                         </td>
                          
                         <td> 

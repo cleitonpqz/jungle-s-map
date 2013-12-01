@@ -1,4 +1,4 @@
-@(modelo : Modelo, campos : List[String])
+@(equacao : Equacao, campos : List[String])
 
 @import helper._
 
@@ -55,14 +55,14 @@ $("#ajustarBtn").click(function (){
                 for (var i = 0; i < griddata.rowscount; i++){
                     rows.push($('#grid').jqxGrid('getrowdata', i));
                 }
-               jsRoutes.controllers.Modelos.fazerAjuste(@modelo.id).ajax({
+               jsRoutes.controllers.Modelos.fazerAjuste(@equacao.id).ajax({
                     type :  "POST",
                     dataType: 'json',
                     contentType : 'application/json; charset=utf-8',
                     data: JSON.stringify(rows),
                     success: function(data){
                         @{var numero=0;}
-                        @for(numero<-0 until modelo.qtd_coeficientes){
+                        @for(numero<-0 until equacao.qtd_coeficientes){
                             $("#b@numero").val(data.b@numero);
                         }
                         $("#equacao").val(data.expressao);
@@ -108,7 +108,7 @@ $("#ajustarBtn").click(function (){
         <div class="control-group">  
                 <label class="control-label" for="input01">Modelo</label>  
                 <div class="controls">  
-                  <input type="text" class="input-xxlarge" id="modelo" disabled value="@modelo.expressao">  
+                  <input type="text" class="input-xxlarge" id="modelo" disabled value="@equacao.expressao_modelo">  
                 </div> 
         </div>
     </div>
@@ -121,7 +121,7 @@ $("#ajustarBtn").click(function (){
        <div class="span6">
            <div  class="form-horizontal">
             @{var numero=0;}
-              @for(numero<-0 until modelo.qtd_coeficientes){
+              @for(numero<-0 until equacao.qtd_coeficientes){
               <div class="control-group">  
                 <label class="control-label" for="input" >b@numero</label>  
                 <div class="controls">  
@@ -170,7 +170,7 @@ $("#ajustarBtn").click(function (){
    <div>
         <table class="well" >
            
-       @for(variavel<-modelo.modelo_variavel){
+       @for(variavel<-equacao.equacao_variavel){
        <tr>
            <td class="legenda">@variavel.variavel.sigla :</td><td  class="legenda">@variavel.variavel.nome</td>
        </tr>

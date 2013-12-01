@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Bioma], currentSortBy: String, currentOrder: String, currentFilter: String, biomaForm: Form[Bioma])
+@(currentPage: com.avaje.ebean.Page[Bioma], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -36,33 +36,61 @@
 
 @import helper._
 @import helper.twitterBootstrap._
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+        jQuery(function(){
 
-@main("Cadastrar Bioma"){
+            //inicializa modal
+            $("#modal").modal({
+                show: false
+            });
+
+            //bind para buscar conteúdo da view e mostrar na modal
+            $(".novo_editar_bioma").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+   function confirmaExclusao(url, descricao){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir o Bioma "+descricao,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+</script>
     
-    @form(action = routes.Biomas.salvar, 'role -> "form") {
-        
-        <fieldset class="form-inline">
-           @inputText(
-                biomaForm("nome"), 
-                '_label -> "Bioma",
-                'class ->"input-xlarge",
-                'placeholder->"Digite o nome do bioma",
-                '_help -> "",
-                '_error -> biomaForm.error("nome")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
-            
-        </div>
-    <br>
-        <h3 id="homeTitle">@Messages("Biomas", currentPage.getTotalRowCount)</h3>
 }
+@main("Manter Bioma", javascript){
+    
+    <div class="actions">
+            <a id="novo_bioma" href="@routes.Biomas.novoEditar(0, 0, 0)" align="bottom" class="novo_editar_bioma btn btn-primary input-large" rel="tooltip" title="Cadastrar novo bioma">Incluir</a>
+     </div>
+    <br>
+    <div id="modal" class="modal hide"></div>
+    
     @if(flash.containsKey("success")) {
-        <div class="alert alert-info">
+        <div class="alert alert-info" id="message">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <strong>Feito!</strong> @flash.get("success")
         </div>
@@ -101,11 +129,11 @@
                             @bioma.nome
                         </td>
                         <td>
-                               <a href="@routes.Biomas.editar(bioma.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @bioma.nome">Editar</a>
+                               <a href="@routes.Biomas.novoEditar(bioma.id, 2,0)" class="novo_editar_bioma btn btn-primary btn-small" rel="tooltip" title="Editar @bioma.nome">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Biomas.deletar(bioma.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @bioma.nome">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Biomas.deletar(bioma.id)', '@bioma.nome')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @bioma.nome">Excluir</a>
                         </td>
                     </tr>
                 }

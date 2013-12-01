@@ -3,59 +3,254 @@
 @import helper._
 
 @import helper.twitterBootstrap._ 
+@stylesheet = {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/equacao.css")">
+}
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 
-@main("Alterar TrabalhoCientifico") {
+<script type="text/javascript">
+ jQuery(function(){
+
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_dominios").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });   
+       
+ $(".nova_variavel").click(function(e){
+            var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                  }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+   $("#novo_autor").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+  
+     $(".cadastrar_equacao").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modalEquacao").html(data).modal('show');
+                 }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+       $(".cadastrar_modelo").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modalModelo").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+        });     
+     
+</script>
     
-    @form(routes.TrabalhosCientificos.update(id)) {
+}
+
+@main(if(id != 0){"Editar Trabalho Científico"}else{"Cadastrar Trabalho Científico"}, javascript, stylesheet) {
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
+    @form(action = routes.TrabalhosCientificos.salvar(id)) {
         
-        <fieldset>
-            @select(
-                trabalhoCientificoForm("autor.id"), 
-                options(Autor.opcoes), 
-                '_label -> "Autor", 
-                '_default -> "-- Escolha o Autor --",
-                '_showConstraints -> false,
-                '_error -> trabalhoCientificoForm.error("autor")
-            ) 
-            
-            @select(
-                trabalhoCientificoForm("disponibilidade.id"), 
-                options(Disponibilidade.opcoes), 
-                '_label -> "Disponibilidade", 
-                '_default -> "-- Escolha a Disponibilidade --",
-                '_showConstraints -> false,
-                '_error -> trabalhoCientificoForm.error("disponibilidade")
+   <fielset>
+     <div class="row">
+        <div class="span6">
+           <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("autor.id"), 
+                        options(Autor.opcoes), 
+                        '_label -> "Autor",
+                        'id->"autor_id",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Autor --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("autor")
+                    ) 
+                    </td>
+                     <td>
+                         <a href="@routes.Autores.novoEditar(0, 1)" align="bottom" class="novo_editar_dominios btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova formação">Novo</a>
+                     </td>
+                 </tr>
+             </table>
+    </div>
+    <div class="span6">
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("disponibilidade.id"), 
+                        options(Disponibilidade.opcoes), 
+                        '_label -> "Disponibilidade",
+                        'id->"disponibilidade_id",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha a Disponibilidade --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("disponibilidade")
+                    )
+                    </td>
+                     <td>
+                         <a href="@routes.Disponibilidades.novaEditar(0, 1)" align="bottom" class="novo_editar_dominios btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova disponibilidade">Nova</a>
+                         
+                    </td>
+                 </tr>
+             </table>
+      </div>
+       <div class="span6">
+            @inputText(
+                trabalhoCientificoForm("ano"), 
+                '_label -> "Ano",
+                'class ->"input-xlarge",
+                'placeholder->"Digite o ano",
+                '_help -> "",
+                '_error -> trabalhoCientificoForm.error("ano")
             )
-
-            @select(
-                trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
-                options(MetodoQuantificacaoBiomassa.opcoes), 
-                '_label -> "Método de Quantificação de Biomassa", 
-                '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
-                '_showConstraints -> false,
-                '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
-            )
-
-            @select(
-                trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
-                options(MetodoQuantificacaoCarbono.opcoes), 
-                '_label -> "Método de Quantificação de Carbono", 
-                '_default -> "-- Escolha o Método de Quantificação de Carbono --",
-                '_showConstraints -> false,
-                '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
-            ) 
-            
-                 
-        </fieldset>
+       </div>
+       </div>
+     
+        
+            <legend>Método de Quantificação</legend>
+            <div class="row">
+            <div class="span6">
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_biomassa.id"), 
+                        options(MetodoQuantificacaoBiomassa.opcoes), 
+                        '_label -> "Biomassa",
+                        'id->"metodoQB_id",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Método de Quantificação de Biomassa --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_biomassa")
+                    )
+                    </td>
+                     <td>
+                          <a href="@routes.MetodosQB.novoEditar(0, 1)" align="bottom" class="novo_editar_dominios btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo metodo de qt de biomassa">Novo</a>
+                     </td>
+                 </tr>
+             </table>
+       </div>
+       <div class="span6">
+            <table>
+                <tr>
+                    <td>
+                    @select(
+                        trabalhoCientificoForm("metodo_quantificacao_carbono.id"), 
+                        options(MetodoQuantificacaoCarbono.opcoes), 
+                        '_label -> "Carbono",
+                        'id->"metodoQC_id",
+                        'class ->"input-xlarge",
+                        '_default -> "-- Escolha o Método de Quantificação de Carbono --",
+                        '_showConstraints -> false,
+                        '_error -> trabalhoCientificoForm.error("metodo_quantificacao_carbono")
+                    ) 
+                    </td>
+                     <td>
+                          <a href="@routes.MetodosQC.novoEditar(0, 1)" align="bottom" class="novo_editar_dominios btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo metodo de qt de carbono">Novo</a>
+                    </td>
+                 </tr>
+             </table>
+        </div>
+   </div>
+       
+    
+    
+     <legend class="equacao-border">Equações / Modelos</legend>
+     <a href="@routes.Variaveis.novaEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Cadastrar Nova Variável</a>
+     <a href="@routes.AutoresModelos.novoEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo autor de Modelo">Cadastrar Novo Autor de Modelo</a>
+             <div class="control-group">
+               <h5>Biomassa</h5>
+                <div>
+                      <select name="trabalho_cientifico_equacao[0].equacao.id" id="modeloEquacaoBiomassa" class="selectBiomassa" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
+                                @for(opcao<-Equacao.opcoesEquacao(1)){
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrarModal(1)"  class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVA EQUAÇÃO</a>
+                    <a href="@routes.Modelos.cadastrarModal(1)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de biomassa">NOVO MODELO</a>  
+                </div>
+            </div>
+           <div class="control-group">
+               <h5>Carbono</h5>
+                <div>
+                      <select name="trabalho_cientifico_equacao[1].equacao.id" id="modeloEquacaoCarbono" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
+                                @for(opcao<-Equacao.opcoesEquacao(2)){
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrarModal(2)" class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVA EQUAÇÃO</a> 
+                    <a href="@routes.Modelos.cadastrarModal(2)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de carbono">NOVO MODELO</a>  
+            </div>
+                      
+           <div class="control-group">
+               <h5>Volume</h5>
+                <div>
+                      <select name="trabalho_cientifico_equacao[2].equacao.id" id="modeloEquacaoVolume" style="width: 700px;">  
+                            <option>--Escolha uma Equacao/Modelo--</option>
+                                @for(opcao<-Equacao.opcoesEquacao(3)){
+                                    <option value ="@opcao._1" @if(id!=0){@for(equacao<-trabalhoCientificoForm.get().trabalho_cientifico_equacao){@if(equacao.equacao.id.toString()==opcao._1){selected}}}>@opcao._2</option>
+                                }
+                        </select> 
+                    <a href="@routes.Equacoes.cadastrarModal(3)" class="cadastrar_equacao btn btn-primary btn-small" rel="tooltip" title="Cadastrar novo modelo de volume">NOVA EQUAÇÃO</a> 
+                    <a href="@routes.Modelos.cadastrarModal(3)"  class="cadastrar_modelo btn btn-success btn-small" rel="tooltip" title="Cadastrar novo modelo de volume">NOVO MODELO</a>               
+                </div>
+              
+        </div>
+          
+ </fielset>
         
        
         <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Salvar">
-            <a href="@routes.TrabalhosCientificos.manter(0, "nome", "asc", "")" class="btn">Voltar</a>
+            <input type="submit" class="btn btn-primary" value="Incluir">
+            <input type="submit" class="btn btn-info" value="Cancelar">
         </div>
+   
         
-    }
- 
-     
-        
+}
+<div id="modal" class="modal hide"></div>
+
+<div id="modalEquacao" class="modal hide fade" style=" height:80%; width:70%; margin-left: -35%; "></div>
+<div id="modalModelo" class="modal hide fade" style=" height:85%; width:70%; margin-left: -35%; "></div>
 }

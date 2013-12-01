@@ -35,9 +35,6 @@ public class TrabalhoCientifico extends Model {
     @Constraints.Required(message="O campo autor é obrigatório!")
     public Integer ano;
     
-    @OneToMany(targetEntity = TrabalhoCientificoModelo.class, cascade = CascadeType.ALL)
-    public List<TrabalhoCientificoModelo> trabalho_cientifico_modelo = new ArrayList<TrabalhoCientificoModelo>();
-    
     @OneToMany(targetEntity = TrabalhoCientificoEquacao.class, cascade = CascadeType.ALL)
     public List<TrabalhoCientificoEquacao> trabalho_cientifico_equacao = new ArrayList<TrabalhoCientificoEquacao>();
     

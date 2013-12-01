@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Espacamento], currentSortBy: String, currentOrder: String, currentFilter: String, espacamentoForm: Form[Espacamento])
+@(currentPage: com.avaje.ebean.Page[Espacamento], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -33,34 +33,66 @@
         <a href="@link(0, key)">@title</a>
     </th>
 }
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+    
+         jQuery(function(){
+
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_espacamento").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+        
+    function confirmaExclusao(url, descricao){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir o espaçamento "+descricao,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+    
+</script>
+    
+}
 
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Cadastrar Espaçamento"){
+@main("Manter Espaçamento", javascript){
     
-    @form(action = routes.Espacamentos.salvar) {
-        
-        <fieldset class form-inline>
-           @inputText(
-                espacamentoForm("descricao"), 
-                '_label -> "Espaçamento",
-                'class ->"input-xlarge",
-                'placeholder->"Digite a descrição do espaçamento",
-                '_help -> "",
-                '_error -> espacamentoForm.error("nome")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
+    <div class="actions">
+            <a href="@routes.Espacamentos.novoEditar(0, 0)" align="bottom" class="novo_editar_espacamento btn btn-primary input-large" rel="tooltip" title="Cadastrar novo Espaçamento">Incluir</a>
             
         </div>
     <br>
-        <h3 id="homeTitle">@Messages("Espaçamentos", currentPage.getTotalRowCount)</h3>
-}
+ 
+    <div id="modal" class="modal hide"></div>
+    
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -101,11 +133,11 @@
                             @espacamento.descricao
                         </td>
                         <td>
-                               <a href="@routes.Espacamentos.editar(espacamento.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @espacamento.descricao">Editar</a>
+                               <a href="@routes.Espacamentos.novoEditar(espacamento.id, 2)" class="novo_editar_espacamento btn btn-primary btn-small" rel="tooltip" title="Editar @espacamento.descricao">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Espacamentos.deletar(espacamento.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @espacamento.descricao">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Espacamentos.deletar(espacamento.id)', '@espacamento.descricao')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @espacamento.descricao">Excluir</a>
                         </td>
                     </tr>
                 }

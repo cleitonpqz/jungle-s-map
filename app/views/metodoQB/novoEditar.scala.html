@@ -1,0 +1,55 @@
+@(id:Long,  metodoQBForm: Form[MetodoQuantificacaoBiomassa], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formMetodoQB").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formMetodoQB").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#metodoQB_id").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
+                    }else{
+                        location.reload();
+                    }   
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Método de Quantificação de Biomassa"}else{"Editar Método de Quantificação de Biomassa"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.MetodosQB.salvar(id, quemChama), 'role -> "form", 'id -> "formMetodoQB") {
+        
+       <fieldset>
+           @inputText(
+                metodoQBForm("descricao"), 
+                '_label -> "Método de Quantificação de Biomassa",
+                'class ->"input-xlarge",
+                'placeholder->"Digite a descricao do método",
+                '_help -> "",
+                '_error -> metodoQBForm.error("descricao")
+            )
+                 
+        </fieldset>
+    }
+   <hr>
+    
+}    

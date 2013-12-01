@@ -1,4 +1,4 @@
-@(autorForm: Form[AutorModelo])
+@(id:Long,  autorForm: Form[Autor], quemChama : Integer)
 
 
 @javascript = {
@@ -16,8 +16,14 @@
                     }
                 });
                 dataFilterRequest.done(function(data){
-                    $("#autor_modelo_id").append("<option value='" + data.id + "'>"+data.nome+"</option>").val(data.id)
-                    $("#modal").modal("hide");
+                    @if(quemChama==1){
+                        $("#autor_id").append("<option value='" + data.id + "'>" + data.nome + "</option>").val(data.id)
+                        $("#modal").modal("hide");
+                    }else{
+                        $("#modal").modal("hide");
+                        location.reload();
+                    }   
+                    
                 }).fail(function(jqXHR, textStatus){
                     $("#modal").html(jqXHR.responseText);
                 });
@@ -30,28 +36,25 @@
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal("Cadastrar e Selecionar Autor de Modelo", "Salvar", javascript){
+@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
     
-    @form(action = routes.AutoresModelos.salvarSelecionar, 'role -> "form", 'id -> "formAutor") {
+    @form(action = routes.Autores.salvar(id, quemChama), 'role -> "form", 'id -> "formAutor") {
         
-        <fieldse>
-           @inputText(
+        <fieldset>
+                        
+            @inputText(
                 autorForm("nome"), 
                 '_label -> "Autor",
                 'class ->"input-xlarge",
-                'placeholder->"Digite o nome do autor",
+                'rel->"tooltip",
+                'title->"Digite o nome do autor",
                 '_help -> "",
                 '_error -> autorForm.error("nome")
             )
                  
         </fieldset>
+
     }
-
-    <div class="alert alert-error" style="display: none">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>ERRO!</strong>
-    </div>
-
-    <hr>
+   <hr>
     
 }    

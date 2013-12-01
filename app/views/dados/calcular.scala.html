@@ -1,3 +1,5 @@
+@(local: Local)
+
 @import helper._
 @import helper.twitterBootstrap._
 
@@ -6,22 +8,62 @@
 
 
 <div class="">
-   
-    <label>Biomassa  Equação </label><input type="text" name="biomassa" class="large" placeholder="Biomassa">  
-    <label>Carbono   Equação</label><input type="text" name="carbono" class="large" placeholder="Carbono">
-    <label>Volume    Equação</label><input type="text" name="volume" class="large" placeholder="Volume">
-   	<br />
-    <input type="button" value="Calcular" id='calcular' class="btn" />
+   <legend>Biomassa</legend>
+   <div class="row">
+        <div class="span6">
+            <label>Equação</label><input type="text" name="equacaoBiomassa" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 && equacao.equacao.expressao != null){value="@equacao.equacao.expressao"}}class="input-xlarge" placeholder="Equação Biomassa">
+        </div>
+        <div class="span6">
+            <label>Modelo</label><input type="text" name="modeloBiomassa" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 != equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Biomassa">
+            @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 && equacao.equacao.expressao_modelo!=null){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            }else{@if(equacao.equacao.variavel_interesse.id ==1){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
+        </div> 
+   </div>      
+   <legend>Carbono</legend>
+   <div class="row">
+        <div class="span6">
+            <label>Equação</label><input type="text" name="equacaoCarbono" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2 &&equacao.equacao.expressao!=null){value="@equacao.equacao.expressao"}} class="input-xlarge" placeholder="Equação Carbono">
+        </div>
+        <div class="span6">
+            <label>Modelo</label>
+            <input type="text" name="modeloCarbono" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Carbono">
+             @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2&& equacao.equacao.expressao_modelo!=null){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            }else{@if(equacao.equacao.variavel_interesse.id ==2){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
+        </div> 
+   </div> 
+   <legend>Volume</legend>
+   <div class="row">
+        <div class="span6">
+            <label>Equação</label><input type="text" class="input-xlarge" name="equacaoVolume" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao!=null){value="@equacao.equacao.expressao"}}  placeholder="Equação Volume">
+        </div>
+        <div class="span6">
+            <label>Modelo</label><input type="text" class="input-xlarge" name="modeloVolume" @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} placeholder="Modelo Volume">
+            @for(equacao<-local.trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){
+                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+            }else{@if(equacao.equacao.variavel_interesse.id ==3){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
+        </div> 
+   </div>      
+      	<hr />
+    <input type="button" value="Calcular" id='calcular' class="btn btn-info" />
     <br />
     <br />
-    <h4>Resultados</h4> 
-    <br />                  
-    <br />                  
-	<label>Biomassa  Total(ton) </label><input type="text" name="biomassat" class="large" placeholder="Biomassa">
-	<input type="button" value="Detalhes" id='Detalhesb' class="btn btn-info" />  
-	<label>Carbono   Total(ton)</label><input type="text" name="carbonot" class="large" placeholder="Carbono">
-	<input type="button" value="Detalhes" id='Detalhesc' class="btn btn-info" />
-	<label>Volume  	 Total(m3)</label><input type="text" name="volumet" class="large" placeholder="Volume"> 
-	<input type="button" value="Detalhes" id='Detalhesv' class="btn btn-info" />                 
+    <legend>Resultados</legend>
+    <br /> 
+    <div class="row">
+        <div class="span6">
+            <label>Biomassa  Total(ton) </label><input type="text" name="biomassat" class="large" placeholder="Biomassa">
+            <input type="button" value="Detalhes" id='Detalhesb' class="btn btn-info btn-mini" /> 
+        </div>
+        <div class="span6">
+            <label>Carbono   Total(ton)</label><input type="text" name="carbonot" class="large" placeholder="Carbono">
+            <input type="button" value="Detalhes" id='Detalhesc' class="btn btn-info btn-mini" />
+        </div>
+        <div class="span6">
+            <label>Volume  	 Total(m3)</label><input type="text" name="volumet" class="large" placeholder="Volume"> 
+            <input type="button" value="Detalhes" id='Detalhesv' class="btn btn-info btn-mini" />
+        </div>
+        </div>
 </div>
 }

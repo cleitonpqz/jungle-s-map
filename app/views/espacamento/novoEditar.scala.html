@@ -1,0 +1,58 @@
+@(id:Long,  espacamentoForm: Form[Espacamento], quemChama : Integer)
+
+
+@javascript = {
+    <script type="text/javascript">
+        jQuery(function(){
+
+            $("#saveModalButton").click(function(e){
+                var url = $("#formEspacamento").attr("action");
+                var dataFilterRequest = jQuery.ajax({
+                    url: url,
+                    type: 'post',
+                    data: $("#formEspacamento").serialize(),
+                    dataFilter: function(data, type){
+                        return data;
+                    }
+                });
+                dataFilterRequest.done(function(data){
+                    @if(quemChama==1){
+                        $("#espacamento").append("<option value='" + data.id + "'>" + data.descricao + "</option>").val(data.id)
+                    }else{
+                        location.reload();
+                    }   
+                    $("#modal").modal("hide");
+                }).fail(function(jqXHR, textStatus){
+                    $("#modal").html(jqXHR.responseText);
+                });
+                e.preventDefault();
+            });
+        });
+    </script>
+}
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@modal(if(quemChama!=2){"Cadastrar Espaçamento"}else{"Editar Espaçamento"}, "Salvar", quemChama, javascript){
+    
+    @form(action = routes.Espacamentos.salvar(id, quemChama), 'role -> "form", 'id -> "formEspacamento") {
+        
+        <fieldset>
+                        
+            @inputText(
+                espacamentoForm("descricao"), 
+                '_label -> "Espaçamento",
+                'class ->"input-xlarge",
+                'rel->"tooltip",
+                'title->"Digite o descricao do espacamento",
+                '_help -> "",
+                '_error -> espacamentoForm.error("descricao")
+            )
+                 
+        </fieldset>
+
+    }
+   <hr>
+    
+}    

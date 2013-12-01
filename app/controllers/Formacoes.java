@@ -18,52 +18,44 @@ public class Formacoes extends Controller {
         return GO_HOME;
     }
     
+    public static Result novaEditar(Long id, int quemChama) {
+        Form<Formacao> formacaoForm;
+        if(id==0){
+                formacaoForm = form(Formacao.class);
+        }else{
+                formacaoForm = form(Formacao.class).fill(Formacao.find.byId(id));
+        }
+        
+        return ok(
+            novoEditar.render(id, formacaoForm, quemChama)
+        );
+    }
+
+    public static Result salvar(Long id, int quemChama) {
+        Form<Formacao> formacaoForm = form(Formacao.class).bindFromRequest();
+        if(formacaoForm.hasErrors()) {
+            return badRequest(novoEditar.render(id, formacaoForm, quemChama));
+        }
+        if(quemChama==2 && id!=0){
+            flash("success", "Formação " + formacaoForm.get().nome + " foi editada com sucesso");
+            formacaoForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "Formação " + formacaoForm.get().nome + " foi incluida com sucesso");
+            formacaoForm.get().save();
+        }else{
+            formacaoForm.get().save();
+        }
+        
+        return ok(Json.toJson(formacaoForm.get()));
+    }
+    
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<Formacao> formacaoForm = form(Formacao.class);
         return ok(
             manter.render(
-                Formacao.page(page, 10, sortBy, order, filter),sortBy, order, filter, formacaoForm)
+                Formacao.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
-    
-    public static Result editar(Long id) {
-        Form<Formacao> formacaoForm = form(Formacao.class).fill(
-                Formacao.find.byId(id)
-        );
-        return ok(
-            editarForm.render(id, formacaoForm)
-        );
-    }
-    
-     public static Result update(Long id) {
-        Form<Formacao> formacaoForm = form(Formacao.class).bindFromRequest();
-        if(form().bindFromRequest().get("bioma.id")==null 
-            || form().bindFromRequest().get("bioma.id").equals("")) {
-            formacaoForm.reject("bioma.id", "O campo Bioma é de preenchimento obrigatório!");
-        }
-        if(formacaoForm.hasErrors()) {
-            return badRequest(editarForm.render(id, formacaoForm));
-        }
-        formacaoForm.get().update(id);
-        flash("success", "A Formação " + formacaoForm.get().nome + " foi alterada com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result salvar() {
-        Form<Formacao> formacaoForm = form(Formacao.class).bindFromRequest();
-        if(form().bindFromRequest().get("bioma.id")==null 
-            || form().bindFromRequest().get("bioma.id").equals("")) {
-            formacaoForm.reject("bioma.id", "O campo Bioma é de preenchimento obrigatório!");
-        }
-        if(formacaoForm.hasErrors()) {
-            return badRequest(manter.render(Formacao.page(0, 10, "nome", "asc", ""), "nome", "asc", "", formacaoForm));
-        }
-        formacaoForm.get().save();
-        flash("success", "A Formação " + formacaoForm.get().nome + " foi incluida com sucesso");
-        return GO_HOME;
-    }
-    
-    
+     
     public static Result deletar(Long id) {
         try{
             Formacao.find.ref(id).delete();

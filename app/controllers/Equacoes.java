@@ -7,6 +7,7 @@ import static play.data.Form.*;
 import play.*;
 import views.html.equacao.*;
 import java.sql.SQLException;
+import play.libs.Json;
 import javax.persistence.PersistenceException;
 
 import models.*;
@@ -26,9 +27,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
     }
     public static Result salvar(Long varialvelInteresse) {
        Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
-       
-        
-        if(equacaoForm.hasErrors()) {
+         if(equacaoForm.hasErrors()) {
             flash("error","Equação não incluída");
             return badRequest(cadastrarEquacao.render(varialvelInteresse, equacaoForm));
         }
@@ -37,5 +36,24 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         return GO_HOME;
     }
     
-
+    public static Result salvarAjax(Long varialvelInteresse) {
+        Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
+        if(form().bindFromRequest().get("expressao")==null 
+            || form().bindFromRequest().get("expressao").equals("")) {
+            equacaoForm.reject("expressao", "Campo de preenchimento obrigatório");
+        }
+        if(equacaoForm.hasErrors()) {
+            return badRequest(cadastrarEquacao.render(varialvelInteresse, equacaoForm));
+        }
+        equacaoForm.get().save();
+        
+        return ok(Json.toJson(equacaoForm.get()));
+    }
+    public static Result cadastrarModal(Long variavelInteresse) {
+        Form<Equacao> equacaoForm = form(Equacao.class);
+        return ok(
+            novo.render(variavelInteresse ,equacaoForm, 0)
+        );
+    }
+    
 }

@@ -19,42 +19,43 @@ public class TrabalhosCientificos extends Controller {
     }
     
     public static Result manter(int page, String sortBy, String order, String filter) {
-        Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class);
-        return ok(
+           return ok(
             manter.render(
-                TrabalhoCientifico.page(page, 10, sortBy, order, filter),sortBy, order, filter, trabalhoCientificoForm)
+                TrabalhoCientifico.page(page, 10, sortBy, order, filter),sortBy, order, filter)
             );
     }
     
-    public static Result editar(Long id) {
-        Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class).fill(
-                TrabalhoCientifico.find.byId(id)
-        );
+     public static Result incluirEditar(Long id) {
+         Form<TrabalhoCientifico> trabalhoCientificoForm;
+         if(id!=0){
+                trabalhoCientificoForm=form(TrabalhoCientifico.class).fill( TrabalhoCientifico.find.byId(id));
+         }else{
+                trabalhoCientificoForm = form(TrabalhoCientifico.class);
+        }
+                
         return ok(
             editarForm.render(id, trabalhoCientificoForm)
         );
     }
     
-     public static Result update(Long id) {
+    public static Result salvar(Long id) {
         Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class).bindFromRequest();
         if(trabalhoCientificoForm.hasErrors()) {
             return badRequest(editarForm.render(id, trabalhoCientificoForm));
         }
-        trabalhoCientificoForm.get().update(id);
-        flash("success", "O Trabalho Científico do autor " + trabalhoCientificoForm.get().autor.nome + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
-    public static Result salvar() {
-        Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class).bindFromRequest();
-        if(trabalhoCientificoForm.hasErrors()) {
-            return badRequest(manter.render(TrabalhoCientifico.page(0, 10, "nome", "asc", ""), "nome", "asc", "", trabalhoCientificoForm));
+        if(id!=0){
+            trabalhoCientificoForm.get().update(id);
+            flash("success", "O Trabalho Científico do autor " + trabalhoCientificoForm.get().autor.nome + " foi alterado com sucesso");
+           
+        }else{
+             trabalhoCientificoForm.get().save();
+             flash("success", "O Trabalho Científico do autor " + trabalhoCientificoForm.get().autor.nome + " foi incluído com sucesso");
+        
         }
-        trabalhoCientificoForm.get().save();
-        flash("success", "O Trabalho Científico do autor " + trabalhoCientificoForm.get().autor.nome + " foi incluído com sucesso");
-        return GO_HOME;
+        
+         return GO_HOME;
     }
-    
+      
     
     public static Result deletar(Long id) {
         try{

@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Variavel], currentSortBy: String, currentOrder: String, currentFilter: String, variavelForm: Form[Variavel])
+@(currentPage: com.avaje.ebean.Page[Variavel], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -33,43 +33,64 @@
         <a href="@link(0, key)">@title</a>
     </th>
 }
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+    
+         jQuery(function(){
 
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_variavel").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+        
+    function confirmaExclusao(url, nome){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir a variável "+nome,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+    
+</script>
+    
+}
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Cadastrar Variável"){
+@main("Cadastrar Variável", javascript){
     
-    @form(action = routes.Variaveis.salvar, 'role -> "form") {
-        
-        <fieldset>
-           @inputText(
-                variavelForm("nome"), 
-                '_label -> "Nome",
-                'class ->"input-xlarge",
-                'placeholder->"Digite o nome da variável",
-                '_help -> "",
-                '_error -> variavelForm.error("nome")
-            )
-                 
-           @inputText(
-                variavelForm("sigla"), 
-                '_label -> "Sigla",
-                'class ->"input-xlarge",
-                'placeholder->"Digite a sigla da variável",
-                '_help -> "",
-                '_error -> variavelForm.error("sigla")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
+    <div class="actions">
+            <a href="@routes.Variaveis.novaEditar(0, 0)" align="bottom" class="novo_editar_variavel btn btn-primary input-large" rel="tooltip" title="Cadastrar nova Variável">Incluir</a>
             
-        </div>
+    </div>
     <br>
-        <h3 id="homeTitle">@Messages("Variáveis", currentPage.getTotalRowCount)</h3>
-}
+ 
+   <div id="modal" class="modal hide"></div>
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -114,11 +135,11 @@
                             @variavel.sigla
                         </td>
                         <td>
-                               <a href="@routes.Variaveis.editar(variavel.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @variavel.nome">Editar</a>
+                               <a href="@routes.Variaveis.novaEditar(variavel.id, 2)" class="novo_editar_variavel btn btn-primary btn-small" rel="tooltip" title="Editar @variavel.nome">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Variaveis.deletar(variavel.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @variavel.nome">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Variaveis.deletar(variavel.id)', '@variavel.nome')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @variavel.nome">Excluir</a>
                         </td>
                     </tr>
                 }

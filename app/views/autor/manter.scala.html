@@ -1,4 +1,4 @@
-@(currentPage: com.avaje.ebean.Page[Autor], currentSortBy: String, currentOrder: String, currentFilter: String, autorForm: Form[Autor])
+@(currentPage: com.avaje.ebean.Page[Autor], currentSortBy: String, currentOrder: String, currentFilter: String)
 
 @****************************************
 * Helper generating navigation links    *
@@ -33,34 +33,63 @@
         <a href="@link(0, key)">@title</a>
     </th>
 }
+@javascript = {
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
+<script type="text/javascript">
+    
+         jQuery(function(){
 
+            $("#modal").modal({
+                show: false
+            });
+            
+            $(".novo_editar_autor").click(function(e){
+                var url = $(this).attr("href");
+                jQuery.ajax(url).done(function(data){
+                    $("#modal").html(data).modal('show');
+                }).fail(function(data){
+                    alert("erro");
+                });
+
+                e.preventDefault();
+            });
+        });
+        
+    function confirmaExclusao(url, nome){
+        bootbox.dialog({
+            message: "Tem certeza que deseja excluir o autor "+nome,
+            title: "Confirmar a Exclusão",
+            buttons: {
+              success: {
+                label: "Confirmar",
+                className: "btn-danger",
+                callback: function() {
+                   window.location.href=url;
+                }
+              },
+              main: {
+                label: "Cancelar",
+                className: "btn",
+                
+              }
+           }
+        });
+    }     
+    
+</script>
+    
+}
 @import helper._
 @import helper.twitterBootstrap._
 
-@main("Cadastrar Autor"){
-    
-    @form(action = routes.Autores.salvar) {
-        
-        <fieldse>
-           @inputText(
-                autorForm("nome"), 
-                '_label -> "Autor",
-                'class ->"input-xlarge",
-                'placeholder->"Digite o nome do autor",
-                '_help -> "",
-                '_error -> autorForm.error("nome")
-            )
-                 
-        </fieldset>
-        
-       
-        <div class="actions">
-            <input type="submit" class="btn btn-primary" value="Incluir">
+@main("Manter Autor", javascript){
+    <div class="actions">
+            <a href="@routes.Autores.novoEditar(0, 0)" align="bottom" class="novo_editar_autor btn btn-primary input-large" rel="tooltip" title="Cadastrar novo Autor">Incluir</a>
             
-        </div>
+     </div>
     <br>
-        <h3 id="homeTitle">@Messages("Autores", currentPage.getTotalRowCount)</h3>
-}
+ 
+   <div id="modal" class="modal hide"></div>
     @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -101,11 +130,11 @@
                             @autor.nome
                         </td>
                         <td>
-                               <a href="@routes.Autores.editar(autor.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar @autor.nome">Editar</a>
+                               <a href="@routes.Autores.novoEditar(autor.id, 2)" class="novo_editar_autor btn btn-primary btn-small" rel="tooltip" title="Editar @autor.nome">Editar</a>
                         </td>
                          
                         <td> 
-                               <a href="@routes.Autores.deletar(autor.id)" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @autor.nome">Excluir</a>
+                               <a onclick="confirmaExclusao('@routes.Autores.deletar(autor.id)', '@autor.nome')" class="btn btn-danger btn-small" rel="tooltip" title="Excluir @autor.nome">Excluir</a>
                         </td>
                     </tr>
                 }

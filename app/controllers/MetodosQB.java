@@ -6,6 +6,7 @@ import play.data.*;
 import static play.data.Form.*;
 import play.*;
 import views.html.metodoQB.*;
+import play.libs.Json;
 import javax.persistence.PersistenceException;
 
 import models.*;
@@ -19,43 +20,42 @@ public class MetodosQB extends Controller {
     }
     
     public static Result manter() {
-        Form<MetodoQuantificacaoBiomassa> metodoQBForm = form(MetodoQuantificacaoBiomassa.class);
-        return ok(
+          return ok(
             manter.render(
-                MetodoQuantificacaoBiomassa.list("descricao","asc", ""), metodoQBForm)
+                MetodoQuantificacaoBiomassa.list("descricao","asc", ""))
             );
     }
     
-    public static Result editar(Long id) {
-        Form<MetodoQuantificacaoBiomassa> metodoQBForm = form(MetodoQuantificacaoBiomassa.class).fill(
-                MetodoQuantificacaoBiomassa.find.byId(id)
-        );
+    public static Result novoEditar(Long id, int quemChama) {
+        Form<MetodoQuantificacaoBiomassa> metodoQBForm;
+        if(id==0){
+                metodoQBForm = form(MetodoQuantificacaoBiomassa.class);
+        }else{
+                metodoQBForm = form(MetodoQuantificacaoBiomassa.class).fill(MetodoQuantificacaoBiomassa.find.byId(id));
+        }
+        
         return ok(
-            editarForm.render(id, metodoQBForm)
+                novoEditar.render(id, metodoQBForm, quemChama)
         );
     }
-    
-     public static Result update(Long id) {
+
+    public static Result salvar(Long id, int quemChama) {
         Form<MetodoQuantificacaoBiomassa> metodoQBForm = form(MetodoQuantificacaoBiomassa.class).bindFromRequest();
         if(metodoQBForm.hasErrors()) {
-            return badRequest(editarForm.render(id, metodoQBForm));
+            return badRequest(novoEditar.render(id, metodoQBForm, quemChama));
         }
-        metodoQBForm.get().update(id);
-        flash("success", "O Método de Quantificação de Biomassa " + metodoQBForm.get().descricao + " foi alterado com sucesso");
-        return GO_HOME;
-    }
-    
-       
-    public static Result salvar() {
-        Form<MetodoQuantificacaoBiomassa> metodoQBForm = form(MetodoQuantificacaoBiomassa.class).bindFromRequest();
-        if(metodoQBForm.hasErrors()) {
-            return badRequest(manter.render(MetodoQuantificacaoBiomassa.list("descricao", "asc", ""), metodoQBForm));
+        if(quemChama==2 && id!=0){
+            flash("success", "MetodoQB " + metodoQBForm.get().descricao + " foi editado com sucesso");
+            metodoQBForm.get().update(id);
+        }else if(quemChama==0){
+            flash("success", "MetodoQB " + metodoQBForm.get().descricao + " foi incluido com sucesso");
+            metodoQBForm.get().save();
+        }else{
+            metodoQBForm.get().save();
         }
-        metodoQBForm.get().save();
-        flash("success", "O Método de Quantificação de Biomassa " + metodoQBForm.get().descricao + " foi incluido com sucesso");
-        return GO_HOME;
+        
+        return ok(Json.toJson(metodoQBForm.get()));
     }
-    
     
     public static Result deletar(Long id) {
         try{
