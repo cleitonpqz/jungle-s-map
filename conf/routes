@@ -62,25 +62,19 @@ GET    /metodosQC                                   controllers.MetodosQC.manter
 POST   /metodosQC/:id/:quemChama/salvar             controllers.MetodosQC.salvar(id:Long, quemChama:Integer)
 GET    /metodosQC/:id/deletar                       controllers.MetodosQC.deletar(id:Long)
 #-----------------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
+
 #Variável Listar e novo
-GET	/variaveis/novo                    controllers.Variaveis.novo()
-POST	/variaveis/salvar                  controllers.Variaveis.salvarSelecionar()
 GET     /variaveis                         controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
-POST    /variaveis                         controllers.Variaveis.salvar()
+
 # Bioma Editar                     
-GET     /variaveis/:id                     controllers.Variaveis.editar(id:Long)
-POST    /variaveis/:id                     controllers.Variaveis.update(id:Long)
 # Bioma Deletar
 GET    /variaveis/:id/deletar              controllers.Variaveis.deletar(id:Long)
 POST   /variaveis/findByLocal/			   controllers.Variaveis.findByLocal(id: Long)
-=======
 #Variável
 GET    /variaveis/:id/:quemChama/novaEditar         controllers.Variaveis.novaEditar(id:Long, quemChama:Integer)
-GET    /variaveis                                   controllers.Variaveis.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST   /variaveis/:id/:quemChama/salvar             controllers.Variaveis.salvar(id:Long, quemChama:Integer)
 GET    /variaveis/:id/deletar                       controllers.Variaveis.deletar(id:Long)
->>>>>>> ac62a2d54cddcd0330d06528ba923790224fa2b9
+
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #AutoresModelos

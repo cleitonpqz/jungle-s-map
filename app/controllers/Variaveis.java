@@ -8,12 +8,8 @@ import play.*;
 import views.html.variavel.*;
 import javax.persistence.PersistenceException;
 import play.libs.Json;
-<<<<<<< HEAD
-import play.libs.Json.*;
 import com.avaje.ebean.*;
 import static play.libs.Json.toJson;
-=======
->>>>>>> ac62a2d54cddcd0330d06528ba923790224fa2b9
 
 import models.*;
 
