@@ -20,6 +20,17 @@ public class Local extends Model {
 
     @Constraints.Required(message="O campo área é obrigatório!")
     public Double area_total;
+    
+    public Double area_parcela;
+    
+    public Double qtde_biomassa;
+    
+    public Double qtde_carbono;
+    
+    public Double qtde_volume;
+    
+    @ManyToOne
+    public TipoEstimativa tipo_estimativa;
 
     @ManyToOne
     public TrabalhoCientifico trabalho_cientifico;
@@ -29,6 +40,9 @@ public class Local extends Model {
 
     @ManyToOne
     public Espacamento espacamento;
+    
+    @OneToMany(targetEntity = ArvoreAjuste.class, cascade = CascadeType.ALL)
+    public List<ArvoreAjuste> arvore_ajuste = new ArrayList<ArvoreAjuste>();
 
     @OneToMany(targetEntity = MunicipioLocal.class, cascade = CascadeType.ALL)
     public List<MunicipioLocal> municipios_locais = new ArrayList<MunicipioLocal>();
@@ -38,7 +52,22 @@ public class Local extends Model {
 
     @OneToMany(targetEntity = Parcela.class, cascade = CascadeType.ALL)
     public List<Parcela> parcelas = new ArrayList<Parcela>();
-
+    
+     @OneToOne(mappedBy="local",optional = true, cascade = CascadeType.ALL)
+     @PrimaryKeyJoinColumn
+     @JoinColumn(name="id")
+     public LocalDetalheBiomassa local_detalhe_biomassa;
+     
+     @OneToOne(mappedBy="local",optional = true, cascade = CascadeType.ALL)
+     @PrimaryKeyJoinColumn
+     @JoinColumn(name="id")
+     public LocalDetalheCarbono local_detalhe_carbono;
+      
+     @OneToOne(mappedBy="local",optional = true, cascade = CascadeType.ALL)
+     @PrimaryKeyJoinColumn
+     @JoinColumn(name="id")
+     public LocalDetalheVolume local_detalhe_volume;
+    
     public static Model.Finder<Long,Local> find = new Model.Finder<Long,Local>(Long.class, Local.class);
 
     public static List<Local> list(String sortBy, String order, String filter) {

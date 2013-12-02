@@ -331,7 +331,14 @@ $(document).ready(function(){
       popup = window.open('@routes.Locais.localizarSimilar(0, "descricao", "asc", -1, -1, "", -1, -1)', 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
     }
 
-    
+    $('.soNumeros').keypress(function(event) {
+
+      if (event.which == 8 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46) {
+            return true;
+        }else if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    });
     </script>
 }
 @municipioGroup(field: Field, className: String = "municipio") = {
@@ -358,8 +365,8 @@ $(document).ready(function(){
 @coordenadaGroup(field: Field, className: String = "coordenada") = {
     <div class="well form-inline @className">
        <a class="removeCoordenada btn btn-danger pull-right btn-small">Remover</a>
-        <input type="text" name="coordenadas[0].latitude" class="large" placeholder="Latitude">  
-        <input type="text" name="coordenadas[0].longitude" class="large" placeholder="Longitude">  
+        <input type="text" name="coordenadas[0].latitude" class="soNumeros large" placeholder="Latitude">  
+        <input type="text" name="coordenadas[0].longitude" class="soNumeros large" placeholder="Longitude">  
   </div>
 
  }
@@ -444,7 +451,7 @@ $(document).ready(function(){
                 @inputText(
                     localForm("area_total"), 
                     '_label -> "Área Total (ha)",
-                    'class ->"input-xlarge",
+                    'class ->"soNumeros input-xlarge",
                     'rel->"tooltip",
                     'title->"Digite o nome do local",
                     '_help -> "",

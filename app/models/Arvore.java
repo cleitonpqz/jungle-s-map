@@ -30,7 +30,8 @@ public class Arvore extends Model {
     public Long qtdBiomassaEst;
 
     @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
-    public List<VariavelArvore> variavelArvore;
+    public List<VariavelArvore> variavelArvore = new ArrayList<VariavelArvore>();
+
     
     public static Model.Finder<Long,Arvore> find = new Model.Finder<Long,Arvore>(Long.class, Arvore.class);
 

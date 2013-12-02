@@ -346,6 +346,15 @@ $(document).ready(function(){
 
                            
      };
+     
+      $('.soNumeros').keypress(function(event) {
+
+      if (event.which == 8 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46) {
+            return true;
+        }else if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    });
     </script>
 }
 @municipioGroup(field: Field, fieldName: String = "municipios_locais[0]", className: String = "municipio") = {
@@ -372,8 +381,8 @@ $(document).ready(function(){
  
     <div class="well form-inline @className">
        <a class="removeCoordenada btn btn-danger pull-right btn-small">Remover</a>
-        <input type="text" name="@{fieldName+".latitude"}" class="large" placeholder="Latitude" value="@field("latitude").value")">  
-        <input type="text" name="@{fieldName+".longitude"}" class="large" placeholder="Longitude" value="@field("longitude").value")">  
+        <input type="text" name="@{fieldName+".latitude"}" class="soNumeros large" placeholder="Latitude" value="@field("latitude").value")">  
+        <input type="text" name="@{fieldName+".longitude"}" class="soNumeros large" placeholder="Longitude" value="@field("longitude").value")">  
   </div>
  
  }
@@ -459,7 +468,7 @@ $(document).ready(function(){
                 @inputText(
                     localForm("area_total"), 
                     '_label -> "Área Total (ha)",
-                    'class ->"input-xlarge",
+                    'class ->"soNumeros input-xlarge",
                     'rel->"tooltip",
                     'title->"Digite o nome do local",
                     '_help -> "",
