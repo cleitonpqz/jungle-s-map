@@ -35,6 +35,7 @@ public class Arvores extends Controller {
 		int cont = linhas.length;
 		String numParcela = "";
 		Long idParcela = null;
+		List<SqlRow> variaveis = Variavel.findByLocal(id);
 
 		for(int i = 0; i < cont ; i++){
 			String temp = linhas[i];
@@ -55,9 +56,9 @@ public class Arvores extends Controller {
 					arvore.numArvore = Long.valueOf(itens[1]);
 					//arvore.dap = Long.valueOf(itens[2]);
 					//arvore.altura = Long.valueOf(itens[3]);
-					arvore.qtdBiomassaObs = itens[4];
-					arvore.qtdCarbonoObs = itens[5];
-					arvore.qtdVolumeObs = itens[6];
+					arvore.qtdBiomassaObs = itens[2];
+					arvore.qtdCarbonoObs = itens[3];
+					arvore.qtdVolumeObs = itens[4];
 					arvore.save();
 
 				}else{
@@ -66,9 +67,9 @@ public class Arvores extends Controller {
 					arvore.numArvore = Long.valueOf(itens[1]);
 					//arvore.dap = Long.valueOf(itens[2]);
 					//arvore.altura = Long.valueOf(itens[3]);
-					arvore.qtdBiomassaObs = itens[4];
-					arvore.qtdCarbonoObs = itens[5];
-					arvore.qtdVolumeObs = itens[6];
+					arvore.qtdBiomassaObs = itens[2];
+					arvore.qtdCarbonoObs = itens[3];
+					arvore.qtdVolumeObs = itens[4];
 					arvore.save();
 				}
 			}
@@ -82,7 +83,7 @@ public class Arvores extends Controller {
 		Long idParcela = null;
 		String numParcela = "";
 
-		//List<Variavel> variaveis = Variavel.findByLocal(id);
+		List<SqlRow> variaveis = Variavel.findByLocal(id);
         
         for(JsonNode row : json){
 
@@ -101,6 +102,15 @@ public class Arvores extends Controller {
 				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
 				arvore.qtdCarbonoObs = (row.get("carbono").toString());
 				arvore.qtdVolumeObs = (row.get("volume").toString());
+				for(SqlRow l: variaveis){
+
+					Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
+					VariavelArvore varA = new VariavelArvore();
+					varA.valor = Long.valueOf(row.get(l.getString("id")).toString());
+					varA.variavel = var;
+					arvore.variavelArvore.add(varA); 
+				}
+				
 				arvore.save();
         	}
         	else{
@@ -110,13 +120,23 @@ public class Arvores extends Controller {
 				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
 				arvore.qtdCarbonoObs = (row.get("carbono").toString());
 				arvore.qtdVolumeObs = (row.get("volume").toString());
+				for(SqlRow l: variaveis){
+
+					Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
+					VariavelArvore varA = new VariavelArvore();
+					varA.valor = Long.valueOf(row.get(l.getString("id")).toString());
+					varA.variavel = var;
+					arvore.variavelArvore.add(varA); 
+				}
 				arvore.save();
 
         	}
         }
+       
+        
 		
             return ok(Json.toJson("mensagem : sucesso"));
-            //return ok(Json.toJson(variaveis));
+            //return ok(Json.toJson(teste));
         }
 
 }

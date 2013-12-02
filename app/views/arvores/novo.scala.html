@@ -21,8 +21,9 @@
   		<div id='jqxWidget arvore'>
   		    <div class="jqxgrid" id="jqxgrid_arvore"></div>
   		        <div style='margin-top: 20px;'>
+              <div class="arv"></div>
   		            <div>
-  		                <input type="button" value="Export to Excel" id='excelExportArvore' class="btn" />
+  		                <input type="button" value="Baixar Modelo" id='excelExportArvore' class="btn" />
   		                <input type="button" value="Adicionar Linha" id='addRowArvore' class="btn" />
   		            </div>
   		        </div>
@@ -35,6 +36,7 @@
     <br />
       
       <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
+      
       <div id="arv"></div>
     </div>
     </div>
@@ -99,7 +101,7 @@ $(document).ready(function(){
                 for (var i = 0; i < 5; i++) {
                   columns[i] =  { text: arvore_source.datafields[i].name.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
                 };
-                
+
                 for (var i = 5; i < arvore_source.datafields.length; i++){
                   columns[i] = { text: data[i - 5].sigla.toUpperCase() , datafield: arvore_source.datafields[i].name, cellsformat: 'd' }
                 }
@@ -131,9 +133,12 @@ $(document).ready(function(){
                 });
                 
                 $("#excelExportArvore").click(function () {
-                    grid_arvore.jqxGrid('exportdata', 'xls', 'jqxGrid', true);
+                    grid_arvore.jqxGrid('exportdata', 'xls', 'arvore', true);
                 });
 
+              },
+              error: function(){
+                   $("#arv").html("<label>Nenhuma Variavel Encontrada, favor cadastrar!</label>")
               }
             });
             
@@ -197,10 +202,15 @@ $(document).ready(function(){
  </script> 
  <script type="text/javascript">
 
+
     $(document).ready(function() {
       if(isAPIAvailable()) {
         $('#files').bind('change', handleFileSelect);
       }
+
+      $("#excelExportArvore1").click(function () {
+                    grid_arvore.jqxGrid('exportdata', 'xls', 'arvore', true);
+                });
     });
 
   function isAPIAvailable() {

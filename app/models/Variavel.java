@@ -47,7 +47,7 @@ public class Variavel extends Model {
 
     public static List<SqlRow> findByLocal(Long id) {
          
-        String sql =" SELECT " 
+        String sql =" SELECT DISTINCT " 
                       +"variavel.id," 
                       +"variavel.sigla," 
                       +"variavel.nome "
@@ -77,11 +77,13 @@ public class Variavel extends Model {
   public static List<Variavel> _findByLocal(long id){
     List<Variavel> variaveis = 
     Ebean.find(Variavel.class)
-      .fetch("equacao_variavel")
-      .fetch("equacao_variavel.equacao")
-      .fetch("equacao.trabalho_cientifico_equacao")
-      .fetch("TrabalhoCientificoEquacao.trabalho_cientifico")
-      .fetch("local.trabalho_cientifico")
+      .fetch("Local.trabalho_cientifico_id")
+      .fetch("TrabalhoCientifico.id")
+      .fetch("equacaovariavel.equacao_id")
+      .fetch("Equacao.trabalho_cientifico_equacao")
+      .fetch("TrabalhoCientificoEquacao.trabalho_cientifico_id")
+      
+      
       .where().eq("local.id", id)
       .findList();
 
