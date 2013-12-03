@@ -122,6 +122,7 @@ GET	/DadosLocal/:id              controllers.DadosLocal.calcular(id:Long)
 GET   /Arvores/:id			controllers.Arvores.novo(id:Long)
 POST /Arvores/saveFile                  controllers.Arvores.saveFile(files:String, id:Long)
 POST /arvores/saveGrid			controllers.Arvores.saveGrid(id:Long)
+POST /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Parcelas novo, saveFile
 
