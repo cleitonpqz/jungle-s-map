@@ -35,10 +35,10 @@ public class Parcelas extends Controller {
 			if(itens[0] != null){
 				Parcela parcela = new Parcela();
 				parcela.local = local;
-				parcela.numParcela = Long.valueOf(itens[0]);
-				parcela.biomassa = Long.valueOf(itens[0]);
-				parcela.carbono = Long.valueOf(itens[0]);
-				parcela.volume = Long.valueOf(itens[0]);
+				parcela.num_parcela = Long.valueOf(itens[0]);
+				parcela.biomassa = Double.valueOf(itens[0]);
+				parcela.carbono = Double.valueOf(itens[0]);
+				parcela.volume = Double.valueOf(itens[0]);
 
 				parcela.save();
 			}
@@ -53,10 +53,10 @@ public class Parcelas extends Controller {
                 for(JsonNode row : json){
                     Parcela parcela = new Parcela();
 				parcela.local = local;
-				parcela.numParcela = Long.valueOf(row.get("parcela").toString());
-				parcela.biomassa = Long.valueOf(row.get("biomassa").toString());
-				parcela.carbono = Long.valueOf(row.get("carbono").toString());
-				parcela.volume = Long.valueOf(row.get("volume").toString());
+				parcela.num_parcela = Long.valueOf(row.get("parcela").toString());
+				parcela.biomassa = Double.valueOf(row.get("biomassa").toString());
+				parcela.carbono = Double.valueOf(row.get("carbono").toString());
+				parcela.volume = Double.valueOf(row.get("volume").toString());
 
 				parcela.save();
                 }

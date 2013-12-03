@@ -18,22 +18,9 @@ public class Arvore extends Model {
     @ManyToOne
     public Parcela parcela;
 
-<<<<<<< HEAD
     @ManyToMany(cascade=CascadeType.ALL)
     public Local local;
 
-    public Long numArvore;
-    public String qtdBiomassaObs;
-    public String qtdCarbonoObs;
-    public Long qtdCarbonoEst;
-    public String qtdVolumeObs;
-    public Long qtdVolumeEst;
-    public Long qtdBiomassaEst;
-
-    @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
-    public List<VariavelArvore> variavelArvore = new ArrayList<VariavelArvore>();
-
-=======
     public Long num_arvore;
     public Double qtd_biomassa_obs;
     public Double qtd_carbono_obs;
@@ -44,8 +31,7 @@ public class Arvore extends Model {
 
     @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
     public List<VariavelArvore> variavel_arvore = new ArrayList<VariavelArvore>();
->>>>>>> Cálculos
-    
+
     public static Model.Finder<Long,Arvore> find = new Model.Finder<Long,Arvore>(Long.class, Arvore.class);
 
     public static Map<String,String> opcoes() {

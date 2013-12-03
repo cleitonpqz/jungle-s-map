@@ -47,6 +47,7 @@ public class Arvores extends Controller {
 				if(numParcela != itens[0]){
 
 					Parcela parcela = new Parcela();
+					
 					parcela.local = local;
 					parcela.numParcela = Long.valueOf(itens[0]);
 					parcela.save();
@@ -55,6 +56,7 @@ public class Arvores extends Controller {
 
 					Arvore arvore = new Arvore();
 					arvore.parcela = parcela;
+
 					arvore.numArvore = Long.valueOf(itens[1]);
 					arvore.qtdBiomassaObs = itens[2];
 					arvore.qtdCarbonoObs = itens[3];
@@ -68,12 +70,12 @@ public class Arvores extends Controller {
 						arvore.variavelArvore.add(varA);
 						x ++; 
 					}
-
 					arvore.save();
 
 				}else{
 					Arvore arvore = new Arvore();
 					arvore.parcela = Parcela.find.byId(idParcela);
+
 					arvore.numArvore = Long.valueOf(itens[1]);
 					arvore.qtdBiomassaObs = itens[2];
 					arvore.qtdCarbonoObs = itens[3];
@@ -87,6 +89,7 @@ public class Arvores extends Controller {
 						arvore.variavelArvore.add(varA);
 						x ++; 
 					}
+
 					arvore.save();
 				}
 			}
@@ -107,7 +110,7 @@ public class Arvores extends Controller {
         	if(numParcela != row.get("parcela").toString()){
         		Parcela parcela = new Parcela();
         		parcela.local = local;
-        		parcela.numParcela = Long.valueOf(row.get("parcela").toString());
+        		parcela.num_parcela = Long.valueOf(row.get("parcela").toString());
         		parcela.save();
 
         		idParcela = parcela.id;
@@ -115,17 +118,17 @@ public class Arvores extends Controller {
         		Arvore arvore = new Arvore();
         		
         		arvore.parcela= parcela;
-        		arvore.numArvore = Long.valueOf(row.get("arvore").toString());
-				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
-				arvore.qtdCarbonoObs = (row.get("carbono").toString());
-				arvore.qtdVolumeObs = (row.get("volume").toString());
+        		arvore.num_arvore = Long.valueOf(row.get("arvore").toString());
+				arvore.qtd_biomassa_obs = Double.parseDouble((row.get("biomassa").toString()));
+				arvore.qtd_carbono_obs = Double.parseDouble((row.get("carbono").toString()));
+				arvore.qtd_volume_obs = Double.parseDouble((row.get("volume").toString()));
 				for(SqlRow l: variaveis){
 
 					Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
 					VariavelArvore varA = new VariavelArvore();
-					varA.valor = Long.valueOf(row.get(l.getString("id")).toString());
+					varA.valor = Double.valueOf(row.get(l.getString("id")).toString());
 					varA.variavel = var;
-					arvore.variavelArvore.add(varA); 
+					arvore.variavel_arvore.add(varA); 
 				}
 				
 				arvore.save();
@@ -133,17 +136,17 @@ public class Arvores extends Controller {
         	else{
 				Arvore arvore = new Arvore();
 				arvore.parcela = Parcela.find.byId(idParcela);
-				arvore.numArvore = Long.valueOf(row.get("arvore").toString());
-				arvore.qtdBiomassaObs = (row.get("biomassa").toString());
-				arvore.qtdCarbonoObs = (row.get("carbono").toString());
-				arvore.qtdVolumeObs = (row.get("volume").toString());
+				arvore.num_arvore = Long.valueOf(row.get("arvore").toString());
+				arvore.qtd_biomassa_obs = Double.parseDouble((row.get("biomassa").toString()));
+				arvore.qtd_carbono_obs = Double.parseDouble((row.get("carbono").toString()));
+				arvore.qtd_volume_obs = Double.parseDouble((row.get("volume").toString()));
 				for(SqlRow l: variaveis){
 
 					Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
 					VariavelArvore varA = new VariavelArvore();
-					varA.valor = Long.valueOf(row.get(l.getString("id")).toString());
+					varA.valor = Double.valueOf(row.get(l.getString("id")).toString());
 					varA.variavel = var;
-					arvore.variavelArvore.add(varA); 
+					arvore.variavel_arvore.add(varA); 
 				}
 				arvore.save();
 

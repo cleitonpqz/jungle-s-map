@@ -7,12 +7,12 @@ create table arvore (
   id                        bigint not null,
   parcela_id                bigint,
   num_arvore                bigint,
-  qtd_biomassa_obs          varchar(255),
-  qtd_carbono_obs           varchar(255),
-  qtd_carbono_est           bigint,
-  qtd_volume_obs            varchar(255),
-  qtd_volume_est            bigint,
-  qtd_biomassa_est          bigint,
+  qtd_biomassa_obs          float,
+  qtd_carbono_obs           float,
+  qtd_carbono_est           float,
+  qtd_volume_obs            float,
+  qtd_volume_est            float,
+  qtd_biomassa_est          float,
   constraint pk_arvore primary key (id))
 ;
 
@@ -20,17 +20,17 @@ create table arvore_ajuste (
   id                        bigint not null,
   local_id                  bigint not null,
   num_arvore                bigint,
-  qtd_biomassa_obs          varchar(255),
-  qtd_carbono_obs           varchar(255),
-  qtd_carbono_est           bigint,
-  qtd_volume_obs            varchar(255),
-  qtd_volume_est            bigint,
-  qtd_biomassa_est          bigint,
+  qtd_biomassa_obs          float,
+  qtd_carbono_obs           float,
+  qtd_carbono_est           float,
+  qtd_volume_obs            float,
+  qtd_volume_est            float,
+  qtd_biomassa_est          float,
   constraint pk_arvore_ajuste primary key (id))
 ;
 
 create table arvore_ajuste_variavel (
-  id                        float not null,
+  id                        bigint not null,
   valor                     float,
   arvore_ajuste_id          bigint,
   variavel_id               bigint,
@@ -138,7 +138,7 @@ create table local_detalhe_biomassa (
   erro_absoluto             float,
   erro_relativo             float,
   intervalo_confianca_min_parcela float,
-  intervalo_confiancam_max_parcela float,
+  intervalo_confianca_max_parcela float,
   constraint pk_local_detalhe_biomassa primary key (id))
 ;
 
@@ -158,7 +158,7 @@ create table local_detalhe_carbono (
   erro_absoluto             float,
   erro_relativo             float,
   intervalo_confianca_min_parcela float,
-  intervalo_confiancam_max_parcela float,
+  intervalo_confianca_max_parcela float,
   constraint pk_local_detalhe_carbono primary key (id))
 ;
 
@@ -178,7 +178,7 @@ create table local_detalhe_volume (
   erro_absoluto             float,
   erro_relativo             float,
   intervalo_confianca_min_parcela float,
-  intervalo_confiancam_max_parcela float,
+  intervalo_confianca_max_parcela float,
   constraint pk_local_detalhe_volume primary key (id))
 ;
 
@@ -220,27 +220,27 @@ create table parcela (
   id                        bigint not null,
   local_id                  bigint,
   num_parcela               bigint,
-  area                      bigint,
-  biomassa                  bigint,
-  qtd_biomassa_min          bigint,
-  qtd_biomassa_med          bigint,
-  qtd_biomassa_max          bigint,
-  carbono                   bigint,
-  qtd_carbono_min           bigint,
-  qtd_carbono_med           bigint,
-  qtd_carbono_max           bigint,
-  volume                    bigint,
-  qtd_volume_min            bigint,
-  qtd_volume_med            bigint,
-  qtd_volume_max            bigint,
-  r2                        bigint,
-  r2ajust                   bigint,
-  ia                        bigint,
-  syx                       bigint,
-  syx_perc                  bigint,
-  fm                        bigint,
-  syx_fm                    bigint,
-  syx_fm_perc               bigint,
+  area                      float,
+  biomassa                  float,
+  qtd_biomassa_min          float,
+  qtd_biomassa_med          float,
+  qtd_biomassa_max          float,
+  carbono                   float,
+  qtd_carbono_min           float,
+  qtd_carbono_med           float,
+  qtd_arbono_max            float,
+  volume                    float,
+  qtd_volume_min            float,
+  qtd_volume_med            float,
+  qtd_volume_max            float,
+  r2                        float,
+  r2_ajust                  float,
+  ia                        float,
+  syx                       float,
+  syx_perc                  float,
+  fm                        float,
+  syx_fm                    float,
+  syx_fm_perc               float,
   constraint pk_parcela primary key (id))
 ;
 
@@ -286,7 +286,7 @@ create table variavel_arvore (
   id                        bigint not null,
   arvore_id                 bigint,
   variavel_id               bigint,
-  valor                     bigint,
+  valor                     float,
   constraint pk_variavel_arvore primary key (id))
 ;
 
