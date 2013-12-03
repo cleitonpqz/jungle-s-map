@@ -58,14 +58,14 @@ public class Arvores extends Controller {
 					arvore.parcela = parcela;
 
 					arvore.num_arvore = Long.valueOf(itens[1]);
-					arvore.qtd_biomassa_obs = itens[2];
-					arvore.qtd_carbono_obs = itens[3];
-					arvore.qtd_volume_obs = itens[4];
+					arvore.qtd_biomassa_obs = Double.valueOf(itens[2]);
+					arvore.qtd_carbono_obs = Double.valueOf(itens[3]);
+					arvore.qtd_volume_obs = Double.valueOf(itens[4]);
 					int x = 5;
 					for(SqlRow l : variaveis){
 						Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
 						VariavelArvore varA = new VariavelArvore();
-						varA.valor = Long.valueOf(itens[x]);
+						varA.valor = Double.valueOf(itens[x]);
 						varA.variavel = var;
 						arvore.variavel_arvore.add(varA);
 						x ++; 
@@ -77,14 +77,14 @@ public class Arvores extends Controller {
 					arvore.parcela = Parcela.find.byId(idParcela);
 
 					arvore.num_arvore = Long.valueOf(itens[1]);
-					arvore.qtd_biomassa_obs = itens[2];
-					arvore.qtd_carbono_obs = itens[3];
-					arvore.qtd_volume_obs = itens[4];
+					arvore.qtd_biomassa_obs = Double.valueOf(itens[2]);
+					arvore.qtd_carbono_obs = Double.valueOf(itens[3]);
+					arvore.qtd_volume_obs = Double.valueOf(itens[4]);
 					int x = 5;
 					for(SqlRow l : variaveis){
 						Variavel var = Variavel.find.byId(Long.valueOf(l.getString("id")));
 						VariavelArvore varA = new VariavelArvore();
-						varA.valor = Long.valueOf(itens[x]);
+						varA.valor = Double.valueOf(itens[x]);
 						varA.variavel = var;
 						arvore.variavel_arvore.add(varA);
 						x ++; 
