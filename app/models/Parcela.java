@@ -18,37 +18,37 @@ public class Parcela extends Model {
     public Local local;
 
     @OneToMany(targetEntity = Arvore.class, cascade = CascadeType.ALL)
-    public Arvore arvore;
+    public List<Arvore> arvore = new ArrayList<Arvore>();
 
-    public Long numParcela;
-    public long area;
-    public long biomassa;
-    public Long qtdBiomassaMin;
-    public Long qtdBiomassaMed;
-    public Long qtdBiomassaMax;
-    public long carbono;
-    public Long qtdCarbonoMin;
-    public Long qtdCarbonoMed;
-    public Long qtdCarbonoMax;
-    public long volume;
-    public Long qtdVolumeMin;
-    public Long qtdVolumeMed;
-    public Long qtdVolumeMax;
-    public Long r2;
-    public Long r2Ajust;
-    public Long ia;
-    public Long syx;
-    public Long syxPerc;
-    public Long fm;
-    public Long syxFm;
-    public Long syxFmPerc;
+    public Long num_parcela;
+    public Double area;
+    public Double biomassa;
+    public Double qtd_biomassa_min;
+    public Double qtd_biomassa_med;
+    public Double qtd_biomassa_max;
+    public Double carbono;
+    public Double qtd_carbono_min;
+    public Double qtd_carbono_med;
+    public Double qtd_arbono_max;
+    public Double volume;
+    public Double qtd_volume_min;
+    public Double qtd_volume_med;
+    public Double qtd_volume_max;
+    public Double r2;
+    public Double r2_ajust;
+    public Double ia;
+    public Double syx;
+    public Double syx_perc;
+    public Double fm;
+    public Double syx_fm;
+    public Double syx_fm_perc;
         
    public static Model.Finder<Long,Parcela> find = new Model.Finder<Long,Parcela>(Long.class, Parcela.class);
 
     public static Map<String,String> opcoes() {
         LinkedHashMap<String,String> opcoes = new LinkedHashMap<String,String>();
-        for(Parcela a: Parcela.find.orderBy("numParcela").findList()) {
-            opcoes.put(a.id.toString(), a.numParcela.toString()) ;
+        for(Parcela a: Parcela.find.orderBy("num_parcela").findList()) {
+            opcoes.put(a.id.toString(), a.num_parcela.toString()) ;
          }
         return opcoes;
     }

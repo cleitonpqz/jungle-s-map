@@ -20,7 +20,7 @@ public class Variavel extends Model {
     public String nome;
 
     @OneToMany(targetEntity = VariavelArvore.class, cascade = CascadeType.ALL)
-    public VariavelArvore variavelArvore;
+    public VariavelArvore variavel_arvore;
     
     public static Model.Finder<Long,Variavel> find = new Model.Finder<Long,Variavel>(Long.class, Variavel.class);
 

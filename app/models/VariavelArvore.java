@@ -18,7 +18,7 @@ public class VariavelArvore extends Model {
     public Arvore arvore;
     @ManyToOne
     public Variavel variavel;
-    public Long valor;
+    public Double valor;
     
    public static Model.Finder<Long,VariavelArvore> find = new Model.Finder<Long,VariavelArvore>(Long.class, VariavelArvore.class);
 
