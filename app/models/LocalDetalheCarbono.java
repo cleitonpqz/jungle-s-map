@@ -31,6 +31,6 @@ public class LocalDetalheCarbono extends Model{
     public double erro_absoluto;
     public double erro_relativo;
     public double intervalo_confianca_min_parcela;
-    public double intervalo_confiancam_max_parcela;
+    public double intervalo_confianca_max_parcela;
     
 }

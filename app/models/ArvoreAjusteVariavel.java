@@ -11,7 +11,7 @@ import com.avaje.ebean.*;
 public class ArvoreAjusteVariavel extends Model {
    
   @Id
-  public Double id;
+  public Long id;
     
   public Double valor;
    
