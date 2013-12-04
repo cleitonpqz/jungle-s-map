@@ -7,12 +7,12 @@ GET     /                                   controllers.Application.index()
 GET     /javascriptRoutes                   controllers.Application.javascriptRoutes()
 
 # Trabalho Científico Listar e novo
-GET     /trabalhos/manter                 controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
-GET     /trabalhos                        controllers.TrabalhosCientificos.incluirEditar(id : Long)
-POST    /trabalhos                        controllers.TrabalhosCientificos.salvar(id : Long)
+GET     /trabalhos/manter                   controllers.TrabalhosCientificos.manter(p:Int ?= 0, s ?= "autor.nome", o ?= "asc", f ?= "")
+GET     /trabalhos                          controllers.TrabalhosCientificos.incluirEditar(id : Long)
+POST    /trabalhos                          controllers.TrabalhosCientificos.salvar(id : Long)
 # Trabalho Científico Deletar
-GET    /trabalhos/:id/deletar              controllers.TrabalhosCientificos.deletar(id:Long)
-POST    /TrabalhosCientificos/findById     controllers.TrabalhosCientificos.findById(id:Long)
+GET    /trabalhos/:id/deletar               controllers.TrabalhosCientificos.deletar(id:Long)
+POST   /TrabalhosCientificos/findById       controllers.TrabalhosCientificos.findById(id:Long)
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -21,13 +21,13 @@ GET	/biomas/:id/:quemChama/:idFormacao/novoEditar         controllers.Biomas.nov
 GET     /biomas                                               controllers.Biomas.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /biomas/:id/:quemChama/salvar                         controllers.Biomas.salvar(id:Long, quemChama:Integer, idFormacao:Long)
 # Bioma Deletar
-GET    /biomas/:id/deletar                                    controllers.Biomas.deletar(id:Long)
+GET     /biomas/:id/deletar                                   controllers.Biomas.deletar(id:Long)
 #-----------------------------------------------------------------------------------------------------------------------------
 #Formacoes
 GET	/formacoes/:id/:quemChama/novaEditar         controllers.Formacoes.novaEditar(id:Long, quemChama:Integer)
 GET     /formacoes                                   controllers.Formacoes.manter(p:Int ?= 0, s ?= "nome", o ?= "asc", f ?= "")
 POST    /formacoes/:id/:quemChama/salvar             controllers.Formacoes.salvar(id:Long, quemChama:Integer)
-GET    /formacoes/:id/deletar                        controllers.Formacoes.deletar(id:Long)
+GET     /formacoes/:id/deletar                       controllers.Formacoes.deletar(id:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Espacamentos
@@ -69,7 +69,7 @@ GET     /variaveis                         controllers.Variaveis.manter(p:Int ?=
 # Bioma Editar                     
 # Bioma Deletar
 GET    /variaveis/:id/deletar              controllers.Variaveis.deletar(id:Long)
-POST   /variaveis/findByLocal/			   controllers.Variaveis.findByLocal(id: Long)
+POST   /variaveis/findByLocal/             controllers.Variaveis.findByLocal(id: Long)
 #Variável
 GET    /variaveis/:id/:quemChama/novaEditar         controllers.Variaveis.novaEditar(id:Long, quemChama:Integer)
 POST   /variaveis/:id/:quemChama/salvar             controllers.Variaveis.salvar(id:Long, quemChama:Integer)
@@ -102,7 +102,7 @@ GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0
 GET     /equacoes                    controllers.Equacoes.cadastrar(variavelInteresse:Long)
 POST    /equacoes                    controllers.Equacoes.salvar(variavelInteresse:Long)
 POST    /equacoes/salvarAjax         controllers.Equacoes.salvarAjax(variavelInteresse:Long)
-GET    /equacoes/cadastrarModal      controllers.Equacoes.cadastrarModal(variavelInteresse:Long)
+GET     /equacoes/cadastrarModal      controllers.Equacoes.cadastrarModal(variavelInteresse:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Modelos Listar e novo
@@ -111,23 +111,27 @@ POST    /modelos                     controllers.Modelos.salvar(variavelInteress
 POST    /modelos/salvarAjax          controllers.Modelos.salvarAjax(variavelInteresse:Long)
 GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
 POST    /modelos/fazerAjuste         controllers.Modelos.fazerAjuste(id:Long)
-GET    /modelos/cadastrarModal        controllers.Modelos.cadastrarModal(variavelInteresse:Long)
+GET     /modelos/cadastrarModal      controllers.Modelos.cadastrarModal(variavelInteresse:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 
-GET	/DadosLocal/:id              controllers.DadosLocal.calcular(id:Long)
+GET	/DadosLocal/:id/:quemChamou/calcular         controllers.DadosLocal.calcular(id:Long, quemChamou:Integer)
+GET     /DadosLocal/:id/detalheBiomassa              controllers.DadosLocal.detalheBiomassa(id:Long)
+GET     /DadosLocal/:id/detalheCarbono               controllers.DadosLocal.detalheCarbono(id:Long)
+GET     /DadosLocal/:id/detalheVolume                controllers.DadosLocal.detalheVolume(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Arvores novo, saveFile
 
 GET   /Arvores/:id			controllers.Arvores.novo(id:Long)
 POST /Arvores/saveFile                  controllers.Arvores.saveFile(files:String, id:Long)
 POST /arvores/saveGrid			controllers.Arvores.saveGrid(id:Long)
+POST /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Parcelas novo, saveFile
 
-GET	/Parcelas/:id			controllers.Parcelas.novo(id:Long)
-POST /parcelas/saveFile			controllers.Parcelas.saveFile(files:String, id:Long)
-POST /parcelas/saveGrid			controllers.Parcelas.saveGrid(id:Long)
+GET     /Parcelas/:id                   controllers.Parcelas.novo(id:Long)
+POST    /parcelas/saveFile		controllers.Parcelas.saveFile(files:String, id:Long)
+POST    /parcelas/saveGrid		controllers.Parcelas.saveGrid(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # Map static resources from the /public folder to the /assets URL path

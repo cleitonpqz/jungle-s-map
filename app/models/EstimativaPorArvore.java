@@ -24,7 +24,7 @@ public class EstimativaPorArvore {
     JEP parserVolume;
             
     
-    public void calculaEstimativaPorArvore(Parcela parcela) throws SQLException {
+    public void calculaEstimativaPorArvore(Parcela parcela) {
 
         double somaBiomassaEst = 0.0;
         double somaCarbonoEst = 0.0;

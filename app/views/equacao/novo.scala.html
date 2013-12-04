@@ -202,18 +202,22 @@ $('body').on('click','#C', function(){
                     }
                 });
                 dataFilterRequest.done(function(data){
+				if(data.error=="null"){
                     @if(variavelInteresse==1){
-                        $("#modeloEquacaoBiomassa").append("<option value='" + data.id + "'> B= " + data.expressão +" | Não possue modelo cadastrado </option>").val(data.id)
+                        $("#modeloEquacaoBiomassa").append("<option value='" + data.id + "'> B= " + data.expressao +" | Não possui modelo cadastrado </option>").val(data.id)
                         $("#modalEquacao").modal("hide");
                     }
                     @if(variavelInteresse==2){
-                        $("#modeloEquacaoCarbono").append("<option value='" + data.id + "'> C= " + data.expressão +" | Não possue modelo cadastrado </option>").val(data.id)
+                        $("#modeloEquacaoCarbono").append("<option value='" + data.id + "'> C= " + data.expressao +" | Não possui modelo cadastrado </option>").val(data.id)
                         $("#modalEquacao").modal("hide");
                     }
                     @if(variavelInteresse==3){
-                        $("#modeloEquacaoVolume").append("<option value='" + data.id + "'> V= " + data.expressão +" | Não possue modelo cadastrado </option>").val(data.id)
+                        $("#modeloEquacaoVolume").append("<option value='" + data.id + "'> V= " + data.expressao +" | Não possui modelo cadastrado </option>").val(data.id)
                         $("#modalEquacao").modal("hide");
-                    } 
+                    }
+				}else{
+					alert(data.error);
+				}	
                        
                 }).fail(function(jqXHR, textStatus){
                     $("#equacaoForm").html(jqXHR.responseText);
@@ -238,7 +242,7 @@ $('body').on('click','#C', function(){
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal(if(quemChama!=2){"Cadastrar Equação"}else{"Editar Equação"}, "Salvar", quemChama, javascript){
+@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
     
     @form(routes.Equacoes.salvar(variavelInteresse), 'id -> "equacaoForm") {
         

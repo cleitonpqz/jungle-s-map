@@ -1,6 +1,5 @@
 package models;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.commons.math3.distribution.TDistribution;

@@ -349,18 +349,22 @@ $('body').on('click','#limparExpressao', function(){
                     }
                 });
                 dataFilterRequest.done(function(data){
+				if(data.error=="null"){
                     @if(variavelInteresse==1){
-                        $("#modeloEquacaoBiomassa").append("<option value='" + data.id + "'>Não possue equação cadastrada | B= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modeloEquacaoBiomassa").append("<option value='" + data.id + "'>Não possui equação cadastrada | B= " + data.expressao_modelo +"</option>").val(data.id)
                         $("#modalModelo").modal("hide");
                     }
                     @if(variavelInteresse==2){
-                        $("#modeloEquacaoCarbono").append("<option value='" + data.id + "'>Não possue equação cadastrada | C= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modeloEquacaoCarbono").append("<option value='" + data.id + "'>Não possui equação cadastrada | C= " + data.expressao_modelo +"</option>").val(data.id)
                         $("#modalModelo").modal("hide");
                     }
                     @if(variavelInteresse==3){
-                        $("#modeloEquacaoVolume").append("<option value='" + data.id + "'>Não possue equação cadastrada | V= " + data.expressao_modelo +"</option>").val(data.id)
+                        $("#modeloEquacaoVolume").append("<option value='" + data.id + "'>Não possui equação cadastrada | V= " + data.expressao_modelo +"</option>").val(data.id)
                         $("#modalModelo").modal("hide");
                     } 
+				}else{
+					alert(data.error);
+				}	
                        
                 }).fail(function(jqXHR, textStatus){
                     $("#equacaoForm").html(jqXHR.responseText);
@@ -374,7 +378,7 @@ $('body').on('click','#limparExpressao', function(){
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal(if(quemChama!=2){"Cadastrar Modelo"}else{"Editar Modelo"}, "Salvar", quemChama, javascript){
+@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
     
      @form(routes.Modelos.salvar(variavelInteresse), 'id -> "modeloForm") {
      <fieldset style="margin-left:10%; margin-right:auto;">

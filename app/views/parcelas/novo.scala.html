@@ -6,7 +6,7 @@
 
 @main("Cadastrar Dados de Parcelas"){
 
-@form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
+@form(action = routes.DadosLocal.calcular(1, 2), 'id -> "form") {
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
     <label>Área Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
@@ -40,7 +40,7 @@
     </div>
     <br />
     <hr>
-	<a href="@routes.DadosLocal.calcular(local.id)" class="btn btn-primary" rel="tooltip" title="Calcular Biomassa, Carbono">Calcular</a>
+	<a href="@routes.DadosLocal.calcular(local.id, 2)" class="btn btn-primary" rel="tooltip" title="Calcular Biomassa, Carbono">Calcular</a>
 
 
 </div>

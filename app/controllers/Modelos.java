@@ -52,16 +52,21 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
     }
     
      public static Result salvarAjax(Long varialvelInteresse) {
+		ObjectNode result = Json.newObject();
         Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
         if(form().bindFromRequest().get("expressao_modelo")==null 
             || form().bindFromRequest().get("expressao_modelo").equals("")) {
             equacaoForm.reject("expressao_modelo", "Campo de preenchimento obrigatório");
-        }
-        if(equacaoForm.hasErrors()) {
-            return badRequest(cadastrar.render(varialvelInteresse, equacaoForm));
+			result.put("error", "Campo modelo é obrigatório.");
+			return ok(result);
         }
         equacaoForm.get().save();
-        return ok(Json.toJson(equacaoForm.get()));
+        Equacao equacao = equacaoForm.get();
+		result.put("id", equacao.id);
+		result.put("expressao_modelo", equacao.expressao_modelo);
+		result.put("error", "null");
+        return ok(result);
+        
     }
      
      public static Result cadastrarModal(Long variavelInteresse) {

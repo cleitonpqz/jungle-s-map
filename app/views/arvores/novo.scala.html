@@ -5,7 +5,7 @@
 
 @main("Cadastrar Dados de Arvores"){
 
-@form(action = routes.DadosLocal.calcular(1), 'id -> "form") {
+@form(action = routes.DadosLocal.calcular(1, 1), 'id -> "form") {
 <div class="">
 
    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
@@ -36,13 +36,16 @@
     <br />
       
       <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
-      
+      <br />
+      <br />
+       <input type="button" value="Baixar Modelo" id='modelo' class="btn" />
+       
       <div id="arv"></div>
     </div>
     </div>
     <br />
     <hr>
-	   <a href="@routes.DadosLocal.calcular(1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
+	   <a href="@routes.DadosLocal.calcular(1, 1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
 
 </div>
 }}
@@ -61,6 +64,7 @@ $(document).ready(function(){
     	else if(tipo2 == true){
     		$("#arvore_manual").hide();
     		$("#arvore_import").show();
+
 		}
 		else 
 			alert("Selecione um Dado de Entrada e um Tipo de Entrada!!");
@@ -201,6 +205,15 @@ $(document).ready(function(){
     });
  </script> 
  <script type="text/javascript">
+  $("#modelo").click(function () {
+                     jsRoutes.controllers.Arvores.criaModelo(@local.id).ajax({
+                      success: function(data){
+                        
+                        //window.location('data:text/csv;charset=utf-8,' + escape(data)+ 'download=arvore.csv');
+                        window.open('data:text/csv;charset=utf-8,' + escape(data));
+                      }
+                     });
+                });
 
 
     $(document).ready(function() {
