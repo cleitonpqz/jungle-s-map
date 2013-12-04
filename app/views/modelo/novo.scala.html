@@ -98,16 +98,16 @@
                  if(countVariavel>0){
                       if(!existe(variavelUtilizada, varElemento[i][0])){
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='text' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='text' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
                    }
                    }else{
                         $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
-                                                    <input type='text' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
-                                                    <input type='text' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+varElemento[i][0]+"'>\n\
+                                                    <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
                        variavelUtilizada[countVariavel]=[varElemento[i][0], varElemento[i][1]];
                        countVariavel++;
@@ -119,8 +119,8 @@
         }
        $("#expressao").val(stringExpressao);
        $("#divTermos").append("<div id='divTermo_"+countTermo+"'>\n\
-                                <input type='text' name='termos["+countTermo+"].expressao' value='"+stringTermo+"'>\n\
-                                <input type='text' name='termos["+countTermo+"].ordem' value='"+countTermo+"'> </div>");
+                                <input type='hidden' name='termos["+countTermo+"].expressao' value='"+stringTermo+"'>\n\
+                                <input type='hidden' name='termos["+countTermo+"].ordem' value='"+countTermo+"'> </div>");
         
             
         countElementos=0;
@@ -378,7 +378,7 @@ $('body').on('click','#limparExpressao', function(){
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal(if(quemChama!=2){"Cadastrar Autor"}else{"Editar Autor"}, "Salvar", quemChama, javascript){
+@modal(if(quemChama!=2){"Cadastrar Modelo"}else{"Editar Modelo"}, "Salvar", quemChama, javascript){
     
      @form(routes.Modelos.salvar(variavelInteresse), 'id -> "modeloForm") {
      <fieldset style="margin-left:10%; margin-right:auto;">
