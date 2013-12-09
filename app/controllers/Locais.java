@@ -199,9 +199,56 @@ public class Locais extends Controller{
         result.put("coordenadas", Json.toJson(coordenadas));
         
         for(MunicipioLocal municipioLocal: local.municipios_locais){
-            municipios = municipios+municipioLocal.municipio.nome+", ";
+            if(municipioLocal.principal!=null)
+                municipios = municipios+municipioLocal.municipio.nome+"(principal), ";
+            else
+                municipios = municipios+municipioLocal.municipio.nome+", ";
         }
         result.put("municipios", Json.toJson(municipios));
+        if(local.qtde_biomassa!=null){
+            result.put("qtde_biomassa", String.format("%.4f",local.qtde_biomassa));
+        }else{
+            result.put("qtde_biomassa", "");
+        }
+        if(local.qtde_carbono!=null){
+            result.put("qtde_carbono", String.format("%.4f",local.qtde_carbono));
+        }else{
+            result.put("qtde_carbono", "");
+        }
+        if(local.qtde_volume!=null){
+            result.put("qtde_volume", String.format("%.4f",local.qtde_volume));
+        }else{
+            result.put("qtde_volume", "");
+        }
+        
+        if(local.trabalho_cientifico.trabalho_cientifico_equacao.get(0) != null){
+            for(TrabalhoCientificoEquacao trabalhoEquacao : local.trabalho_cientifico.trabalho_cientifico_equacao){
+                if(trabalhoEquacao.equacao.variavel_interesse.id == 1){
+                    if(trabalhoEquacao.equacao.expressao!=null && !trabalhoEquacao.equacao.expressao.equals("")){
+                        result.put("equacao_biomassa", trabalhoEquacao.equacao.expressao);
+                    }else result.put("equacao_biomassa", "Não possui equação cadastrada");
+                    if(trabalhoEquacao.equacao.expressao_modelo!=null && !trabalhoEquacao.equacao.expressao_modelo.equals("")){
+                        result.put("modelo_biomassa", trabalhoEquacao.equacao.expressao_modelo);
+                    }else result.put("modelo_biomassa", "Não possui modelo cadastrado");
+                }
+                if(trabalhoEquacao.equacao.variavel_interesse.id == 2){
+                    if(trabalhoEquacao.equacao.expressao!=null && !trabalhoEquacao.equacao.expressao.equals("")){
+                        result.put("equacao_carbono", trabalhoEquacao.equacao.expressao);
+                    }else result.put("equacao_carbono", "Não possui equação cadastrada");
+                    if(trabalhoEquacao.equacao.expressao_modelo!=null && !trabalhoEquacao.equacao.expressao_modelo.equals("")){
+                        result.put("modelo_carbono", trabalhoEquacao.equacao.expressao_modelo);
+                    }else result.put("modelo_carbono", "Não possui modelo cadastrado");
+                }
+                if(trabalhoEquacao.equacao.variavel_interesse.id == 3){
+                    if(trabalhoEquacao.equacao.expressao!=null && !trabalhoEquacao.equacao.expressao.equals("")){
+                        result.put("equacao_volume", trabalhoEquacao.equacao.expressao);
+                    }else result.put("equacao_volume", "Não possui equação cadastrada");
+                    if(trabalhoEquacao.equacao.expressao_modelo!=null && !trabalhoEquacao.equacao.expressao_modelo.equals("")){
+                        result.put("modelo_volume", trabalhoEquacao.equacao.expressao_modelo);
+                    }else result.put("modelo_volume", "Não possui modelo cadastrado");
+                }
+            }
+         }
  
         return ok(result);
     }

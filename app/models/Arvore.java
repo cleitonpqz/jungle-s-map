@@ -18,9 +18,6 @@ public class Arvore extends Model {
     @ManyToOne
     public Parcela parcela;
 
-    @ManyToMany(cascade=CascadeType.ALL)
-    public Local local;
-
     public Long num_arvore;
     public Double qtd_biomassa_obs;
     public Double qtd_carbono_obs;

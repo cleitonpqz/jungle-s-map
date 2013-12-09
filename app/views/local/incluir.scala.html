@@ -222,9 +222,12 @@ function findByIdTrabalhoCientifico() {
                         .html("<tr><td>Autor</td><td>"+data.autor.nome+"</td></tr>\n\\n\
                                 <tr><td>Ano</td><td>"+data.ano+"</td></tr>\n\
                                 <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
-                                <tr><td>Metodo de Qantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
-                                <tr><td>Metodo de Qantificação arbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>");
-                                $('#trabalhoCientificoModal').modal('hide');
+                                <tr><td>Metodo de Quant. Biomassa</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
+                                <tr><td>Metodo de Quant. Carbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>\n\
+                                <tr><th></th><th> Equações</th><th>Modelo</th></tr>\n\
+                                <tr><td>Biomassa</td><td>"+data.equacao_biomassa+"</td><td>"+data.modelo_biomassa+"</td></tr>\n\
+                                <tr><td>Carbono</td><td>"+data.equacao_carbono+"</td><td>"+data.modelo_carbono+"</td></tr>\n\
+                                <tr><td>Volume</td><td>"+data.equacao_volume+"</td><td>"+data.modelo_volume+"</td></tr>");
                                 e.stopPropagation();
 		}
          });
@@ -530,6 +533,7 @@ $(document).ready(function(){
                 </div>
                 
         </fieldset>
+     <br>
      <div class="well">
         <table id="trabalhoCientificoInformacao" class="table">
             

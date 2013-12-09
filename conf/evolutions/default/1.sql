@@ -18,14 +18,15 @@ create table arvore (
 
 create table arvore_ajuste (
   id                        bigint not null,
-  local_id                  bigint not null,
   num_arvore                bigint,
+  equacao_id                bigint,
   qtd_biomassa_obs          float,
   qtd_carbono_obs           float,
   qtd_carbono_est           float,
   qtd_volume_obs            float,
   qtd_volume_est            float,
   qtd_biomassa_est          float,
+  local_id                  bigint,
   constraint pk_arvore_ajuste primary key (id))
 ;
 

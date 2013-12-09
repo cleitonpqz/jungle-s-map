@@ -9,7 +9,7 @@ import org.apache.commons.math3.distribution.TDistribution;
 
 public class EstatisticaCalculos {
     
-    public Estatistica calculaEstatisticas(Long idLocal, Equacao equacao) throws SQLException {
+    public Estatistica calculaEstatisticas(Long idLocal, Equacao equacao){
         Double somaBiomassaEst = 0.0;
         Double somaCarbonoEst  = 0.0;
         Double somaVolumeEst   = 0.0;
@@ -59,7 +59,7 @@ public class EstatisticaCalculos {
             
         switch(equacao.variavel_interesse.id.intValue()){
           case 1: 
-                 for(ArvoreAjuste arvore : local.arvore_ajuste){
+                 for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                     somaBiomassaObs =+ arvore.qtd_biomassa_obs;
                     
                     parser = new org.nfunk.jep.JEP();
@@ -84,7 +84,7 @@ public class EstatisticaCalculos {
                   } else {
                     qtdeBiomassaObsMed = 0.0;
                   }
-                  for(ArvoreAjuste arvore : local.arvore_ajuste){
+                  for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                       qtdeBiomassaObs = arvore.qtd_biomassa_obs;
                       qtdeBiomassaEst = arvore.qtd_biomassa_est;
                       somaQuadradoResiduoBiomassa   =+ Math.pow((qtdeBiomassaObs - qtdeBiomassaEst), 2);
@@ -113,7 +113,7 @@ public class EstatisticaCalculos {
                
               break;
           case 2:
-                for(ArvoreAjuste arvore : local.arvore_ajuste){
+                for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                     somaCarbonoObs =+ arvore.qtd_carbono_obs;
                     
                     parser = new org.nfunk.jep.JEP();
@@ -138,7 +138,7 @@ public class EstatisticaCalculos {
                   } else {
                     qtdeCarbonoObsMed = 0.0;
                   }
-                  for(ArvoreAjuste arvore : local.arvore_ajuste){
+                  for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                       qtdeCarbonoObs = arvore.qtd_carbono_obs;
                       qtdeCarbonoEst = arvore.qtd_carbono_est;
                       somaQuadradoResiduoCarbono   =+ Math.pow((qtdeCarbonoObs - qtdeCarbonoEst), 2);
@@ -168,7 +168,7 @@ public class EstatisticaCalculos {
                
               break;
           case 3:
-              for(ArvoreAjuste arvore : local.arvore_ajuste){
+              for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                     somaVolumeObs =+ arvore.qtd_carbono_obs;
                     
                     parser = new org.nfunk.jep.JEP();
@@ -193,7 +193,7 @@ public class EstatisticaCalculos {
                   } else {
                     qtdeVolumeObsMed = 0.0;
                   }
-                  for(ArvoreAjuste arvore : local.arvore_ajuste){
+                  for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
                       qtdeVolumeObs = arvore.qtd_volume_obs;
                       qtdeVolumeEst = arvore.qtd_volume_est;
                       somaQuadradoResiduoVolume   =+ Math.pow((qtdeVolumeObs - qtdeVolumeEst), 2);

@@ -1,11 +1,22 @@
-@(localForm : Form[Local])
+@(localForm : Form[Local], tipoEstimativa : Integer)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 
 @main("Calcular Biomassa - Carbono - Volume"){
-
+@if(flash.containsKey("success")) {
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Feito!</strong> @flash.get("success")
+        </div>
+    } 
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>ERRO!</strong> @flash.get("error")
+        </div>
+    } 
 
 <div class="">
    <legend>Biomassa</legend>
@@ -16,7 +27,7 @@
         <div class="span6">
             <label>Modelo</label><input type="text" name="modeloBiomassa" @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Biomassa">
             @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==1 && equacao.equacao.expressao_modelo!=null){
-                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+                <a href="@routes.Modelos.ajustar(localForm.get().id, equacao.equacao.id, tipoEstimativa)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{@if(equacao.equacao.variavel_interesse.id ==1){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
         </div> 
    </div>      
@@ -29,7 +40,7 @@
             <label>Modelo</label>
             <input type="text" name="modeloCarbono" @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} class="input-xlarge" placeholder="Modelo Carbono">
              @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==2&& equacao.equacao.expressao_modelo!=null){
-                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+                <a href="@routes.Modelos.ajustar(localForm.get()id, equacao.equacao.id, tipoEstimativa)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{@if(equacao.equacao.variavel_interesse.id ==2){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
         </div> 
    </div> 
@@ -41,12 +52,12 @@
         <div class="span6">
             <label>Modelo</label><input type="text" class="input-xlarge" name="modeloVolume" @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){value="@equacao.equacao.expressao_modelo"}} placeholder="Modelo Volume">
             @for(equacao<-localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){@if(equacao.equacao.variavel_interesse.id ==3 && equacao.equacao.expressao_modelo!=null){
-                <a href="@routes.Modelos.ajustar(equacao.equacao.id)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
+                <a href="@routes.Modelos.ajustar(localForm.get().id, equacao.equacao.id, tipoEstimativa)" class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>
             }else{@if(equacao.equacao.variavel_interesse.id ==3){<a href="" disabled class="btn btn-warning btn-mini" rel="tooltip" title="Ajustar equação">Ajustar</a>}}}
         </div> 
    </div>      
       	<hr />
-    <a href='' class="btn btn-info">Calcular</a>
+    <a href='@routes.DadosLocal.fazerCalculo(localForm.get().id, tipoEstimativa)' class="btn btn-info">Calcular</a>
     <br />
     <br />
     <legend>Resultados</legend>
@@ -63,9 +74,11 @@
                     '_error -> localForm.error("qtde_biomassa")
                     )
                     </td>
+                    @if(localForm.get().local_detalhe_biomassa!=null){
                      <td>
-                         <a href='@routes.DadosLocal.detalheBiomassa(localForm.get().id)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas">Ver Detalhe</a>
+                         <a href='@routes.DadosLocal.detalheBiomassa(localForm.get().id, tipoEstimativa)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas" >Ver Detalhe</a>
                      </td>
+                     }
                  </tr>
         </table>
         <table>
@@ -79,9 +92,11 @@
                     '_error -> localForm.error("qtde_carbono")
                     )
                     </td>
+                    @if(localForm.get().local_detalhe_carbono!=null){
                      <td>
-                         <a href='@routes.DadosLocal.detalheCarbono(localForm.get().id)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas">Ver Detalhe</a>
+                         <a href='@routes.DadosLocal.detalheCarbono(localForm.get().id, tipoEstimativa)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas">Ver Detalhe</a>
                      </td>
+                     }
                  </tr>
         </table>
         <table>
@@ -89,15 +104,17 @@
                     <td>
                     @inputText(
                     localForm("qtde_volume"), 
-                    '_label -> "Carbono Total(ton)",
+                    '_label -> "Volume Total(m3)",
                     'class ->"input-xlarge",
                     '_help -> "",
                     '_error -> localForm.error("qtde_carbono")
                     )
                     </td>
+                    @if(localForm.get().local_detalhe_volume!=null){
                      <td>
-                         <a href='@routes.DadosLocal.detalheVolume(localForm.get().id)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas">Ver Detalhe</a>
+                         <a href='@routes.DadosLocal.detalheVolume(localForm.get().id, tipoEstimativa)' class="btn btn-info btn-small" rel="tooltip" title="Ver detalhe e estatísticas">Ver Detalhe</a>
                      </td>
+                     }
                  </tr>
         </table>
         </div>

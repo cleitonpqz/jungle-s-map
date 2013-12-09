@@ -1,4 +1,4 @@
-@(equacao : Equacao, campos : List[String])
+@(equacao : Equacao, campos : List[String], idLocal : Long, tipoEstimativa : Integer)
 
 @import helper._
 
@@ -12,6 +12,14 @@
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 <script type="text/javascript">
+    function replaceAll(find, replace, str) 
+    {
+      while( str.indexOf(find) > -1)
+      {
+        str = str.replace(find, replace);
+      }
+      return str;
+    }
     $(document).ready(function () {
             var fields = new Array();
             var colunas = new Array();
@@ -55,7 +63,7 @@ $("#ajustarBtn").click(function (){
                 for (var i = 0; i < griddata.rowscount; i++){
                     rows.push($('#grid').jqxGrid('getrowdata', i));
                 }
-               jsRoutes.controllers.Modelos.fazerAjuste(@equacao.id).ajax({
+               jsRoutes.controllers.Modelos.fazerAjuste(@idLocal, @equacao.id, @tipoEstimativa).ajax({
                     type :  "POST",
                     dataType: 'json',
                     contentType : 'application/json; charset=utf-8',
@@ -65,7 +73,10 @@ $("#ajustarBtn").click(function (){
                         @for(numero<-0 until equacao.qtd_coeficientes){
                             $("#b@numero").val(data.b@numero);
                         }
-                        $("#equacao").val(data.expressao);
+                        $("#equacao").val(replaceAll(".", ",", data.expressao));
+                        $("#r2").val(data.r2);
+                        $("#r2ajust").val(data.r2Ajust);
+                        $("#syx").val(data.syx);
                 },
                 error : function(err) {
                     
@@ -165,7 +176,9 @@ $("#ajustarBtn").click(function (){
        </div> 
     <div class="actions" >
             <a id="ajustarBtn" href="#" class="btn btn-primary">Ajustar</a>
+            <a id="voltarBtn" href="@routes.DadosLocal.calcular(idLocal, tipoEstimativa)" class="btn">Voltar</a>
      </div>
+     
     <br>
    <div>
         <table class="well" >

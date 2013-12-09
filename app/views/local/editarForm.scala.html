@@ -236,8 +236,12 @@ function findByIdTrabalhoCientifico() {
                         .html("<tr><td>Autor</td><td>"+data.autor.nome+"</td></tr>\n\\n\
                                 <tr><td>Ano</td><td>"+data.ano+"</td></tr>\n\
                                 <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
-                                <tr><td>Metodo de Qantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
-                                <tr><td>Metodo de Qantificação arbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>");
+                                <tr><td>Metodo de Quant. Biomassa</td><td>"+data.metodo_quantificacao_biomassa.descricao+"</td></tr>\n\
+                                <tr><td>Metodo de Quant. Carbono</td><td>"+data.metodo_quantificacao_carbono.descricao+"</td></tr>\n\
+                                <tr><th></th><th> Equações</th><th>Modelo</th></tr>\n\
+                                <tr><td>Biomassa</td><td>"+data.equacao_biomassa+"</td><td>"+data.modelo_biomassa+"</td></tr>\n\
+                                <tr><td>Carbono</td><td>"+data.equacao_carbono+"</td><td>"+data.modelo_carbono+"</td></tr>\n\
+                                <tr><td>Volume</td><td>"+data.equacao_volume+"</td><td>"+data.modelo_volume+"</td></tr>");
                                 e.stopPropagation();
 		}
          });
@@ -551,9 +555,36 @@ $(document).ready(function(){
             <tr><td>Autor</td><td>@localForm("trabalho_cientifico.autor.nome").value</td></tr>
             <tr><td>Ano</td><td>@localForm("trabalho_cientifico.ano").value</td></tr>
             <tr><td>Disponibilidade</td><td>@localForm("trabalho_cientifico.disponibilidade.descricao").value</td></tr>
-            <tr><td>Metodo de Quantificação Biomassa:</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_biomassa.descricao").value</td></tr>
-            <tr><td>Metodo de Quantificação Carbono</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_carbono.descricao").value</td></tr>
-         }   
+            <tr><td>Mtdo de Quant. Biomassa:</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_biomassa.descricao").value</td></tr>
+            <tr><td>Mtdo de Quant. Carbono</td><td>@localForm("trabalho_cientifico.metodo_quantificacao_carbono.descricao").value</td></tr>
+            @if(localForm.get().trabalho_cientifico.trabalho_cientifico_equacao.get(0) != null){
+                <tr><th></th><th> Equações</th><th>Modelo</th></tr>
+                @for(trabalhoEquacao <- localForm.get().trabalho_cientifico.trabalho_cientifico_equacao){
+                    @if(trabalhoEquacao.equacao.variavel_interesse.id == 1){
+                      <tr><td>Biomassa</td>
+                            <td>@if(trabalhoEquacao.equacao.expressao != null){
+                                    @trabalhoEquacao.equacao.expressao}else{Não possui equação cadastrada}</td>
+                            <td>@if(trabalhoEquacao.equacao.expressao_modelo!=null && trabalhoEquacao.equacao.expressao_modelo!=""){
+                                @trabalhoEquacao.equacao.expressao_modelo}else{Não possui modelo cadastrado}</td>
+                       </tr>
+                    }
+                    @if(trabalhoEquacao.equacao.variavel_interesse.id == 2){
+                           <tr><td>Carbono</td>
+                               <td>@if(trabalhoEquacao.equacao.expressao != null){
+                                    @trabalhoEquacao.equacao.expressao}else{Não possui equação cadastrada}</td>
+                            <td>@if(trabalhoEquacao.equacao.expressao_modelo!=null && trabalhoEquacao.equacao.expressao_modelo!=""){
+                                @trabalhoEquacao.equacao.expressao_modelo}else{Não possui modelo cadastrado}</td>
+                    }
+                    @if(trabalhoEquacao.equacao.variavel_interesse.id == 3){
+                           <tr><td>Volume</td>
+                               <td>@if(trabalhoEquacao.equacao.expressao != null){
+                                    @trabalhoEquacao.equacao.expressao}else{Não possui equação cadastrada}</td>
+                            <td>@if(trabalhoEquacao.equacao.expressao_modelo!=null && trabalhoEquacao.equacao.expressao_modelo!=""){
+                                @trabalhoEquacao.equacao.expressao_modelo}else{Não possui modelo cadastrado}</td>
+                    }
+                }
+            }
+         }
         </table>
     </div>
     <fieldset>
@@ -564,6 +595,6 @@ $(document).ready(function(){
     </fieldset>
     
     }
-    <div id="modal" class="modal hide"></div>
+   
 }
 

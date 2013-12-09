@@ -15,7 +15,6 @@
 }
 
 @javascript = {
-    <script type="text/javascript" src="@routes.Assets.at("/javascripts/jquery-1.9.0.min.js")"></script>
     <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
     <script type="text/javascript">
         function initialize() {
@@ -51,20 +50,25 @@
                         
                  var contentString= "<div class='well'>\
                             <table class='table'>\
-                            <th>Local</th>\
-                            <tr><td>Local</td><td>"+data.descricao+"</td></tr>\n\
+                            <tr><th>Local</th><td>"+data.descricao+"</td></tr>\n\
                            <tr><td>Formacao</td><td>"+data.formacao.nome+"</td></tr>\n\
                            <tr><td>Espaçamento</td><td>"+data.espacamento+"</td></tr>\n\
-                           <tr><td>Área Total</td><td>"+data.area_total+"</td></tr>\n\
+                           <tr><td>Área Total</td><td>"+Number(data.area_total).toFixed(2)+"</td></tr>\n\
                             <tr><td>Municípios</td><td>"+data.municipios+"</td></tr>\n\
                            <tr><td>Coordenadas</td><td>"+data.coordenadas+"</td></tr>\n\
-                           <tr><td colspan='8'>\n\
-                           <table>\n\
-                           <th>Trabalho Científico</th>\n\
+                            <tr><td>Total Biomassa(ton)</td><td>"+data.qtde_biomassa+"</td></tr>\n\
+                            <tr><td>Total Carbono(ton)</td><td>"+data.qtde_carbono+"</td></tr>\n\
+                             <tr><td>Volume Total</td><td>"+data.qtde_volume+"</td></tr>\n\
+                           <table class='table'>\n\
+                           <th colspan='3'Trabalho Científico</th>\n\
                           <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
                           <tr><td>Ano</td><td>"+data.ano+"</td></tr>\n\
-                          <tr><td>Metodo de Quantificação Biomassa:</td><td>"+data.metodo_quantificacao_biomassa+"</td></tr>\n\
-                          <tr><td>Metodo de Quantificação Carbono</td><td>"+data.metodo_quantificacao_carbono+"</td></tr>\n\
+                          <tr><td>Mtdo de Quant. Biomassa:</td><td>"+data.metodo_quantificacao_biomassa+"</td></tr>\n\
+                          <tr><td>Mtdo de Quant. Carbono</td><td>"+data.metodo_quantificacao_carbono+"</td></tr>\n\
+                         <tr><th></th><th> Equações</th><th>Modelo</th></tr>\n\
+                         <tr><td>Biomassa</td><td>"+data.equacao_biomassa+"</td><td>"+data.modelo_biomassa+"</td></tr>\n\
+                         <tr><td>Carbono</td><td>"+data.equacao_carbono+"</td><td>"+data.modelo_carbono+"</td></tr>\n\
+                         <tr><td>Volume</td><td>"+data.equacao_volume+"</td><td>"+data.modelo_volume+"</td></tr>\n\
                            </table>\n\
                            </td></tr>\n\
                             </table>\

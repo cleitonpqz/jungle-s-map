@@ -32,7 +32,7 @@ public class EstimativaPorParcela {
         LocalDetalheCarbono localDetalheCarbono = new LocalDetalheCarbono();
         LocalDetalheVolume  localDetalheVolume = new LocalDetalheVolume();   
         tamanhoAmostra = local.parcelas.size();        
-        qtdeParcelasLocal = local.area_total / local.area_parcela;
+        qtdeParcelasLocal = (int)(local.area_total*10000 / local.area_parcela);
         umMenosF = 1 - (tamanhoAmostra / qtdeParcelasLocal);        
         //Constante t. Com 5% (foi usado 0,025 para ser bicaudal) e n-1 fica:
         t = getT(0.025,tamanhoAmostra - 1);

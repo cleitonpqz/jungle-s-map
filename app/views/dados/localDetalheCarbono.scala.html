@@ -1,13 +1,15 @@
-@(ldbForm: Form[LocalDetalheCarbono])
+@(ldbForm: Form[LocalDetalheCarbono], estimativa:Integer)
 
 @import helper._
 @import helper.twitterBootstrap._
 
 @main("Detalhe Cálculo de Carbono"){
     
-    @form(action = routes.DadosLocal.calcular(ldbForm.get().local.id, 0), 'role -> "form") {
+    @form(action = routes.DadosLocal.calcular(ldbForm.get().local.id, estimativa), 'role -> "form") {
         
        <fieldset>
+           <div class="row">
+               <div class="span6">
            @inputText(
                 ldbForm("qtde_carbono_min"), 
                 '_label -> "Qtde Carbono Minima",
@@ -57,6 +59,9 @@
                 '_help -> "",
                 '_error -> ldbForm.error("variancia_media")
             )
+            
+               </div>
+               <div class="span6">
 			@inputText(
                 ldbForm("erro_padrao"), 
                 '_label -> "Erro Padrão",
@@ -100,10 +105,12 @@
                 '_help -> "",
                 '_error -> ldbForm.error("intervalo_confianca_max_parcela")
             )
+               </div>
+           </div>
                  
         </fieldset>
     <div class="actions">
-            <a href="@routes.DadosLocal.calcular(ldbForm.get().local.id, 0)" class="btn btn-primary" >Voltar</a>
+            <a href="@routes.DadosLocal.calcular(ldbForm.get().local.id, estimativa)" class="btn btn-primary" >Voltar</a>
             
     </div>
     }

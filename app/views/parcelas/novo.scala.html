@@ -10,7 +10,7 @@
 <div class="">
     <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
     <label>Área Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
-    <label>Área da Parcela(m2): </label><input type="text" name="local.areatotal" class="large" placeholder="Area da Parcela">
+    <label>Área da Parcela(m2): </label><input type="text" name="local.area_parcela" id="areaParcelaText" class="soNumeros large" placeholder="Area da Parcela" @if(local.area_parcela != null){value="@local.area_parcela"}> 
     <div class="radios">
     <h4>Tipo de Entrada</h4>
     <br />
@@ -123,6 +123,18 @@ $(document).ready(function(){
     <script type="text/javascript">
     $(document).ready(function() {    
     $("#salvarGridBtn").click(function(){
+            if($("#areaParcelaText").val()===""){
+               bootbox.dialog({
+                        message: "Erro. Campo Área da Parcela é Obrigatório.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+            }else{ 
                 var rows = $("#jqxgrid_parcela").jqxGrid('getrows');
                 var valoresEnviar = [];
                 var countPreenchido=0;
@@ -140,7 +152,7 @@ $(document).ready(function(){
                 });
                 
                   if(countPreenchido>0 && !erro){
-                    jsRoutes.controllers.Parcelas.saveGrid(@local.id).ajax({
+                    jsRoutes.controllers.Parcelas.saveGrid(@local.id, $("#areaParcelaText").val()).ajax({
                     type :  "POST",
                     dataType: 'json',
                     contentType : 'application/json; charset=utf-8',
@@ -171,7 +183,7 @@ $(document).ready(function(){
                         }
                      });
                 }
-                
+            }  
             });    
     });
     
@@ -205,10 +217,22 @@ $(document).ready(function(){
   }
 
   function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-    var file = files[0];
-
-    printTable(file);
+       if($("#areaParcelaText").val()===""){
+               bootbox.dialog({
+                        message: "Erro. Campo Área da Parcela é Obrigatório.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+       }else{ 
+            var files = evt.target.files; // FileList object
+            var file = files[0];
+            printTable(file);
+      }
   }
 
   function printTable(file) {
@@ -225,7 +249,7 @@ $(document).ready(function(){
         }
       }
       var id = @local.id;
-       jsRoutes.controllers.Parcelas.saveFile(itens, id).ajax({
+       jsRoutes.controllers.Parcelas.saveFile(itens, id, $("#areaParcelaText").val()).ajax({
               success: function(data){
                 $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
               }  
@@ -233,5 +257,13 @@ $(document).ready(function(){
     };
     reader.onerror = function(){ alert('Erro ao Abrir o arquivo' + file.fileName); };
   }
+$('.soNumeros').keypress(function(event) {
+
+      if (event.which == 8 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46) {
+            return true;
+        }else if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    });
 
 </script>

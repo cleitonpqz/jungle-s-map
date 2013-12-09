@@ -25,8 +25,10 @@ public class Parcelas extends Controller {
 		return ok( novo.render(local));
 	}
 
-	public static Result saveFile(String files, long id){
+	public static Result saveFile(String files, long id, Double areaParcela){
 		Local local = Local.find.byId(id);
+                local.area_parcela = areaParcela;
+                local.update();
 		String linhas[] = files.split(",");
 		int cont = linhas.length;
 		for(int i = 0; i < cont ; i++){
@@ -47,8 +49,10 @@ public class Parcelas extends Controller {
 		return ok("success");
 	}
         
-        public static Result saveGrid(long id){
+        public static Result saveGrid(long id, Double areaParcela){
                 Local local = Local.find.byId(id);
+                local.area_parcela = areaParcela;
+                local.update();
 		JsonNode json = request().body().asJson();
                 for(JsonNode row : json){
                     Parcela parcela = new Parcela();

@@ -5,12 +5,13 @@
 
 @main("Cadastrar Dados de Arvores"){
 
-@form(action = routes.DadosLocal.calcular(1, 1), 'id -> "form") {
+@form(action = routes.DadosLocal.calcular(local.id, 1), 'id -> "form") {
 <div class="">
 
    <input type="hidden" name="local.id" class="large" placeholder="Local" value="@local.id"> 
-   <label>Área Total(ha): </label><input type="text" name="local.areatotal" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
-    <div class="radios">
+   <label>Área Total(ha): </label><input type="text" name="local.areatotal" id="areaTotalText" class="large" placeholder="Area Total" value="@local.area_total" disabled="true">  
+   <label>Área da Parcela(m2): </label><input type="text" name="local.area_parcela" id="areaParcelaText" class="large" placeholder="Area da Parcela" @if(local.area_parcela != null){value="@local.area_parcela"}> 
+   <div class="radios">
     <h4>Tipo de Entrada</h4>
     <br />
   	<label class="radio tipo" id="tipo" required>
@@ -45,11 +46,12 @@
     </div>
     <br />
     <hr>
-	   <a href="@routes.DadosLocal.calcular(1, 1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
+	   <a href="@routes.DadosLocal.calcular(local.id, 1)" class="btn btn-success btn-small" rel="tooltip" title="Calcular">Calcular</a>
 
 </div>
 }}
 <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
+<script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".radios").change(function(){
@@ -76,7 +78,7 @@ $(document).ready(function(){
 <script type="text/javascript">
         $(function(){
             
-
+            
             jsRoutes.controllers.Variaveis.findByLocal(@local.id).ajax({
               success: function(data){
 
@@ -152,6 +154,18 @@ $(document).ready(function(){
     <script type="text/javascript">
     $(document).ready(function() {    
     $("#salvarGridBtn").click(function(){
+        if($("#areaParcelaText").val()===""){
+               bootbox.dialog({
+                        message: "Erro. Campo Área da Parcela é Obrigatório.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+            }else{
                 var rows = $("#jqxgrid_arvore").jqxGrid('getrows');
                 var valoresEnviar = [];
                 var countPreenchido=0;
@@ -169,7 +183,7 @@ $(document).ready(function(){
                 });
                 
                   if(countPreenchido>0 && !erro){
-                    jsRoutes.controllers.Arvores.saveGrid(@local.id).ajax({
+                    jsRoutes.controllers.Arvores.saveGrid(@local.id, $("#areaParcelaText").val()).ajax({
                     type :  "POST",
                     dataType: 'json',
                     contentType : 'application/json; charset=utf-8',
@@ -200,8 +214,8 @@ $(document).ready(function(){
                         }
                      });
                 }
-                
-            });    
+            }     
+         });    
     });
  </script> 
  <script type="text/javascript">
@@ -250,10 +264,23 @@ $(document).ready(function(){
   }
 
   function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-    var file = files[0];
+      if($("#areaParcelaText").val()===""){
+               bootbox.dialog({
+                        message: "Erro. Campo Área da Parcela é Obrigatório.",
+                        title: "Erro",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
+            }else{
+                var files = evt.target.files; // FileList object
+                var file = files[0];
 
-    printTable(file);
+                printTable(file);
+            }
   }
 
   function printTable(file) {
@@ -271,7 +298,7 @@ $(document).ready(function(){
       }
       
       
-       jsRoutes.controllers.Arvores.saveFile(itens, @local.id).ajax({
+       jsRoutes.controllers.Arvores.saveFile(itens, @local.id, $("#areaParcelaText").val()).ajax({
               success: function(data){
                 $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
               }  

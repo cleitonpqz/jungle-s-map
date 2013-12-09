@@ -8,8 +8,7 @@ import play.*;
 import views.html.modelo.*;
 import org.nfunk.jep.*;
 import javax.persistence.PersistenceException;
-import play.libs.Json.*;
-import play.libs.Json;   
+import play.libs.Json;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -40,7 +39,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         flash("success", "O Modelo foi incluido com sucesso");
         return GO_HOME;
     }
-    public static Result ajustar(Long idEquacao){
+    public static Result ajustar(Long idLocal, Long idEquacao, Integer tipoEstimativa){
         Equacao equacao = Equacao.find.byId(idEquacao);
         List<String> campos = new ArrayList<String>();
         campos.add("Árvore");
@@ -48,7 +47,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
             campos.add(equacaoVariavel.variavel.sigla);
         }
          campos.add("Valor Observado");
-         return ok(ajustar.render(equacao, campos));
+         return ok(ajustar.render(equacao, campos, idLocal, tipoEstimativa));
     }
     
      public static Result salvarAjax(Long varialvelInteresse) {
@@ -76,14 +75,17 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         );
     }
     
-    public static Result fazerAjuste(Long idEquacao){
+    public static Result fazerAjuste(Long idLocal, Long idEquacao, Integer estimativa){
         //Pegando os dados
         Equacao equacao = Equacao.find.byId(idEquacao);
+        Local local = Local.find.byId(idLocal);
+        EstatisticaCalculos calculaEstatistica = new EstatisticaCalculos();
+        Estatistica estatistica = new Estatistica();
         JsonNode json = request().body().asJson();
         List<JsonNode> linhasPreenchidas =new ArrayList<JsonNode>();
         List<String> campos = new ArrayList<String>();
         campos.add("Árvore");
-         for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
+        for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
             campos.add(equacaoVariavel.variavel.sigla);
         }
         campos.add("Valor Observado");
@@ -101,7 +103,8 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                 }
             } 
             if(colunasPreenchidas > 0 && colunasPreenchidas< numeroColunas){
-                return badRequest(ajustar.render(equacao, campos));   
+                System.out.println("Erro");
+                return badRequest(ajustar.render(equacao, campos, idLocal, estimativa));   
             }else if(colunasPreenchidas==numeroColunas){
                 linhasPreenchidas.add(row);
                 numlinhasPreenchidas++;
@@ -109,13 +112,15 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
        }
             
         if(numlinhasPreenchidas<1){
-            return badRequest(ajustar.render(equacao, campos));  
+            return badRequest(ajustar.render(equacao, campos, idLocal, estimativa));  
         }
         //Calculando
         double[][] valorEntrada= new double[linhasPreenchidas.size()][equacao.termos.size()];
         double[] valorObservado= new double[linhasPreenchidas.size()];
         for(int linha =0; linha<linhasPreenchidas.size(); linha++){
-            int numTermo = 0;
+            ArvoreAjuste arvoreAjuste = new ArvoreAjuste();
+            arvoreAjuste.local = local;
+             int numTermo = equacao.termos.size();
              for(Termo termo : equacao.termos){
                 JEP myParser = new JEP();
                 myParser.addStandardFunctions();
@@ -125,24 +130,46 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                   myParser.addVariable(equacaoVariavel.variavel.sigla, valor);
                 }
                 myParser.parseExpression(termo.expressao);
-                valorEntrada[linha][numTermo]=myParser.getValue();
-                numTermo++;
+                valorEntrada[linha][numTermo-1]=myParser.getValue();
+                numTermo--;
             }
+             for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
+                      ArvoreAjusteVariavel variavelAjuste = new ArvoreAjusteVariavel();
+                      variavelAjuste.variavel = equacaoVariavel.variavel;
+                      variavelAjuste.valor  = Double.parseDouble(linhasPreenchidas.get(linha).get(equacaoVariavel.variavel.sigla).toString());
+                      arvoreAjuste.arvore_ajuste_variavel.add(variavelAjuste);
+              }
+             
             valorObservado[linha]= Double.parseDouble(linhasPreenchidas.get(linha).get("Valor Observado").toString());
+            arvoreAjuste.equacao_id=equacao.id;
+             if(equacao.variavel_interesse.id==Long.valueOf(1)){
+                arvoreAjuste.qtd_biomassa_obs=valorObservado[linha];
+            }else if(equacao.variavel_interesse.id==Long.valueOf(2)){
+                arvoreAjuste.qtd_carbono_obs=valorObservado[linha];
+            }else{
+                arvoreAjuste.qtd_volume_obs=valorObservado[linha];
+            }
+             arvoreAjuste.save();
         }
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();        
         regression.newSampleData(valorObservado, valorEntrada);
         double[] valorCoeficiente = regression.estimateRegressionParameters();
-        
-        Equacao novaEquacao = new Equacao();
         String expressao = equacao.expressao_modelo;
+        System.out.println(expressao);
         ObjectNode result = Json.newObject();
         for(Integer i=0; i<equacao.qtd_coeficientes; i++){
-          expressao=expressao.replaceAll("b"+i.toString(), String.valueOf(valorCoeficiente[i]));
-          result.put("b"+i.toString(), String.valueOf(valorCoeficiente[i]));
+          expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i+1]));
+          expressao=expressao.replaceAll(",",".");
+          result.put("b"+i.toString(), String.format("%.4f",valorCoeficiente[i+1]));
         }
+        equacao.expressao = expressao;
+        equacao.update();
         result.put("expressao", expressao);
-        
+        estatistica=calculaEstatistica.calculaEstatisticas(idLocal, equacao);
+        result.put("r2", String.format("%.4f",estatistica.r2));
+        result.put("r2Ajust", String.format("%.4f",estatistica.r2Ajust));
+        result.put("syx", String.format("%.4f",estatistica.syx));
+                
         return ok(result);
     }
     

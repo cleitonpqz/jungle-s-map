@@ -30,8 +30,10 @@ public class Arvores extends Controller {
 		return ok( novo.render(local));
 	}
 
-	public static Result saveFile(String files, Long id){
+	public static Result saveFile(String files, Long id, Double areaParcela){
 		Local local = Local.find.byId(id);
+                local.area_parcela = areaParcela;
+                local.update();
 		String linhas[] = files.split(",");
 		int cont = linhas.length;
 		String numParcela = "";
@@ -97,8 +99,10 @@ public class Arvores extends Controller {
 		return ok("message : success");
 	}
 
-	public static Result saveGrid(long id){
+	public static Result saveGrid(long id, Double areaParcela){
         Local local = Local.find.byId(id);
+        local.area_parcela = areaParcela;
+        local.update();
 		JsonNode json = request().body().asJson();
 		Long idParcela = null;
 		String numParcela = "";

@@ -99,39 +99,40 @@ GET     /Locais/manter                      controllers.Locais.manter(p:Int ?= 0
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Equações Listar e novo
-GET     /equacoes                    controllers.Equacoes.cadastrar(variavelInteresse:Long)
-POST    /equacoes                    controllers.Equacoes.salvar(variavelInteresse:Long)
-POST    /equacoes/salvarAjax         controllers.Equacoes.salvarAjax(variavelInteresse:Long)
-GET     /equacoes/cadastrarModal      controllers.Equacoes.cadastrarModal(variavelInteresse:Long)
+GET     /equacoes                       controllers.Equacoes.cadastrar(variavelInteresse:Long)
+POST    /equacoes                       controllers.Equacoes.salvar(variavelInteresse:Long)
+POST    /equacoes/salvarAjax            controllers.Equacoes.salvarAjax(variavelInteresse:Long)
+GET     /equacoes/cadastrarModal        controllers.Equacoes.cadastrarModal(variavelInteresse:Long)
 
 #-------------------------------------------------------------------------------------------------------------------------------
 #Modelos Listar e novo
-GET     /modelos                     controllers.Modelos.cadastrar(variavelInteresse:Long)
-POST    /modelos                     controllers.Modelos.salvar(variavelInteresse:Long)
-POST    /modelos/salvarAjax          controllers.Modelos.salvarAjax(variavelInteresse:Long)
-GET     /modelos/ajustar/:id         controllers.Modelos.ajustar(id:Long)
-POST    /modelos/fazerAjuste         controllers.Modelos.fazerAjuste(id:Long)
-GET     /modelos/cadastrarModal      controllers.Modelos.cadastrarModal(variavelInteresse:Long)
+GET     /modelos                                            controllers.Modelos.cadastrar(variavelInteresse:Long)
+POST    /modelos                                            controllers.Modelos.salvar(variavelInteresse:Long)
+POST    /modelos/salvarAjax                                 controllers.Modelos.salvarAjax(variavelInteresse:Long)
+GET     /modelos/:local/:equacao/:estimativa/ajustar        controllers.Modelos.ajustar(local:Long, equacao:Long, estimativa : Integer)
+POST    /modelos/fazerAjuste                                controllers.Modelos.fazerAjuste(equacao:Long, local:Long, estimativa : Integer)
+GET     /modelos/cadastrarModal                             controllers.Modelos.cadastrarModal(variavelInteresse:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #DadosLocal novo
 
-GET	/DadosLocal/:id/:quemChamou/calcular         controllers.DadosLocal.calcular(id:Long, quemChamou:Integer)
-GET     /DadosLocal/:id/detalheBiomassa              controllers.DadosLocal.detalheBiomassa(id:Long)
-GET     /DadosLocal/:id/detalheCarbono               controllers.DadosLocal.detalheCarbono(id:Long)
-GET     /DadosLocal/:id/detalheVolume                controllers.DadosLocal.detalheVolume(id:Long)
+GET	/DadosLocal/:id/:tipoEstimativa/calcular            controllers.DadosLocal.calcular(id:Long, tipoEstimativa:Integer)
+GET     /DadosLocal/:id/:tipoEstimativa/fazerCalculo        controllers.DadosLocal.fazerCalculo(id:Long, tipoEstimativa:Integer)
+GET     /DadosLocal/:id/:estimativa/detalheBiomassa         controllers.DadosLocal.detalheBiomassa(id:Long, estimativa:Integer)
+GET     /DadosLocal/:id/:estimativa/detalheCarbono          controllers.DadosLocal.detalheCarbono(id:Long, estimativa:Integer)
+GET     /DadosLocal/:id/:estimativa/detalheVolume           controllers.DadosLocal.detalheVolume(id:Long, estimativa:Integer)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Arvores novo, saveFile
 
 GET   /Arvores/:id			controllers.Arvores.novo(id:Long)
-POST /Arvores/saveFile                  controllers.Arvores.saveFile(files:String, id:Long)
-POST /arvores/saveGrid			controllers.Arvores.saveGrid(id:Long)
+POST /Arvores/saveFile                  controllers.Arvores.saveFile(files:String, id:Long, areaParcela:Double)
+POST /arvores/saveGrid			controllers.Arvores.saveGrid(id:Long, areaParcela:Double)
 POST /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Parcelas novo, saveFile
 
 GET     /Parcelas/:id                   controllers.Parcelas.novo(id:Long)
-POST    /parcelas/saveFile		controllers.Parcelas.saveFile(files:String, id:Long)
-POST    /parcelas/saveGrid		controllers.Parcelas.saveGrid(id:Long)
+POST    /parcelas/saveFile		controllers.Parcelas.saveFile(files:String, id:Long, areaParcela:Double)
+POST    /parcelas/saveGrid		controllers.Parcelas.saveGrid(id:Long, areaParcela:Double)
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # Map static resources from the /public folder to the /assets URL path
