@@ -127,6 +127,7 @@ GET   /Arvores/:id			controllers.Arvores.novo(id:Long)
 POST /Arvores/saveFile                  controllers.Arvores.saveFile(files:String, id:Long, areaParcela:Double)
 POST /arvores/saveGrid			controllers.Arvores.saveGrid(id:Long, areaParcela:Double)
 POST /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
+GET /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
 #--------------------------------------------------------------------------------------------------------------------------------
 #Parcelas novo, saveFile
 
