@@ -220,14 +220,9 @@ $(document).ready(function(){
  </script> 
  <script type="text/javascript">
   $("#modelo").click(function () {
-                     jsRoutes.controllers.Arvores.criaModelo(@local.id).ajax({
-                      success: function(data){
-                        
-                        //window.location('data:text/csv;charset=utf-8,' + escape(data)+ 'download=arvore.csv');
-                        window.open('data:text/csv;charset=utf-8,' + escape(data));
-                      }
-                     });
-                });
+        var url = '@{routes.Arvores.criaModelo(local.id)}';
+        window.open(url);
+    });
 
 
     $(document).ready(function() {

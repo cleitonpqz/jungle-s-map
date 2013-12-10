@@ -188,7 +188,7 @@ public static Result saveGrid(long id, Double areaParcela){
         	}
         	
         	response().setContentType("application/x-download");  
-			response().setHeader("Content-disposition","attachment; filename=tradeLogTest.csv");
+			response().setHeader("Content-disposition","attachment; filename=arvores.csv");
         	
         	return ok(new java.io.File("arvores.csv"));
         }
