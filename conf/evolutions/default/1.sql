@@ -127,6 +127,7 @@ create table local (
 create table local_detalhe_biomassa (
   id                        bigint not null,
   local_id                  bigint not null,
+  num_local                 bigint,
   qtde_biomassa_min         float,
   qtde_biomassa_med         float,
   qtde_biomassa_max         float,

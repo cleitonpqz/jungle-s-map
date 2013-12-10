@@ -2,7 +2,8 @@ package models;
 
 import java.util.*;
 import javax.persistence.*;
-
+import java.sql.*;
+import java.sql.SQLException;
 import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
@@ -150,5 +151,23 @@ public class Local extends Model {
                                 .getPage(page);
                            }
          }
+    public static void updateAreaParcela(Long id, Double areaParcela)throws SQLException{
+        Connection con = play.db.DB.getConnection();
+        try {
+            PreparedStatement stmt = con.prepareStatement("update local set area_parcela = ? where id = ?");  
+  
+    
+            stmt.setDouble(1, areaParcela);  
+            stmt.setLong(2, id);  
+              
+        try {
+            stmt.execute();  
+            } finally {
+                stmt.close();
+            }
+        } finally {
+            con.close();
+        }
+    }
 
 }

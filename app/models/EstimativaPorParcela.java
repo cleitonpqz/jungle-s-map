@@ -27,7 +27,8 @@ public class EstimativaPorParcela {
     DescriptiveStatistics estatisticaCarbono = new DescriptiveStatistics();                
     DescriptiveStatistics estatisticaVolume = new DescriptiveStatistics();                
     
-    public void calculaEstimativaPorParcela(Local local){
+    public void calculaEstimativaPorParcela(Long id){
+        Local local = Local.find.byId(id);
         LocalDetalheBiomassa localDetalheBiomassa = new LocalDetalheBiomassa();
         LocalDetalheCarbono localDetalheCarbono = new LocalDetalheCarbono();
         LocalDetalheVolume  localDetalheVolume = new LocalDetalheVolume();   
@@ -48,6 +49,7 @@ public class EstimativaPorParcela {
         double qtdeBiomassaMax = mediaLocal + qtdeParcelasLocal * erroAbsoluto;
         double qtdeBiomassaMed = mediaLocal;
         
+        localDetalheBiomassa.local=local;
         localDetalheBiomassa.qtde_biomassa_min = qtdeBiomassaMin;
         localDetalheBiomassa.qtde_biomassa_max=qtdeBiomassaMax;        
         localDetalheBiomassa.qtde_biomassa_med=qtdeBiomassaMed;
@@ -73,6 +75,7 @@ public class EstimativaPorParcela {
         double qtdeCarbonoMax = mediaLocal + qtdeParcelasLocal * erroAbsoluto;
         double qtdeCarbonoMed = mediaLocal;
         
+        localDetalheCarbono.local=local;
         localDetalheCarbono.qtde_carbono_min = qtdeCarbonoMin;
         localDetalheCarbono.qtde_carbono_max=qtdeCarbonoMax;        
         localDetalheCarbono.qtde_carbono_med=qtdeCarbonoMed;
@@ -100,7 +103,7 @@ public class EstimativaPorParcela {
         double qtdeVolumeMed = mediaLocal;
         
         
-        
+        localDetalheVolume.local=local;
         localDetalheVolume.qtde_volume_min = qtdeVolumeMin;
         localDetalheVolume.qtde_volume_max=qtdeVolumeMax;        
         localDetalheVolume.qtde_volume_med=qtdeVolumeMed;
@@ -119,10 +122,8 @@ public class EstimativaPorParcela {
         local.qtde_biomassa = qtdeBiomassaMed;
         local.qtde_carbono = qtdeCarbonoMed;
         local.qtde_volume = qtdeVolumeMed;
-        local.local_detalhe_biomassa = localDetalheBiomassa;
-        local.local_detalhe_carbono = localDetalheCarbono;
-        local.local_detalhe_volume = localDetalheVolume;
-        local.update();
+        
+        local.update(id);
             
     }
     

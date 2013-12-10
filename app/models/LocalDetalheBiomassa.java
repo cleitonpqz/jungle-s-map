@@ -18,7 +18,7 @@ public class LocalDetalheBiomassa extends Model{
     @PrimaryKeyJoinColumn
     public Local local;
      
-    public Local  numLocal;
+    public Long  numLocal;
     public double qtde_biomassa_min; //ton    
     public double qtde_biomassa_med; //ton    
     public double qtde_biomassa_max; //ton        

@@ -28,7 +28,7 @@ public class Parcelas extends Controller {
 	public static Result saveFile(String files, long id, Double areaParcela){
 		Local local = Local.find.byId(id);
                 local.area_parcela = areaParcela;
-                local.update();
+                local.update(id);
 		String linhas[] = files.split(",");
 		int cont = linhas.length;
 		for(int i = 0; i < cont ; i++){
@@ -52,7 +52,7 @@ public class Parcelas extends Controller {
         public static Result saveGrid(long id, Double areaParcela){
                 Local local = Local.find.byId(id);
                 local.area_parcela = areaParcela;
-                local.update();
+                local.update(id);
 		JsonNode json = request().body().asJson();
                 for(JsonNode row : json){
                     Parcela parcela = new Parcela();

@@ -8,9 +8,11 @@ import play.*;
 import views.html.arvores.*;
 import play.libs.Json;   
 import javax.persistence.PersistenceException;
+import java.sql.SQLException;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
+import java.sql.SQLException;
 import com.avaje.ebean.*;
 import java.io.FileWriter;
 
@@ -33,7 +35,9 @@ public class Arvores extends Controller {
 	public static Result saveFile(String files, Long id, Double areaParcela){
 		Local local = Local.find.byId(id);
                 local.area_parcela = areaParcela;
-                local.update();
+                System.out.println(String.valueOf(areaParcela));
+                local.update(id);
+                System.out.println(String.valueOf(areaParcela));
 		String linhas[] = files.split(",");
 		int cont = linhas.length;
 		String numParcela = "";
@@ -98,11 +102,17 @@ public class Arvores extends Controller {
 		}
 		return ok("message : success");
 	}
-
-	public static Result saveGrid(long id, Double areaParcela){
+public static Result saveGrid(long id, Double areaParcela){
         Local local = Local.find.byId(id);
         local.area_parcela = areaParcela;
+        try {
+        Local.updateAreaParcela(id, areaParcela);
+        }catch(SQLException ex){
+        }
+        System.out.println(String.valueOf(local.area_parcela));
+        System.out.println(local.descricao);
         local.update();
+       System.out.println(String.valueOf(local.area_parcela));
 		JsonNode json = request().body().asJson();
 		Long idParcela = null;
 		String numParcela = "";
@@ -156,11 +166,8 @@ public class Arvores extends Controller {
 
         	}
         }
-       
-        
-		
             return ok(Json.toJson("mensagem : sucesso"));
-            //return ok(Json.toJson(teste));
+            
         }
 
         public static Result criaModelo(Long id){

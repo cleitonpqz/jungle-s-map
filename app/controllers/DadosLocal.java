@@ -78,7 +78,7 @@ public class DadosLocal extends Controller {
                                     estimativaPorArvore.calculaEstimativaPorArvore(parcela);
                                 }  
                             case 2:    
-                                estimativaPorParcela.calculaEstimativaPorParcela(local);
+                                estimativaPorParcela.calculaEstimativaPorParcela(id);
                                break;
 
                     }

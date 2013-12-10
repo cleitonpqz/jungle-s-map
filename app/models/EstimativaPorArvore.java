@@ -30,7 +30,7 @@ public class EstimativaPorArvore {
         double somaCarbonoEst = 0.0;
         double somaVolumeEst = 0.0;
 
-        Local local = Local.find.byId(parcela.id);
+        Local local = Local.find.byId(parcela.local.id);
         boolean retorno;
         Equacao equacaoBiomassa = new Equacao();
         Equacao equacaoCarbono = new Equacao();
