@@ -295,7 +295,16 @@ $(document).ready(function(){
       
        jsRoutes.controllers.Arvores.saveFile(itens, @local.id, $("#areaParcelaText").val()).ajax({
               success: function(data){
-                $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
+                bootbox.dialog({
+                        message: "Arquivo importado com sucesso.",
+                        title: "Feito",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
               }  
        });
     };

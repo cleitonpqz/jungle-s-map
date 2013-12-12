@@ -35,6 +35,9 @@
     </div>
   	<div id="biomassa_import" style="display: none">
        <input type="file" id="files" name="files[]" multiple="" class="btn btn-small">
+       <br />
+       <br />
+       <input type="button" value="Baixar Modelo" id='modelo' class="btn" />
        <div id="arv"></div> 
     </div>
     </div>
@@ -49,6 +52,11 @@
 <script type="text/javascript" src="@routes.Assets.at("/javascripts/bootbox.min.js")"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#modelo").click(function () {
+        var url = '@{routes.Parcelas.criaModelo()}';
+        window.open(url);
+    });
+
     $(".radios").change(function(){
     	
     	var tipo1 = $("#tipo1").is(":checked");
@@ -159,7 +167,7 @@ $(document).ready(function(){
                     data: JSON.stringify(valoresEnviar),
                     success: function(data){
                      bootbox.dialog({
-                        message: "Dados salvos com sucessso.",
+                        message: "Arquivo importado com sucesso.",
                         title: "Feito",
                         buttons: {
                             main: {
@@ -251,7 +259,16 @@ $(document).ready(function(){
       var id = @local.id;
        jsRoutes.controllers.Parcelas.saveFile(itens, id, $("#areaParcelaText").val()).ajax({
               success: function(data){
-                $("#arv").html("<label>Arquivo Importado com Sucesso!</label>")
+                bootbox.dialog({
+                        message: "Dados salvos com sucessso.",
+                        title: "Feito",
+                        buttons: {
+                            main: {
+                            label: "OK",
+                            className: "btn-primary",
+                            }
+                        }
+                     });
               }  
        });
     };

@@ -172,7 +172,7 @@ public static Result saveGrid(long id, Double areaParcela){
 
         public static Result criaModelo(Long id){
         	List<SqlRow> variaveis = Variavel.findByLocal(id);
-        	String modelo = "Parcela;Arvore;Biomassa;Carbono;Volume";
+        	String modelo = "Exclua a linha dessa menssagem e a linha onde encontra-se os titulos dos dados a serem importados\nParcela;Arvore;Biomassa;Carbono;Volume";
         	for(SqlRow l : variaveis){
         		modelo = modelo + ";" + l.getString("sigla");
         	}
