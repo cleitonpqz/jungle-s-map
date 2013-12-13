@@ -41,10 +41,10 @@ public class Locais extends Controller{
              || form().bindFromRequest().get("trabalho_cientifico.id").equals("")) {
              localForm.reject("trabalho_cientifico.id", "O campo Trabalho Científico é de preenchimento obrigatório!");
          }
-         if(form().bindFromRequest().get("municipios_locais")==null 
-             || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
-             localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
-         }
+         //if(form().bindFromRequest().get("municipios_locais")==null 
+          //   || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
+            // localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
+         //}
          if(form().bindFromRequest().get("espacamento.id")==null 
              || form().bindFromRequest().get("espacamento.id").equals("")) {
              localForm.reject("espacamento.id", "O campo Espaçamento é de preenchimento obrigatório!");
@@ -117,10 +117,10 @@ public class Locais extends Controller{
              || form().bindFromRequest().get("trabalho_cientifico.id").equals("")) {
              localForm.reject("trabalho_cientifico.id", "O campo Trabalho Científico é de preenchimento obrigatório!");
          }
-         if(form().bindFromRequest().get("municipios_locais")==null 
-             || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
-             localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
-         }
+       //  if(form().bindFromRequest().get("municipios_locais")==null 
+         //    || form().bindFromRequest().get("municipios_locais[0].municipio.id").equals("")) {
+           //  localForm.reject("municipios_locais[0].municipio.id", "O campo Município é de preenchimento obrigatório!");
+        // }
          if(form().bindFromRequest().get("espacamento.id")==null 
              || form().bindFromRequest().get("espacamento.id").equals("")) {
              localForm.reject("espacamento.id", "O campo Espaçamento é de preenchimento obrigatório!");
@@ -221,6 +221,21 @@ public class Locais extends Controller{
             result.put("qtde_volume", "");
         }
         
+        if(local.local_detalhe_biomassa!=null){
+            result.put("detalhar_biomassa", true);
+        }else{
+            result.put("detalhar_biomassa", false);
+        }
+        if(local.local_detalhe_carbono!=null){
+            result.put("detalhar_carbono", true);
+        }else{
+            result.put("detalhar_carbono", false);
+        }
+        if(local.local_detalhe_volume!=null){
+            result.put("detalhar_volume", true);
+        }else{
+            result.put("detalhar_volume", false);
+        }
         if(local.trabalho_cientifico.trabalho_cientifico_equacao.get(0) != null){
             for(TrabalhoCientificoEquacao trabalhoEquacao : local.trabalho_cientifico.trabalho_cientifico_equacao){
                 if(trabalhoEquacao.equacao.variavel_interesse.id == 1){

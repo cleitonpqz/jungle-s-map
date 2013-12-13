@@ -67,6 +67,7 @@
             <thead>
                 <tr class="tablehead">
                     @header("autor.nome", "Nome do Autor")
+                    @header("ano", "Ano")
                     <th></th>
                     <th></th>
                     
@@ -78,6 +79,9 @@
                     <tr>
                         <td>
                             @TrabalhoCientifico.autor.nome
+                        </td>
+                        <td>
+                            @TrabalhoCientifico.ano
                         </td>
                         <td>
                                <a href="@routes.TrabalhosCientificos.incluirEditar(TrabalhoCientifico.id)" class="btn btn-primary btn-small" rel="tooltip" title="Editar Trabalho Científico">Editar</a>

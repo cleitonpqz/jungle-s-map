@@ -120,6 +120,8 @@ GET     /DadosLocal/:id/:tipoEstimativa/fazerCalculo        controllers.DadosLoc
 GET     /DadosLocal/:id/:estimativa/detalheBiomassa         controllers.DadosLocal.detalheBiomassa(id:Long, estimativa:Integer)
 GET     /DadosLocal/:id/:estimativa/detalheCarbono          controllers.DadosLocal.detalheCarbono(id:Long, estimativa:Integer)
 GET     /DadosLocal/:id/:estimativa/detalheVolume           controllers.DadosLocal.detalheVolume(id:Long, estimativa:Integer)
+GET     /DadosLocal/:id/:caso/popUpDetalhar                 controllers.DadosLocal.popUpDetalhar(id:Long, caso:Integer)
+
 #--------------------------------------------------------------------------------------------------------------------------------
 #Arvores novo, saveFile
 

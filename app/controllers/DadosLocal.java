@@ -58,6 +58,33 @@ public class DadosLocal extends Controller {
          );
         }
         
+        public static Result popUpDetalhar(Long id, Integer caso){
+            switch (caso){
+                case 1:
+                    LocalDetalheBiomassa ldb = Local.find.byId(id).local_detalhe_biomassa;
+                    Form<LocalDetalheBiomassa> ldbForm = form(LocalDetalheBiomassa.class).fill(ldb);
+                    return ok(
+                       popUpDetalheBiomassa.render(ldbForm)
+                    );
+                 
+                case 2:
+                    LocalDetalheCarbono ldc = Local.find.byId(id).local_detalhe_carbono;
+                    Form<LocalDetalheCarbono> ldcForm;
+                    ldcForm=form(LocalDetalheCarbono.class).fill(ldc);
+
+                   return ok(
+                            popUpDetalheCarbono.render(ldcForm)
+                        );
+                
+                default:
+                    LocalDetalheVolume ldv = Local.find.byId(id).local_detalhe_volume;
+                    Form<LocalDetalheVolume> ldvForm = form(LocalDetalheVolume.class).fill(ldv);
+                    return ok(
+                           popUpDetalheVolume.render(ldvForm)
+                    );
+               
+            }
+        }
         
         public static Result fazerCalculo(Long id, int estimativa) {
             Local local = Local.find.byId(id);

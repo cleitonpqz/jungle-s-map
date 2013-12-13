@@ -65,10 +65,7 @@ public class TrabalhosCientificos extends Controller {
              || form().bindFromRequest().get("metodo_quantificacao_carbono.id").equals("")) {
              trabalhoCientificoForm.reject("metodo_quantificacao_carbono.id", "O campo quant. de Carbono é de preenchimento obrigatório!");
          }
-        if(form().bindFromRequest().get("trabalho_cientifico_equacao")==null) {
-             trabalhoCientificoForm.reject("metodo_quantificacao_carbono", "O campo quant. de Carbono!");
-         }
-        
+                
         if(trabalhoCientificoForm.hasErrors()) {
             return badRequest(editarForm.render(id, trabalhoCientificoForm));
         }

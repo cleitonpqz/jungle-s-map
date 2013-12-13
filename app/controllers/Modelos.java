@@ -118,13 +118,20 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
             return badRequest(ajustar.render(equacao, campos, idLocal, estimativa));  
         }
         //Calculando
-        double[][] valorEntrada= new double[linhasPreenchidas.size()][equacao.termos.size()];
+        int qtd_termos=0;
+        for(Termo termo : equacao.termos){
+            if(!termo.expressao.equals("1")){
+                qtd_termos++;
+            }
+        }
+        double[][] valorEntrada= new double[linhasPreenchidas.size()][qtd_termos];
         double[] valorObservado= new double[linhasPreenchidas.size()];
         for(int linha =0; linha<linhasPreenchidas.size(); linha++){
             ArvoreAjuste arvoreAjuste = new ArvoreAjuste();
             arvoreAjuste.local = local;
-             int numTermo = equacao.termos.size();
+            int numTermo = qtd_termos;
              for(Termo termo : equacao.termos){
+              if(!termo.expressao.equals("1")){
                 JEP myParser = new JEP();
                 myParser.addStandardFunctions();
                 myParser.addStandardConstants();
@@ -135,6 +142,7 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                 myParser.parseExpression(termo.expressao);
                 valorEntrada[linha][numTermo-1]=myParser.getValue();
                 numTermo--;
+              }
             }
              for (EquacaoVariavel equacaoVariavel : equacao.equacao_variavel){
                       ArvoreAjusteVariavel variavelAjuste = new ArvoreAjusteVariavel();
@@ -157,22 +165,11 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();        
         regression.newSampleData(valorObservado, valorEntrada);
         double[] valorCoeficiente = regression.estimateRegressionParameters();
-        for(double coef: valorCoeficiente){
-        System.out.println(String.valueOf(coef));
-        }
         String expressao = equacao.expressao_modelo;
-        System.out.println(expressao);
         ObjectNode result = Json.newObject();
         for(Integer i=0; i<equacao.qtd_coeficientes; i++){
-          if(i==0){
                 expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
-          }else{
-                if(isNegative(valorCoeficiente[i])){
-                    expressao=expressao.replaceAll("+b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
-                }else{
-                    expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
-                }
-          }
+          
           expressao=expressao.replaceAll(",",".");
           result.put("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
         }

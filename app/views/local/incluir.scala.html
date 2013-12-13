@@ -439,7 +439,8 @@ $(document).ready(function(){
                     localForm("espacamento.id"), 
                     options(Espacamento.opcoes),
                     'class ->"input-xlarge",
-                    '_label -> "Espaçamento", 
+                    '_label -> "Espaçamento",
+                    'id->"espacamento",
                     '_default -> "-- Escolha o Espaçamento --",
                     '_showConstraints -> false,
                     '_error -> localForm.error("espacamento")
@@ -526,7 +527,7 @@ $(document).ready(function(){
                 
               
                 <div>
-                  <a type="button" class="btn btn-primary btn-small" href="@routes.TrabalhosCientificos.manter(0, "autor.nome", "asc", "")">Cadastrar trabalho</a>
+                  
                   <a type="button" class="btn btn-success btn-small" onclick="popUpLocalizarSimilar()">Utilizar local similar</a>
                   <a type="button" class="btn btn-warning btn-small">Ver sugestão do software</a>
                   

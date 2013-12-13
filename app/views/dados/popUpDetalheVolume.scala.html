@@ -1,0 +1,149 @@
+@(ldbForm: Form[LocalDetalheVolume])
+
+@import helper._
+@import helper.twitterBootstrap._
+@javascript = {
+<script type="text/javascript">
+     jQuery(function(){
+         $("#qtde_volume_min").val(new Number($("#qtde_volume_min").val()).toFixed(4));
+         $("#qtde_volume_media").val(new Number($("#qtde_volume_media").val()).toFixed(4));
+         $("#qtde_volume_max").val(new Number($("#qtde_volume_max").val()).toFixed(4));
+         $("#media_parcela_volume").val(new Number($("#media_parcela_volume").val()).toFixed(4));
+         $("#variancia_volume").val(new Number($("#variancia_volume").val()).toFixed(4));
+         $("#desvio_padrao_volume").val(new Number($("#desvio_padrao_volume").val()).toFixed(4));
+         $("#variancia_media_volume").val(new Number($("#variancia_media_volume").val()).toFixed(4));
+         $("#erro_padrao_volume").val(new Number($("#erro_padrao_volume").val()).toFixed(4));
+         $("#coef_variancia_volume").val(new Number($("#coef_variancia_volume").val()).toFixed(4));
+         $("#erro_absoluto_volume").val(new Number($("#erro_absoluto_volume").val()).toFixed(4));
+         $("#erro_relativo_volume").val(new Number($("#erro_relativo_volume").val()).toFixed(4));
+         $("#intervalo_conf_min_volume").val(new Number($("#intervalo_conf_min_volume").val()).toFixed(4));
+         $("#intervalo_conf_max_volume").val(new Number($("#intervalo_conf_max_volume").val()).toFixed(4));
+         
+     });
+    
+    
+</script>
+}
+@layoutPopUp("Detalhe Cálculo de Volume", javascript){
+    
+    <form>
+        
+       <fieldset>
+           <div class="row">
+               <div class="span6">
+                    @inputText(
+                         ldbForm("qtde_volume_min"), 
+                         '_label -> "Qtde Volume Minima",
+                         'id->"qtde_volume_min",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("qtde_volume_min")
+                     )
+                                 @inputText(
+                         ldbForm("qtde_volume_med"), 
+                         '_label -> "Qtde Volume Media",
+                         'id->"qtde_volume_media",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("qtde_volume_med")
+                     )
+                                 @inputText(
+                         ldbForm("qtde_volume_max"), 
+                         '_label -> "Qtde Volume Máxima",
+                         'id->"qtde_volume_max",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("qtde_volume_max")
+                     )
+                                 @inputText(
+                         ldbForm("media_parcela"), 
+                         '_label -> "Média da Parcela",
+                         'id->"media_parcela_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("media_parcela")
+                     )
+                                 @inputText(
+                         ldbForm("variancia"), 
+                         '_label -> "Variância",
+                         'id->"variancia_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("variancia")
+                     )
+                                 @inputText(
+                         ldbForm("desvio_padrao"), 
+                         '_label -> "Desvio Padrão",
+                         'id->"desvio_padrao_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("desvio_padrao")
+                     )
+                                 @inputText(
+                         ldbForm("variancia_media"), 
+                         '_label -> "Variância Média",
+                         'id->"variancia_media_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("variancia_media")
+                     )
+                </div>
+                    <div class="span6">
+                                 @inputText(
+                         ldbForm("erro_padrao"), 
+                         '_label -> "Erro Padrão",
+                         'id->"erro_padrao_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("erro_padrao")
+                     )
+
+                                 @inputText(
+                         ldbForm("coeficiente_variacao"), 
+                         '_label -> "Coeficiência de Variância",
+                         'id->"coef_variancia_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("coeficiente_variacao")
+                     )
+                                 @inputText(
+                         ldbForm("erro_absoluto"), 
+                         '_label -> "Erro Absoluto",
+                         'id->"erro_absoluto_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("erro_absoluto")
+                     )
+                                 @inputText(
+                         ldbForm("erro_relativo"), 
+                         '_label -> "Erro Relativo",
+                         'id->"erro_relativo_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("erro_relativo")
+                     )
+                                 @inputText(
+                         ldbForm("intervalo_confianca_min_parcela"), 
+                         '_label -> "Intervalo Confianca Min. Parcela",
+                         'id->"intervalo_conf_min_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("intervalo_confianca_min_parcela")
+                     )
+                                 @inputText(
+                         ldbForm("intervalo_confianca_max_parcela"), 
+                         '_label -> "Intervalo Confianca Max. Parcela",
+                         'id->"intervalo_conf_max_volume",
+                         'class ->"input-xlarge",
+                         '_help -> "",
+                         '_error -> ldbForm.error("intervalo_confianca_max_parcela")
+                     )
+                  </div>
+           </div>
+                 
+        </fieldset>
+   
+    </form>
+
+    
+}    

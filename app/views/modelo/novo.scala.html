@@ -339,7 +339,7 @@ $('#limparExpressao').click(function(){
 
 </script>
 <script type="text/javascript">
-        $("#saveModalButton").click(function(e){
+        $("#savarModalModelo").click(function(e){
                  var dataFilterRequest = jQuery.ajax({
                     url: '@routes.Modelos.salvarAjax(variavelInteresse)',
                     type: 'post',
@@ -378,7 +378,7 @@ $('#limparExpressao').click(function(){
 @import helper._
 @import helper.twitterBootstrap._
 
-@modal(if(quemChama!=2){"Cadastrar Modelo"}else{"Editar Modelo"}, "Salvar", quemChama, javascript){
+@modal2(if(quemChama!=2){"Cadastrar Modelo"}else{"Editar Modelo"}, "Salvar", quemChama, javascript){
     
      @form(routes.Modelos.salvar(variavelInteresse), 'id -> "modeloForm") {
      <fieldset style="margin-left:10%; margin-right:auto;">

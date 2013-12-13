@@ -169,7 +169,7 @@ public class EstatisticaCalculos {
               break;
           case 3:
               for(ArvoreAjuste arvore : ArvoreAjuste.findArvoreAjuste(idLocal, equacao.id)){
-                    somaVolumeObs =+ arvore.qtd_carbono_obs;
+                    somaVolumeObs =+ arvore.qtd_volume_obs;
                     
                     parser = new org.nfunk.jep.JEP();
                     parser.addStandardFunctions();
@@ -181,7 +181,7 @@ public class EstatisticaCalculos {
                             }
                     }
                         parser.parseExpression(equacao.expressao);
-                        qtdeCarbonoEst = parser.getValue();
+                        qtdeVolumeEst = parser.getValue();
                         arvore.qtd_volume_est = qtdeVolumeEst;
                         somaVolumeEst = somaVolumeEst + qtdeVolumeEst;
                         arvore.update();

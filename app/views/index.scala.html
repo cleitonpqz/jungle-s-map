@@ -17,6 +17,11 @@
 @javascript = {
     <script type="text/javascript" src="@routes.Application.javascriptRoutes()"></script>
     <script type="text/javascript">
+    function popUpDetalhar(id, caso) {
+      popup = window.open('/DadosLocal/'+id+'/'+caso+'/popUpDetalhar' , 'popup_id', 'top=100,left=400,status=no,toolbar=no,location=no,menu=no,width=800,height=600,scrollbars=yes,resisable=yes');
+    }
+    </script>
+    <script type="text/javascript">
         function initialize() {
 
             var myLatLng = new google.maps.LatLng(-24.786735,-51.108398);
@@ -47,8 +52,9 @@
                     });
                  jsRoutes.controllers.Locais.findById(id).ajax({
                     success: function(data){
-                        
-                 var contentString= "<div class='well'>\
+                  var contentString;
+                  if(data.detalhar_biomassa && data.detalhar_carbono && data.detalhar_volume){
+                 contentString= "<div class='well'>\
                             <table class='table'>\
                             <tr><th>Local</th><td>"+data.descricao+"</td></tr>\n\
                            <tr><td>Formacao</td><td>"+data.formacao.nome+"</td></tr>\n\
@@ -56,7 +62,33 @@
                            <tr><td>Área Total</td><td>"+Number(data.area_total).toFixed(2)+"</td></tr>\n\
                             <tr><td>Municípios</td><td>"+data.municipios+"</td></tr>\n\
                            <tr><td>Coordenadas</td><td>"+data.coordenadas+"</td></tr>\n\
-                            <tr><td>Total Biomassa(ton)</td><td>"+data.qtde_biomassa+"</td></tr>\n\
+                            <tr><td>Total Biomassa(ton)</td><td>"+data.qtde_biomassa+"</td><td><input type='button' value='detalhar' onclick='popUpDetalhar("+data.id+", 1)'></td></tr>\n\
+                            <tr><td>Total Carbono(ton)</td><td>"+data.qtde_carbono+"</td><td><input type='button' value='detalhar' onclick='popUpDetalhar("+data.id+", 2)'></td></tr>\n\
+                             <tr><td>Volume Total</td><td>"+data.qtde_volume+"</td><td><input type='button' value='detalhar' onclick='popUpDetalhar("+data.id+", 3)'></td></tr>\n\
+                           <table class='table'>\n\
+                           <th colspan='3'Trabalho Científico</th>\n\
+                          <tr><td>Disponibilidade</td><td>"+data.disponibilidade.descricao+"</td></tr>\n\
+                          <tr><td>Ano</td><td>"+data.ano+"</td></tr>\n\
+                          <tr><td>Mtdo de Quant. Biomassa:</td><td>"+data.metodo_quantificacao_biomassa+"</td></tr>\n\
+                          <tr><td>Mtdo de Quant. Carbono</td><td>"+data.metodo_quantificacao_carbono+"</td></tr>\n\
+                         <tr><th></th><th> Equações</th><th>Modelo</th></tr>\n\
+                         <tr><td>Biomassa</td><td>"+data.equacao_biomassa+"</td><td>"+data.modelo_biomassa+"</td></tr>\n\
+                         <tr><td>Carbono</td><td>"+data.equacao_carbono+"</td><td>"+data.modelo_carbono+"</td></tr>\n\
+                         <tr><td>Volume</td><td>"+data.equacao_volume+"</td><td>"+data.modelo_volume+"</td></tr>\n\
+                           </table>\n\
+                           </td></tr>\n\
+                            </table>\
+                            </div>";
+                    }else{
+                        contentString= "<div class='well'>\
+                            <table class='table'>\
+                            <tr><th>Local</th><td>"+data.descricao+"</td></tr>\n\
+                           <tr><td>Formacao</td><td>"+data.formacao.nome+"</td></tr>\n\
+                           <tr><td>Espaçamento</td><td>"+data.espacamento+"</td></tr>\n\
+                           <tr><td>Área Total</td><td>"+Number(data.area_total).toFixed(2)+"</td></tr>\n\
+                            <tr><td>Municípios</td><td>"+data.municipios+"</td></tr>\n\
+                           <tr><td>Coordenadas</td><td>"+data.coordenadas+"</td></tr>\n\
+                            <tr><td>Total Biomassa(ton)</td><td>"+data.qtde_biomassa+"</td>\n\
                             <tr><td>Total Carbono(ton)</td><td>"+data.qtde_carbono+"</td></tr>\n\
                              <tr><td>Volume Total</td><td>"+data.qtde_volume+"</td></tr>\n\
                            <table class='table'>\n\
@@ -73,6 +105,8 @@
                            </td></tr>\n\
                             </table>\
                             </div>";
+                        
+                    }
                       infowindow.setContent(contentString);      
                           }
                  });
