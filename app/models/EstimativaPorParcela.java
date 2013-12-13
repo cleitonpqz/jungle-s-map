@@ -63,7 +63,7 @@ public class EstimativaPorParcela {
         localDetalheBiomassa.erro_relativo=erroRelativo;                
         localDetalheBiomassa.intervalo_confianca_min_parcela=intervaloConfiancaMinParcela;
         localDetalheBiomassa.intervalo_confianca_max_parcela=intervaloConfiancaMaxParcela;              
-        
+        localDetalheBiomassa.save();
         //CARBONO
         for(Parcela parcela : local.parcelas) {
             estatisticaCarbono.addValue(parcela.carbono);            
@@ -89,13 +89,13 @@ public class EstimativaPorParcela {
         localDetalheCarbono.erro_relativo=erroRelativo;                
         localDetalheCarbono.intervalo_confianca_min_parcela=intervaloConfiancaMinParcela;
         localDetalheCarbono.intervalo_confianca_max_parcela=intervaloConfiancaMaxParcela;        
- 
+        localDetalheCarbono.save();
         //VOLUME
         estatistica.clear();        
         for(Parcela parcela : local.parcelas) {
-            estatisticaVolume.addValue(parcela.volume);            
-        }
-        
+            estatisticaVolume.addValue(parcela.volume);
+           }
+        estatistica = estatisticaVolume.copy();
         calculaEstatisticas();
         
         double qtdeVolumeMin = mediaLocal - qtdeParcelasLocal * erroAbsoluto;
@@ -117,12 +117,11 @@ public class EstimativaPorParcela {
         localDetalheVolume.erro_relativo=erroRelativo;                
         localDetalheVolume.intervalo_confianca_min_parcela=intervaloConfiancaMinParcela;
         localDetalheVolume.intervalo_confianca_max_parcela=intervaloConfiancaMaxParcela;        
-        
+        localDetalheVolume.save();
         
         local.qtde_biomassa = qtdeBiomassaMed;
         local.qtde_carbono = qtdeCarbonoMed;
         local.qtde_volume = qtdeVolumeMed;
-        
         local.update(id);
             
     }

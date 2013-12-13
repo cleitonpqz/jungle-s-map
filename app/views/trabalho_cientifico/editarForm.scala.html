@@ -69,7 +69,14 @@
 
                 e.preventDefault();
         });     
-     
+   $('.soNumeros').keypress(function(event) {
+
+      if (event.which == 8 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46) {
+            return true;
+        }else if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+      }
+    });  
 </script>
     
 }
@@ -138,7 +145,7 @@
             @inputText(
                 trabalhoCientificoForm("ano"), 
                 '_label -> "Ano",
-                'class ->"input-xlarge",
+                'class ->"soNumeros input-xlarge",
                 'placeholder->"Digite o ano",
                 '_help -> "",
                 '_error -> trabalhoCientificoForm.error("ano")
@@ -196,6 +203,9 @@
     
     
      <legend class="equacao-border">Equações / Modelos</legend>
+     <div>
+    
+</div>
      <a href="@routes.Variaveis.novaEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar nova variável">Cadastrar Nova Variável</a>
      <a href="@routes.AutoresModelos.novoEditar(0, 6)" align="bottom" class="nova_variavel btn btn-info btn-mini" rel="tooltip" title="Cadastrar novo autor de Modelo">Cadastrar Novo Autor de Modelo</a>
              <div class="control-group">

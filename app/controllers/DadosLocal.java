@@ -69,12 +69,12 @@ public class DadosLocal extends Controller {
               
             }
             if(countEquacao==3){
-                if(local.parcelas.size()!=0){
+                 if(local.parcelas.size()!=0){
                     EstimativaPorArvore estimativaPorArvore = new EstimativaPorArvore();
                     EstimativaPorParcela estimativaPorParcela = new EstimativaPorParcela();
                         switch(estimativa){
                             case 1: 
-                               for(Parcela parcela : local.parcelas){
+                                for(Parcela parcela : local.parcelas){
                                     estimativaPorArvore.calculaEstimativaPorArvore(parcela);
                                 }  
                             case 2:    

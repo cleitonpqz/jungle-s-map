@@ -53,10 +53,14 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
      public static Result salvarAjax(Long varialvelInteresse) {
 		ObjectNode result = Json.newObject();
         Form<Equacao> equacaoForm = form(Equacao.class).bindFromRequest();
+        if(form().bindFromRequest().get("autor_modelo.id")==null 
+            || form().bindFromRequest().get("autor_modelo.id").equals("")) {
+                	result.put("error", "Campo autor é obrigatório.");
+			return ok(result);
+        }
         if(form().bindFromRequest().get("expressao_modelo")==null 
             || form().bindFromRequest().get("expressao_modelo").equals("")) {
-            equacaoForm.reject("expressao_modelo", "Campo de preenchimento obrigatório");
-			result.put("error", "Campo modelo é obrigatório.");
+            		result.put("error", "Campo modelo é obrigatório.");
 			return ok(result);
         }
         equacaoForm.get().save();
@@ -103,7 +107,6 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                 }
             } 
             if(colunasPreenchidas > 0 && colunasPreenchidas< numeroColunas){
-                System.out.println("Erro");
                 return badRequest(ajustar.render(equacao, campos, idLocal, estimativa));   
             }else if(colunasPreenchidas==numeroColunas){
                 linhasPreenchidas.add(row);
@@ -154,13 +157,24 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();        
         regression.newSampleData(valorObservado, valorEntrada);
         double[] valorCoeficiente = regression.estimateRegressionParameters();
+        for(double coef: valorCoeficiente){
+        System.out.println(String.valueOf(coef));
+        }
         String expressao = equacao.expressao_modelo;
         System.out.println(expressao);
         ObjectNode result = Json.newObject();
         for(Integer i=0; i<equacao.qtd_coeficientes; i++){
-          expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i+1]));
+          if(i==0){
+                expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
+          }else{
+                if(isNegative(valorCoeficiente[i])){
+                    expressao=expressao.replaceAll("+b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
+                }else{
+                    expressao=expressao.replaceAll("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
+                }
+          }
           expressao=expressao.replaceAll(",",".");
-          result.put("b"+i.toString(), String.format("%.4f",valorCoeficiente[i+1]));
+          result.put("b"+i.toString(), String.format("%.4f",valorCoeficiente[i]));
         }
         equacao.expressao = expressao;
         equacao.update();
@@ -172,7 +186,15 @@ public static Result GO_HOME = redirect(routes.TrabalhosCientificos.manter(0, "n
                 
         return ok(result);
     }
-    
+    public static boolean isNegative(Double number){
+        if( number < 0){
+            return true;
+        }else {
+            return false;
+        }
+ }
+
+   
     
     
 }

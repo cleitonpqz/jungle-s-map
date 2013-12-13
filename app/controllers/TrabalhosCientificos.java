@@ -42,6 +42,33 @@ public class TrabalhosCientificos extends Controller {
     
     public static Result salvar(Long id) {
         Form<TrabalhoCientifico> trabalhoCientificoForm = form(TrabalhoCientifico.class).bindFromRequest();
+        if(form().bindFromRequest().get("autor.id")==null 
+             || form().bindFromRequest().get("autor.id").equals("")) {
+             trabalhoCientificoForm.reject("autor.id", "O campo autor é de preenchimento obrigatório!");
+         }
+        if(form().bindFromRequest().get("disponibilidade.id")==null 
+             || form().bindFromRequest().get("disponibilidade.id").equals("")) {
+             trabalhoCientificoForm.reject("disponibilidade.id", "O campo disponibilidade é de preenchimento obrigatório!");
+         }
+        if(form().bindFromRequest().get("metodo_quantificacao_biomassa.id")==null 
+             || form().bindFromRequest().get("metodo_quantificacao_biomassa.id").equals("")) {
+             trabalhoCientificoForm.reject("metodo_quantificacao_biomassa.id", "O campo quant. de Biomassa é de preenchimento obrigatório!");
+         }
+        
+        if(form().bindFromRequest().get("ano")!=null && !form().bindFromRequest().get("ano").equals("")) {
+            if(Integer.valueOf(form().bindFromRequest().get("ano"))<1800 ||  Integer.valueOf(form().bindFromRequest().get("ano"))>Calendar.getInstance().get(Calendar.YEAR)) {
+                 trabalhoCientificoForm.reject("ano", "Ano inválido");
+             }
+        }    
+        
+        if(form().bindFromRequest().get("metodo_quantificacao_carbono.id")==null 
+             || form().bindFromRequest().get("metodo_quantificacao_carbono.id").equals("")) {
+             trabalhoCientificoForm.reject("metodo_quantificacao_carbono.id", "O campo quant. de Carbono é de preenchimento obrigatório!");
+         }
+        if(form().bindFromRequest().get("trabalho_cientifico_equacao")==null) {
+             trabalhoCientificoForm.reject("metodo_quantificacao_carbono", "O campo quant. de Carbono!");
+         }
+        
         if(trabalhoCientificoForm.hasErrors()) {
             return badRequest(editarForm.render(id, trabalhoCientificoForm));
         }

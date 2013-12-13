@@ -56,9 +56,11 @@ public class EstimativaPorArvore {
             parserBiomassa = new org.nfunk.jep.JEP();
             parserBiomassa.addStandardFunctions();
             parserBiomassa.addStandardConstants();
+            
             parserCarbono = new org.nfunk.jep.JEP();
             parserCarbono.addStandardFunctions();
             parserCarbono.addStandardConstants();
+            
             parserVolume = new org.nfunk.jep.JEP();
             parserVolume.addStandardFunctions();
             parserVolume.addStandardConstants();
@@ -82,19 +84,24 @@ public class EstimativaPorArvore {
                     somaCarbonoEst =+parserCarbono.getValue();
                     
                  for(EquacaoVariavel variavelEquacao : equacaoVolume.equacao_variavel){
-                    for(VariavelArvore variavelArvore : arvore.variavel_arvore)
-                        if(variavelEquacao.variavel.id == variavelArvore.variavel.id){
-                            parserVolume.addVariable(variavelEquacao.variavel.sigla, variavelArvore.valor);
+                    for(VariavelArvore variavelArvore : arvore.variavel_arvore){
+                            if(variavelEquacao.variavel.id == variavelArvore.variavel.id){
+                                System.out.println("aquiiiiiiiiiiiiiiiiiiiiii");
+                                parserVolume.addVariable(variavelEquacao.variavel.sigla, variavelArvore.valor);
+                            }
                         }
                     }
-                    parserVolume.parseExpression(equacaoVolume.expressao);
+                   parserVolume.parseExpression(equacaoVolume.expressao);
+                   System.out.println(String.valueOf(somaVolumeEst));
                     somaVolumeEst =+parserVolume.getValue();
+                    System.out.println(String.valueOf(somaVolumeEst));
                     
                            
         }        
         parcela.biomassa=somaBiomassaEst;
         parcela.carbono=somaCarbonoEst;
         parcela.volume=somaVolumeEst;
+        System.out.println(String.valueOf(parcela.volume));
         parcela.update();
                 
    }  

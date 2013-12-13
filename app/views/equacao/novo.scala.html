@@ -19,7 +19,7 @@
       }
     
     function acrescentaTermo(termo){
-        $("#expressao").val($("#expressao").val()+termo);
+        $("#expressao_equacao").val($("#expressao_equacao").val()+termo);
     }
     function existe(vetor, objeto) {
         for (var i = 0; i < vetor.length; i++) {
@@ -29,7 +29,7 @@
     }
     return false;
     }
-    function pode(caso){
+    function pode_equacao(caso){
         switch(caso){
          case 'negativo':
              if (countTermos===0)
@@ -60,13 +60,13 @@
         
     }
 	
-  $('body').on('change', '#variavel',function(){
-             	if(pode("variavel")){
-                   var auxVariavel = $("#variavel").val().split(",");
+  $('#variavel_equacao').change(function(){
+             	if(pode_equacao("variavel")){
+                   var auxVariavel = $("#variavel_equacao").val().split(",");
                     acrescentaTermo(auxVariavel[1]);
                     populaTermos("variavel",auxVariavel[1].length);
                     if(!existe(variavelUtilizada, auxVariavel[0])){
-                        $("#divVariaveis").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
+                        $("#divVariaveis_equacao").append("<div id='equacaoVariavel_"+countVariavel+"'>\n\
                                                     <input type='hidden' name='equacao_variavel["+countVariavel+"].variavel.id' value='"+auxVariavel[0]+"'>\n\
                                                     <input type='hidden' name='equacao_variavel["+countVariavel+"].valor' value='0'> </div>");
 
@@ -75,11 +75,11 @@
                     }
                     
                 }
-                $("#variavel").val("0");
+                $("#variavel_equacao").val("0");
 		
 })       
   $("#adicionarConstanteBtn").click(function(){
-        	if(pode("constante")){
+        	if(pode_equacao("constante")){
                     var stringConstante = $("#constante").val();
                         acrescentaTermo(stringConstante);
 			populaTermos("constante", stringConstante.length);
@@ -87,82 +87,82 @@
                 $("#constante").val("");
 		
 })
- $("#multiplicacao").click(function(){
-		if(pode("operador")){
+ $("#multiplicacao_equacao").click(function(){
+		if(pode_equacao("operador")){
                         acrescentaTermo("*");
 			populaTermos("operador",1);
 		}
 })
-$("#divisao").click(function(){
-		if(pode("operador")){
+$("#divisao_equacao").click(function(){
+		if(pode_equacao("operador")){
                     acrescentaTermo("/");
                     populaTermos("operador",1);
 		}
 })
-$("#adicao").click(function(){
-                if(pode("operador")){
+$("#adicao_equacao").click(function(){
+                if(pode_equacao("operador")){
                 acrescentaTermo("+");
 		populaTermos("operador",1);
 		}
 		
 })
-$("#subtracao").click(function(){
-                if(pode("negativo")){
+$("#subtracao_equacao").click(function(){
+                if(pode_equacao("negativo")){
                     acrescentaTermo("-");
                     populaTermos("operador",1);
 		}
 		
 })
-$("#potencicao").click(function(){
-		if(pode("operador")){
+$("#potencicao_equacao").click(function(){
+		if(pode_equacao("operador")){
                     acrescentaTermo("^");
                     populaTermos("operador",1);
                 }
 })
-$("#sqrt").click(function(){
-                if(pode("operadorComParenteses")){
+$("#sqrt_equacao").click(function(){
+                if(pode_equacao("operadorComParenteses")){
                     acrescentaTermo("sqrt");
                     populaTermos("operador",4);
                 }
 		
 })
-$("#logaritmoNeperiano").click(function(){
-                if(pode("operadorComParenteses")){
-                    acrescentaTermo("LN");
+$("#logaritmoNeperiano_equacao").click(function(){
+                if(pode_equacao("operadorComParenteses")){
+                    acrescentaTermo("ln");
                     populaTermos("operador",2);
 		}
 		
 })
-$("#logaritmo").click(function(){
-		if(pode("operadorComParenteses")){
-                    acrescentaTermo("Log");
+$("#logaritmo_equacao").click(function(){
+		if(pode_equacao("operadorComParenteses")){
+                    acrescentaTermo("log");
                     populaTermos("operador",3);
                 }
 })
-$("#exponencial").click(function(){
-		if(pode("operadorComParenteses")){
+$("#exponencial_equacao").click(function(){
+		if(pode_equacao("operadorComParenteses")){
                     acrescentaTermo("exp");
                     populaTermos("operador",3);
                 }
 })
 
-$("#abreParenteses").click(function(){
-                if(pode(abreParenteses)){
+$("#abreParenteses_equacao").click(function(){
+                if(pode_equacao("abreParenteses")){
                     acrescentaTermo("(");
                     populaTermos("abreParenteses",1);
                  }
 				
 })
-$("#fechaParenteses").click(function(){
-                if(pode(fechaParenteses)){
+$("#fechaParenteses_equacao").click(function(){
+                if(pode_equacao("fechaParenteses")){
                     acrescentaTermo(")");
                     populaTermos("fechaParenteses",1);
                 }
 })
 
-$('body').on('click','#CE',function(){
-     if(countTermos>0){
-        var auxExpressao = $("#expressao").val();
+$('#CE_equacao').click(function(){
+      if(countTermos>0){
+        var auxExpressao = $("#expressao_equacao").val();
         if(termos[countTermos-1].tipo==="variavel"){
             countTermos--;
             auxExpressao = auxExpressao.substring(0, auxExpressao.length - termos[countTermos].tamanho);
@@ -179,14 +179,14 @@ $('body').on('click','#CE',function(){
             auxExpressao = auxExpressao.substring(0, auxExpressao.length - termos[countTermos].tamanho);
            
         }
-            $("#expressao").val(auxExpressao);
+            $("#expressao_equacao").val(auxExpressao);
 
           }
             
 })
-$('body').on('click','#C', function(){
-        $("#expressao").val("");
-        $("#divVariaveis").html("");
+$('#C_equacao').click(function(){
+        $("#expressao_equacao").val("");
+        $("#divVariaveis_equacao").html("");
                 countVariavel=0;
 		countTermos=0;
 })  
@@ -261,10 +261,10 @@ $('body').on('click','#C', function(){
            </div>
            </div>    
 
-                  <div class="clearfix  " id="expressao_field">
+                  <div class="clearfix  " id="equacao_expressao_field">
                    <label for="expressao">Equação:</label>
                        <div class="input">
-                              <input type="text" id="expressao" style="width: 700px;" name="expressao" readonly rel="tooltip" title="Insira a equação">
+                              <input type="text" id="expressao_equacao" style="width: 700px;" name="expressao" readonly rel="tooltip" title="Insira a equação">
 
                                <span class="help-inline"></span>
                                <span class="help-block"></span> 
@@ -274,7 +274,7 @@ $('body').on('click','#C', function(){
           <div class="row">
                    <div class="span6">
                        <h4>Variáveis</h4>
-                       <select id="variavel" name="variavel" class="input-xlarge">
+                       <select id="variavel_equacao" name="variavel" class="input-xlarge">
                            <option value ="0">-- Variáveis --</option>
                            
                             @for(opcao<-Variavel.opcoes){
@@ -291,35 +291,35 @@ $('body').on('click','#C', function(){
                      <div id="corpo">
                         <table style="border-style:double;border-color:black; padding-left: 5px;padding-right:5px;font-family: sans-serif;
                         background-color:#b8c3cd;">
-                            <tr><td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE"/></td>
-                                <td colspan="2" ><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C"/></td>
+                            <tr><td colspan="2"><input type="button" rel="tooltip" title="Apaga a última inclusão" style="width:100%" value="CE" id="CE_equacao"/></td>
+                                <td colspan="2" ><input  type="button" rel="tooltip" title="Apaga tudo" style="width:100%" value="C" id="C_equacao"/></td>
                             </tr>
                             
                             <tr>
-                                <td><input type="button" rel="tooltip" title="Adição" style="width:100%" value="+" id="adicao"/></td>
-                                <td><input type="button" rel="tooltip" title="Subtração" style="width:100%" class="operador" value="-" id="subtracao"/></td>
-                                <td><input type="button" rel="tooltip" title="Multiplicacao" style="width:100%" value="*" id="multiplicacao"/></td>
-                                <td><input type="button" rel="tooltip" title="Divisão" style="width:100%" value="/" id="divisao"/></td>
+                                <td><input type="button" rel="tooltip" title="Adição" style="width:100%" value="+" id="adicao_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Subtração" style="width:100%" class="operador" value="-" id="subtracao_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Multiplicacao" style="width:100%" value="*" id="multiplicacao_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Divisão" style="width:100%" value="/" id="divisao_equacao"/></td>
                             </tr>
                             
                             <tr>
-                                <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao"/></td>
-                                <td><input type="button" rel="tooltip" title="Raiz Quadrada - Usar sqrt(número)" type="button"  style="width:100%" value="sqrt" id="sqrt"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - ln(número)" type="button"  style="width:100%" value="ln" id="logaritmoNeperiano"/></td>
-                                <td><input type="button" rel="tooltip" title="Logarítmo base 10 - Usar Log(logaritmando)" style="width:100%" value="log" id="logaritmo"/></td>
+                                <td><input type="button" rel="tooltip" title="Potência - Usar a^2" style="width:100%" value="^" id="potencicao_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Raiz Quadrada - Usar sqrt(número)" type="button"  style="width:100%" value="sqrt" id="sqrt_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo Neperiano - ln(número)" type="button"  style="width:100%" value="ln" id="logaritmoNeperiano_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title="Logarítmo base 10 - Usar Log(logaritmando)" style="width:100%" value="log" id="logaritmo_equacao"/></td>
                                 
                             </tr>
                             
                             <tr>
-                                <td colspan="2"><input type="button" rel="tooltip" title='Exponencial - Usar exp(b)' style="width:100%" value="exp" id="exponencial"/></td>
-                                <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses"/></td>
-                                <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses"/></td>
+                                <td colspan="2"><input type="button" rel="tooltip" title='Exponencial - Usar exp(b)' style="width:100%" value="exp" id="exponencial_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title='Abre Parenteses' style="width:100%" value="(" id="abreParenteses_equacao"/></td>
+                                <td><input type="button" rel="tooltip" title='Fecha Parenteses' style="width:100%" value=")" id="fechaParenteses_equacao"/></td>
                             </tr>
                         </table>
                     </div>
             </div>
            </div>
-        <div id="divVariaveis"></div>
+        <div id="divVariaveis_equacao"></div>
        </fieldset>
     }
    <hr>

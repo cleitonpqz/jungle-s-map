@@ -75,7 +75,7 @@
         
     }
 	
-    $('body').on('click','#adicionarTermoBtn', function(){
+    $('#adicionarTermoBtn').click(function(){
        var stringExpressao =$("#expressao").val();
        var stringTermo=$("#termo").val();
        var stringAux
@@ -130,7 +130,7 @@
         $("#coeficiente").val("b"+countTermo);
        })    
         
-    $('body').on('change', '#variavel',function(){
+    $('#variavel').change(function(){
                	if(pode("variavel")){
                     var auxVariavel = $("#variavel").val().split(",");
                     
@@ -291,7 +291,7 @@ $("#nove").click(function(){
                 }
 })
 
-$('body').on('click','#CE',function(){
+$('#CE').click(function(){
      if(countElementos>0){
         var auxTermo=$("#termo").val();
         
@@ -305,7 +305,7 @@ $('body').on('click','#CE',function(){
         }
             
 })
-$('body').on('click','#C', function(){
+$('#C').click(function(){
         $("#termo").val("");
         countVarElem=0;
         varElemento = new Array();
@@ -314,7 +314,7 @@ $('body').on('click','#C', function(){
         
 })
 
-$('body').on('click','#limparExpressao', function(){
+$('#limparExpressao').click(function(){
     if(countTermo>0){
         var auxExpressao=$("#expressao").val();
         countTermo--;

@@ -2,8 +2,28 @@
 
 @import helper._
 @import helper.twitterBootstrap._
-
-@main("Detalhe Cálculo de Biomassa"){
+@javascript = {
+<script type="text/javascript">
+     jQuery(function(){
+         $("#id_qtde_biomassa_min").val(new Number($("#id_qtde_biomassa_min").val()).toFixed(4));
+         $("#qtde_biomassa_med").val(new Number($("#qtde_biomassa_med").val()).toFixed(4));
+         $("#qtde_biomassa_max").val(new Number($("#qtde_biomassa_max").val()).toFixed(4));
+         $("#med_parcela_biomassa").val(new Number($("#med_parcela_biomassa").val()).toFixed(4));
+         $("#variancia_biomassa").val(new Number($("#variancia_biomassa").val()).toFixed(4));
+         $("#desvio_padrao_biomassa").val(new Number($("#desvio_padrao_biomassa").val()).toFixed(4));
+         $("#variancia_media_biomassa").val(new Number($("#variancia_media_biomassa").val()).toFixed(4));
+         $("#erro_padrao_biomassa").val(new Number($("#erro_padrao_biomassa").val()).toFixed(4));
+         $("#coef_variancia_biomassa").val(new Number($("#coef_variancia_biomassa").val()).toFixed(4));
+         $("#erro_absoluto_biomassa").val(new Number($("#erro_absoluto_biomassa").val()).toFixed(4));
+         $("#erro_relativo_biomassa").val(new Number($("#erro_relativo_biomassa").val()).toFixed(4));
+         $("#inter_conf_min_biomassa").val(new Number($("#inter_conf_min_biomassa").val()).toFixed(4));
+         $("#inter_conf_max_biomassa").val(new Number($("#inter_conf_max_biomassa").val()).toFixed(4));
+     });
+    
+    
+</script>
+}
+@main("Detalhe Cálculo de Biomassa", javascript){
     
     @form(action = routes.DadosLocal.calcular(ldbForm.get().local.id, estimativa), 'role -> "form") {
         
@@ -13,6 +33,7 @@
                         @inputText(
                              ldbForm("qtde_biomassa_min"), 
                              '_label -> "Qtde Biomassa Minima",
+                             'id->"id_qtde_biomassa_min",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("qtde_biomassa_min")
@@ -20,6 +41,7 @@
                                      @inputText(
                              ldbForm("qtde_biomassa_med"), 
                              '_label -> "Qtde Biomassa Media",
+                             'id->"qtde_biomassa_med",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("qtde_biomassa_med")
@@ -27,6 +49,7 @@
                                      @inputText(
                              ldbForm("qtde_biomassa_max"), 
                              '_label -> "Qtde Biomassa Máxima",
+                             'id->"qtde_biomassa_max",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("qtde_biomassa_max")
@@ -34,6 +57,7 @@
                                      @inputText(
                              ldbForm("media_parcela"), 
                              '_label -> "Média da Parcela",
+                             'id->"med_parcela_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("media_parcela")
@@ -41,6 +65,7 @@
                                      @inputText(
                              ldbForm("variancia"), 
                              '_label -> "Variância",
+                             'id->"variancia_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("variancia")
@@ -48,6 +73,7 @@
                                      @inputText(
                              ldbForm("desvio_padrao"), 
                              '_label -> "Desvio Padrão",
+                             'id->"desvio_padrao_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("desvio_padrao")
@@ -55,6 +81,7 @@
                                      @inputText(
                              ldbForm("variancia_media"), 
                              '_label -> "Variância Média",
+                             'id->"variancia_media_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("variancia_media")
@@ -64,6 +91,7 @@
                                      @inputText(
                              ldbForm("erro_padrao"), 
                              '_label -> "Erro Padrão",
+                             'id->"erro_padrao_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("erro_padrao")
@@ -72,6 +100,7 @@
                                      @inputText(
                              ldbForm("coeficiente_variacao"), 
                              '_label -> "Coeficiência de Variância",
+                             'id->"coef_variancia_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("coeficiente_variacao")
@@ -79,6 +108,7 @@
                                      @inputText(
                              ldbForm("erro_absoluto"), 
                              '_label -> "Erro Absoluto",
+                             'id->"erro_absoluto_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("erro_absoluto")
@@ -86,6 +116,7 @@
                                      @inputText(
                              ldbForm("erro_relativo"), 
                              '_label -> "Erro Relativo",
+                             'id->"erro_relativo_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("erro_relativo")
@@ -93,6 +124,7 @@
                                      @inputText(
                              ldbForm("intervalo_confianca_min_parcela"), 
                              '_label -> "Intervalo Confianca Min. Parcela",
+                             'id->"inter_conf_min_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("intervalo_confianca_min_parcela")
@@ -100,6 +132,7 @@
                                      @inputText(
                              ldbForm("intervalo_confianca_max_parcela"), 
                              '_label -> "Intervalo Confianca Max. Parcela",
+                             'id->"inter_conf_max_biomassa",
                              'class ->"input-xlarge",
                              '_help -> "",
                              '_error -> ldbForm.error("intervalo_confianca_max_parcela")

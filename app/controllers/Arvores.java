@@ -33,26 +33,24 @@ public class Arvores extends Controller {
 	}
 
 	public static Result saveFile(String files, Long id, Double areaParcela){
-		Local local = Local.find.byId(id);
-                local.area_parcela = areaParcela;
-                System.out.println(String.valueOf(areaParcela));
-                local.update(id);
-                System.out.println(String.valueOf(areaParcela));
+                Local local = Local.find.byId(id);
+                try {
+                Local.updateAreaParcela(id, areaParcela);
+                }catch(SQLException ex){
+                }
 		String linhas[] = files.split(",");
-		int cont = linhas.length;
+                int cont = linhas.length;
+                System.out.println(String.valueOf(cont));
 		String numParcela = "";
 		Long idParcela = null;
-		
 		List<SqlRow> variaveis = Variavel.findByLocal(id);
-
-		for(int i = 0; i < cont ; i++){
-			String temp = linhas[i];
+                for(int i = 0; i < cont ; i++){
+                   	String temp = linhas[i];
 			String itens[] = temp.split(";");
 			if(itens[0] != null){
-
-				if(numParcela != itens[0]){
-
-					Parcela parcela = new Parcela();
+                            System.out.println(itens[0]);
+				if(!numParcela.equals(itens[0])){
+                                         Parcela parcela = new Parcela();
 					
 					parcela.local = local;
 					parcela.num_parcela = Long.valueOf(itens[0]);
@@ -77,9 +75,9 @@ public class Arvores extends Controller {
 						x ++; 
 					}
 					arvore.save();
-
+                                        
 				}else{
-					Arvore arvore = new Arvore();
+                                    	Arvore arvore = new Arvore();
 					arvore.parcela = Parcela.find.byId(idParcela);
 
 					arvore.num_arvore = Long.valueOf(itens[1]);
@@ -95,24 +93,22 @@ public class Arvores extends Controller {
 						arvore.variavel_arvore.add(varA);
 						x ++; 
 					}
-
-					arvore.save();
+                                        arvore.save();
 				}
+                                System.out.println(numParcela);
+                                System.out.println(itens[0]);
+                                numParcela=itens[0];
 			}
 		}
 		return ok("message : success");
 	}
 public static Result saveGrid(long id, Double areaParcela){
         Local local = Local.find.byId(id);
-        local.area_parcela = areaParcela;
         try {
         Local.updateAreaParcela(id, areaParcela);
         }catch(SQLException ex){
         }
-        System.out.println(String.valueOf(local.area_parcela));
-        System.out.println(local.descricao);
-        local.update();
-       System.out.println(String.valueOf(local.area_parcela));
+        
 		JsonNode json = request().body().asJson();
 		Long idParcela = null;
 		String numParcela = "";

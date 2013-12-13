@@ -2,9 +2,26 @@
 
 @import helper._
 @import helper.twitterBootstrap._
+@javascript = {
+<script type="text/javascript">
+     jQuery(function(){
+         if($("#qtde_biomassa").val()!=""){
+            $("#qtde_biomassa").val(new Number($("#qtde_biomassa").val()).toFixed(4));
+         }
+         if($("#qtde_carbono").val()!=""){
+            $("#qtde_carbono").val(new Number($("#qtde_carbono").val()).toFixed(4));
+         }
+         if($("#qtde_volume").val()!=""){
+            $("#qtde_volume").val(new Number($("#qtde_volume").val()).toFixed(4));
+         }
+                 
+     });
+    
+    
+</script>
+}
 
-
-@main("Calcular Biomassa - Carbono - Volume"){
+@main("Calcular Biomassa - Carbono - Volume", javascript){
 @if(flash.containsKey("success")) {
         <div class="alert alert-info">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -69,6 +86,7 @@
                     @inputText(
                     localForm("qtde_biomassa"), 
                     '_label -> "Biomassa Total(ton)",
+                    'id->"qtde_biomassa",
                     'class ->"input-xlarge",
                     '_help -> "",
                     '_error -> localForm.error("qtde_biomassa")
@@ -87,6 +105,7 @@
                     @inputText(
                     localForm("qtde_carbono"), 
                     '_label -> "Carbono Total(ton)",
+                    'id->"qtde_carbono",
                     'class ->"input-xlarge",
                     '_help -> "",
                     '_error -> localForm.error("qtde_carbono")
@@ -105,6 +124,7 @@
                     @inputText(
                     localForm("qtde_volume"), 
                     '_label -> "Volume Total(m3)",
+                    'id->"qtde_volume",
                     'class ->"input-xlarge",
                     '_help -> "",
                     '_error -> localForm.error("qtde_carbono")
