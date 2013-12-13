@@ -9,6 +9,7 @@ import views.html.parcelas.*;
 import play.libs.Json;   
 import org.codehaus.jackson.JsonNode;
 import javax.persistence.PersistenceException;
+import java.io.FileWriter;
 
 import models.*;
 
@@ -38,9 +39,9 @@ public class Parcelas extends Controller {
 				Parcela parcela = new Parcela();
 				parcela.local = local;
 				parcela.num_parcela = Long.valueOf(itens[0]);
-				parcela.biomassa = Double.valueOf(itens[0]);
-				parcela.carbono = Double.valueOf(itens[0]);
-				parcela.volume = Double.valueOf(itens[0]);
+				parcela.biomassa = Double.valueOf(itens[1]);
+				parcela.carbono = Double.valueOf(itens[2]);
+				parcela.volume = Double.valueOf(itens[3]);
 
 				parcela.save();
 			}
@@ -67,5 +68,25 @@ public class Parcelas extends Controller {
 		
             return ok(Json.toJson("mensagem : sucesso"));
         }
+
+            public static Result criaModelo(){
+            	String modelo = "Exclua a linha dessa menssagem e a linha onde encontra-se os titulos dos dados a serem importados\nParcela;Biomassa;Carbono;Volume";
+            	
+            	try{
+            		FileWriter parcela = new FileWriter("parcelas.csv", false);
+
+            		parcela.write(modelo);
+            		parcela.close();
+    	
+            	}
+            	catch (Exception e){
+            		return ok("error");
+            	}
+            	
+            	response().setContentType("application/x-download");  
+    			response().setHeader("Content-disposition","attachment; filename=parcelas.csv");
+            	
+            	return ok(new java.io.File("parcelas.csv"));
+            }
 
 }

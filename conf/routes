@@ -134,6 +134,7 @@ GET /arvores/criamodelo		controllers.Arvores.criaModelo(id:Long)
 GET     /Parcelas/:id                   controllers.Parcelas.novo(id:Long)
 POST    /parcelas/saveFile		controllers.Parcelas.saveFile(files:String, id:Long, areaParcela:Double)
 POST    /parcelas/saveGrid		controllers.Parcelas.saveGrid(id:Long, areaParcela:Double)
+GET		/parcelas/criaModelo 	controllers.Parcelas.criaModelo()
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # Map static resources from the /public folder to the /assets URL path
